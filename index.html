@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+ <title>LyTune Studio X</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+    <link rel="alternate icon" type="image/png" href="assets/images/logo.png">
+  <meta name="description" content="LyTune Studio X — a beat marketplace built for Afrobeat, Amapiano, and Trap producers to upload, sell, and license beats to artists worldwide." />
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+  <link rel="alternate icon" type="image/png" href="assets/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./theme.js"></script>
+  <script src="./auth.js"></script>
+  <script src="./data.js"></script>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="bg-blur blur1"></div>
+  <div class="bg-blur blur2"></div>
+
+   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="featureIconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#19D7FF"/>
+        <stop offset="55%" stop-color="#007BFF"/>
+        <stop offset="100%" stop-color="#9B2EFF"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand">
+
+      <div class="mini-logo">
+
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LyTune Studio X logo">
+
+          <defs>
+            <linearGradient id="lytuneGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#19D7FF"/>
+              <stop offset="55%" stop-color="#007BFF"/>
+              <stop offset="100%" stop-color="#9B2EFF"/>
+
+            </linearGradient>
+          </defs>
+
+          <path
+            d="M48 165 L82 65 Q86 50 98 47 Q110 44 121 56 L174 118 Q184 130 180 145 Q175 159 160 160 Q149 161 141 152 L109 116 L82 166 Q76 176 64 176 Q53 176 48 165"
+            fill="none"
+            stroke="url(#lytuneGradient1)"
+            stroke-width="24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+        </svg>
+
+      </div>
+
+      <span>LyTune Studio X</span>
+
+    </div>
+
+  <nav class="navbar-links">
+    <div class="search-box">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+  <input 
+    type="text"
+    placeholder="Search Afrobeats, Amapiano, Trap..."
+    aria-label="Search beats"
+  >
+  <button class="search-btn" type="button">
+    Search
+  </button>
+</div>
+<a href="index.html">Home</a>
+  <a href="explore.html">Explore</a>
+  <a href="creators.html">Creators</a>
+  <a href="trending.html">Trending</a>
+  <a href="market.html">Market</a>
+  <a href="message.html">Messages</a>
+  </nav>
+  <div class="nav-actions">
+    <a href="signup.html" class="main-btn">Get Started</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme" title="Toggle theme">
+      <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+      </svg>
+      <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+      </svg>
+    </button>
+  </div>
+  
+  </header>
+  <section class="hero">
+    <div class="hero-equalizer" id="heroEqualizer" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+         Afrobeat • Amapiano • Trap • Street Vibes
+      </div>
+      <h1>
+        THE FUTURE
+        <span>OF</span>
+        <span>AFRO-BEAT</span>
+        SELLING
+      </h1>
+      <p>
+        Built for the next generation of African producers.
+        Upload beats, build your identity, and create the next global sound.
+      </p>
+      <div class="hero-buttons">
+        <a href="signup.html" class="main-btn">Start Selling</a>
+        <a href="explore.html" class="ghost-btn">Browse Beats</a>
+      </div>
+      </div>
+    <div class="hero-visual">
+      <div class="main-logo">
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LyTune Studio X mark">
+          <defs>
+            <linearGradient id="lytuneGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#19D7FF"/>
+              <stop offset="55%" stop-color="#007BFF"/>
+              <stop offset="100%" stop-color="#9B2EFF"/>
+
+            </linearGradient>
+          </defs>
+          <path
+            d="M48 165 L82 65 Q86 50 98 47 Q110 44 121 56 L174 118 Q184 130 180 145 Q175 159 160 160 Q149 161 141 152 L109 116 L82 166 Q76 176 64 176 Q53 176 48 165"
+            fill="none"
+            stroke="url(#lytuneGradient2)"
+            stroke-width="24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="floating-card card1">
+        🎵 AFROBEAT BANGERS
+      </div>
+            <div class="floating-card card4">
+                🎧 AMAPIANO VIBES
+      </div>
+
+      <div class="floating-card card2">
+        🚀 TRAP BANGERS
+      </div>
+
+      <div class="floating-card card3">
+     🔥 STREET VIBES
+      </div>
+
+    </div>
+  </section>
+
+<!-- ============================================================ -->
+<!-- FOUNDING PRODUCER INVITE — replaces fake "beats sold" style   -->
+<!-- stats. LyTune hasn't launched to producers yet, so this shows -->
+<!-- real, honest reasons to join early instead of numbers that    -->
+<!-- don't exist yet.                                               -->
+<!-- ============================================================ -->
+<section class="shock-stats">
+  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">🚀 NOW ACCEPTING FOUNDING PRODUCERS</span>
+  <div class="shock-grid">
+    <div class="shock-stat-card">
+      <div class="founder-icon">🎧</div>
+      <span class="shock-label" style="margin-top:4px;font-size:1rem;font-weight:700;color:var(--text-primary);">First Wave Access</span>
+      <p class="founder-copy">Be one of the first producers on the platform — first in line to be featured.</p>
+    </div>
+    <div class="shock-stat-card">
+      <div class="founder-icon">💸</div>
+      <span class="shock-label" style="margin-top:4px;font-size:1rem;font-weight:700;color:var(--text-primary);">Launch-Special Rates</span>
+      <p class="founder-copy">Lock in founding-producer royalty rates before they change post-launch.</p>
+    </div>
+    <div class="shock-stat-card">
+      <div class="founder-icon">🌍</div>
+      <span class="shock-label" style="margin-top:4px;font-size:1rem;font-weight:700;color:var(--text-primary);">Built for Afrobeat</span>
+      <p class="founder-copy">A marketplace shaped around Afrobeat, Amapiano & Trap — not bolted on as an afterthought.</p>
+    </div>
+    <div class="shock-stat-card">
+      <div class="founder-icon">🤝</div>
+      <span class="shock-label" style="margin-top:4px;font-size:1rem;font-weight:700;color:var(--text-primary);">Direct Artist Access</span>
+      <p class="founder-copy">No middlemen — connect straight with the artists searching for your sound.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- GENRE TICKER — an honest scrolling strip (what LyTune covers) -->
+<!-- rather than a fake "live sale just happened" feed we can't    -->
+<!-- back up with real data yet.                                   -->
+<!-- ============================================================ -->
+<div class="live-ticker-wrapper">
+  <div class="ticker-label">🎉 OPEN NOW</div>
+  <div class="live-ticker" id="liveTicker">
+    <div class="ticker-track" id="tickerTrack">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<section class="features">
+   <span class="section-eyebrow">SIDE A</span>
+  <h2>Built for the Next Generation Of Producers</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+       <span class="track-num">01</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 19V6"></path>
+          <path d="M6 12l6-6 6 6"></path>
+          <path d="M4 21h16"></path>
+        </svg>
+      </div>
+       <h3>Upload Beats</h3>
+      <p>Share your sound with the world in seconds.</p>
+    </div>
+
+    <div class="feature-card">
+      <span class="track-num">02</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M9 12l2 2 4-4"></path>
+        </svg>
+      </div>
+      <h3>Sell Instantly</h3>
+      <p>Turn your creativity into real income.</p>
+    </div>
+
+      <div class="feature-card">
+      <span class="track-num">03</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 17l6-6 4 4 8-8"></path>
+          <path d="M15 7h6v6"></path>
+        </svg>
+      </div>
+      <h3>Go Viral</h3>
+      <p>Get discovered by artists & listeners worldwide.
+        And also connect to artist
+      </p>
+    </div>
+
+       <div class="feature-card">
+      <span class="track-num">04</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="8" cy="8" r="3"></circle>
+          <circle cx="17" cy="16" r="3"></circle>
+          <path d="M10.5 9.5l4 5"></path>
+        </svg>
+      </div>
+      <h3>Connect to Other Producers Only on LyTune Studio X</h3>
+      <p>Connect to many producers and also build your music career.</p>
+    </div>
+
+       <div class="feature-card">
+      <span class="track-num">05</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M9 11h4M11 9v4"></path>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <h3>Search Beats by Audio</h3>
+      <p>Explore beats using an MP3 or MP4 file.</p>
+    </div>
+
+     <div class="feature-card">
+      <span class="track-num">06</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z"></path>
+        </svg>
+      </div>
+      <h3>Afrobeat Focus</h3>
+      <p>Built specifically for Afrobeat culture & sound, not just globally.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- COMING SOON — replaces fake "producer earned $X" testimonial  -->
+<!-- cards. Nobody's sold a beat on LyTune yet, so this is framed   -->
+<!-- as an open invitation instead of a claim we can't back up.     -->
+<!-- ============================================================ -->
+<section class="success-stories">
+  <div class="accent-bar" style="margin:0 auto 18px;"></div>
+  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">YOUR STORY STARTS HERE</span>
+  <h2 style="text-align:center;">Producers <span style="background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Earning Big</span> — Coming Soon</h2>
+  <p style="text-align:center;color:var(--text-secondary);max-width:640px;margin:0 auto 40px;">
+    We're onboarding our very first producers right now. We're looking for the kind of
+    talent and work ethic you see from names like Pheelz, Sarz, and Rexxie — if that's you,
+    this spot could be yours.
+  </p>
+
+  <div class="success-grid">
+    <div class="success-card success-card--open">
+      <div class="success-avatar" style="background:linear-gradient(135deg,#19D7FF,#007BFF);">?</div>
+      <div class="success-info">
+        <strong>This Could Be You</strong>
+        <span class="success-role">Afrobeat Producer</span>
+        <p>Founding producers set their own price and get first pick of featured placement.</p>
+        <a href="signup.html" class="future-btn" style="display:inline-block;margin-top:12px;padding:8px 20px;font-size:0.8rem;">Apply Now</a>
+      </div>
+    </div>
+
+    <div class="success-card success-card--open">
+      <div class="success-avatar" style="background:linear-gradient(135deg,#9B2EFF,#19D7FF);">?</div>
+      <div class="success-info">
+        <strong>This Could Be You</strong>
+        <span class="success-role">Amapiano Producer</span>
+        <p>Be one of the first log-drum specialists artists find when they search LyTune.</p>
+        <a href="signup.html" class="future-btn" style="display:inline-block;margin-top:12px;padding:8px 20px;font-size:0.8rem;">Apply Now</a>
+      </div>
+    </div>
+
+    <div class="success-card success-card--open">
+      <div class="success-avatar" style="background:linear-gradient(135deg,#007BFF,#9B2EFF);">?</div>
+      <div class="success-info">
+        <strong>This Could Be You</strong>
+        <span class="success-role">Trap / Street Producer</span>
+        <p>Founding-wave producers lock in launch-special royalty rates before they change.</p>
+        <a href="signup.html" class="future-btn" style="display:inline-block;margin-top:12px;padding:8px 20px;font-size:0.8rem;">Apply Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- EARNINGS CALCULATOR — moved up, right after the invite        -->
+<!-- section, so people see their earning potential before the     -->
+<!-- AI-search feature pitch further down.                          -->
+<!-- ============================================================ -->
+<section class="earnings-calc">
+  <div class="accent-bar" style="margin:0 auto 18px;"></div>
+  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">🧮 CALCULATE YOUR POTENTIAL</span>
+  <h2 style="text-align:center;">How Much <span style="background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Could You Earn</span>?</h2>
+
+  <div class="calc-grid">
+    <div class="calc-controls">
+      <div class="calc-slider-group">
+        <label for="beatsSlider">Beats sold per month</label>
+        <input type="range" id="beatsSlider" min="1" max="200" value="30" class="calc-slider">
+        <div class="calc-slider-value" id="beatsValue">30</div>
+      </div>
+      <div class="calc-slider-group">
+        <label for="priceSlider">Average price per beat ($)</label>
+        <input type="range" id="priceSlider" min="10" max="500" value="45" class="calc-slider">
+        <div class="calc-slider-value" id="priceValue">$45</div>
+      </div>
+      <div class="calc-slider-group">
+        <label for="exclusiveSlider">Exclusives per month</label>
+        <input type="range" id="exclusiveSlider" min="0" max="20" value="3" class="calc-slider">
+        <div class="calc-slider-value" id="exclusiveValue">3</div>
+      </div>
+    </div>
+
+    <div class="calc-result" id="calcResult">
+      <div class="calc-monthly">
+        <span class="calc-label">Monthly Earnings</span>
+        <span class="calc-number" id="calcMonthly">$1,350</span>
+        <div class="calc-bar">
+          <div class="calc-bar-fill" id="calcBarFill" style="width:27%"></div>
+        </div>
+      </div>
+      <div class="calc-yearly">
+        <span class="calc-label">Yearly Projection</span>
+        <span class="calc-number" id="calcYearly">$16,200</span>
+      </div>
+      <p class="calc-note">🎯 That's just from beat sales. Royalties & placements pay extra!</p>
+    </div>
+  </div>
+</section>
+
+<section class="future">  
+  <div class="future-glow">
+    <div class="future-content">
+      <span class="future-badge"> AI POWERED DISCOVERY</span>
+      <h2>Search Beats By <span>Sound</span></h2>
+      <p>
+        Upload a voice note, freestyle,
+        melody, MP3 or even a song link.
+        Our AI finds beats with the same
+        energy, vibe and mood instantly.
+      </p>
+
+      <div class="future-buttons">
+        <a href="ai-search.html" class="future-btn">Try AI Search</a>
+        <a href="ai-demo.html" class="future-btn secondary">Watch Demo</a>
+      </div>
+    </div>
+
+    <div class="future-visual">
+      <img src="assets/images/ai-search-visual.png" alt="Circular soundwave visualization representing LyTune's AI audio search" class="ai-search-image">
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- REALISTIC PHONE MOCKUP — one true-to-scale device frame with  -->
+    <!-- an internally scrollable screen (drag/scroll to see more      -->
+    <!-- results), instead of three overlapping abstract mock screens. -->
+    <!-- ============================================================ -->
+    <div class="device-showcase" style="grid-column:1/-1;">
+      <div class="device-frame">
+        <div class="device-island"></div>
+        <div class="device-screen">
+          <div class="phone-status-bar">
+            <span>9:41</span>
+            <span class="phone-signal">●●● 5G 🔋</span>
+          </div>
+
+          <div class="phone-app-header">
+            <div class="phone-logo-dot"></div>
+            <span>LyTune Search</span>
+          </div>
+
+          <div class="phone-listening-label">Listening<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span></div>
+
+          <div class="phone-waveform" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="device-scroll-area">
+            <div class="phone-result-card">
+              <div class="phone-result-thumb"></div>
+              <div class="phone-result-info">
+                <strong>Amapiano Log Drum Loop</strong>
+                <span>by Kabza De Small style</span>
+              </div>
+              <div class="phone-result-match">97%</div>
+            </div>
+            <div class="phone-result-card">
+              <div class="phone-result-thumb"></div>
+              <div class="phone-result-info">
+                <strong>Afro Trap Bounce</strong>
+                <span>by Rexxie style</span>
+              </div>
+              <div class="phone-result-match">89%</div>
+            </div>
+            <div class="phone-result-card">
+              <div class="phone-result-thumb"></div>
+              <div class="phone-result-info">
+                <strong>Street Vibes Anthem</strong>
+                <span>by Sarz style</span>
+              </div>
+              <div class="phone-result-match">84%</div>
+            </div>
+            <div class="phone-result-card">
+              <div class="phone-result-thumb"></div>
+              <div class="phone-result-info">
+                <strong>Midnight Log Drum</strong>
+                <span>by Kabza De Small style</span>
+              </div>
+              <div class="phone-result-match">79%</div>
+            </div>
+            <div class="phone-result-card">
+              <div class="phone-result-thumb"></div>
+              <div class="phone-result-info">
+                <strong>Energy (Afro Trap)</strong>
+                <span>by Metro Boomin style</span>
+              </div>
+              <div class="phone-result-match">72%</div>
+            </div>
+          </div>
+        </div>
+        <div class="device-home-indicator"></div>
+      </div>
+      <div class="device-scroll-hint">↕ Scroll inside the screen to see more matches</div>
+    </div>
+  </div>
+</section> 
+
+<!-- ============================================================ -->
+<!-- PRICE SHOCK — earning potential comparison                    -->
+<!-- ============================================================ -->
+<section class="price-shock">
+  <div class="accent-bar" style="margin:0 auto 18px;"></div>
+  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">💰 THE NUMBERS DON'T LIE</span>
+  <h2 style="text-align:center;">What Producers Are <span style="background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Really Making</span></h2>
+  
+  <div class="price-grid">
+    <div class="price-table-card featured">
+      <div class="price-badge">🔥 MOST POPULAR</div>
+      <h3>Lease License</h3>
+      <div class="price-amount">$29<span class="price-cents">.99</span></div>
+      <ul class="price-features">
+        <li>✅ MP3 + WAV files</li>
+        <li>✅ 5,000 streams max</li>
+        <li>✅ Tagged version</li>
+        <li>✅ 50% royalties</li>
+      </ul>
+      <a href="checkout.html?plan=lease" class="price-subscribe-btn">Choose Plan</a>
+    </div>
+
+    <div class="price-table-card">
+      <h3>Premium Lease</h3>
+      <div class="price-amount">$79<span class="price-cents">.99</span></div>
+      <ul class="price-features">
+        <li>✅ MP3 + WAV + Stems</li>
+        <li>✅ 50,000 streams max</li>
+        <li>✅ No tags</li>
+        <li>✅ 20% royalties</li>
+      </ul>
+      <a href="checkout.html?plan=premium" class="price-subscribe-btn">Choose Plan</a>
+    </div>
+
+    <div class="price-table-card">
+      <div class="price-badge" style="background:linear-gradient(135deg,#9B2EFF,#19D7FF);">👑 BEST VALUE</div>
+      <h3>Exclusive Rights</h3>
+      <div class="price-amount">$299<span class="price-cents">.99</span></div>
+      <ul class="price-features">
+        <li>✅ MP3 + WAV + Stems</li>
+        <li>✅ Unlimited streams</li>
+        <li>✅ No tags, no royalties</li>
+        <li>✅ Full ownership transfer</li>
+      </ul>
+      <a href="checkout.html?plan=exclusive" class="price-subscribe-btn">Choose Plan</a>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-top:24px;">
+    Secure checkout on the next page. Cancel or change your license anytime.
+  </p>
+</section>
+
+<section class="cta">
+  <div class="accent-bar" style="margin:0 auto 18px;"></div>
+  <h2>Start Selling Your Beats Today</h2>
+  <p>Join the next generation of Afrobeat producers building global sound.</p>
+  <a href="signup.html" class="main-btn">
+    Get Started
+  </a>
+</section>
+
+<!-- ============================================================ -->
+<!-- WHY LYTUNE — the "why join now" pitch, positioned right       -->
+<!-- before Top Producers so visitors see the advantage of joining -->
+<!-- early before scrolling into the producer showcase.             -->
+<!-- ============================================================ -->
+<section class="why-lytune">
+  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">WHY WE'RE LAUNCHING LYTUNE</span>
+  <h2 style="text-align:center;">Why Join <span style="background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Right Now</span></h2>
+  <p style="text-align:center;color:var(--text-secondary);max-width:640px;margin:0 auto 40px;">
+    Every marketplace has a first wave. Here's what that means for you on LyTune.
+  </p>
+
+  <div class="why-lytune-grid">
+    <div class="why-lytune-card">
+      <div class="founder-icon">🥇</div>
+      <h3>More Chance to Be Seen</h3>
+      <p>With fewer producers on the platform right now, your beats get more visibility per listener than they will once it's crowded.</p>
+    </div>
+    <div class="why-lytune-card">
+      <div class="founder-icon">📣</div>
+      <h3>Your Voice Shapes LyTune</h3>
+      <p>Founding producers get a direct line to the team — feature requests and feedback go straight into what we build next.</p>
+    </div>
+    <div class="why-lytune-card">
+      <div class="founder-icon">🔒</div>
+      <h3>Lock In Better Terms</h3>
+      <p>Rates and fees are most favorable at launch. Join now and keep your founding-producer terms as LyTune grows.</p>
+    </div>
+    <div class="why-lytune-card">
+      <div class="founder-icon">🌍</div>
+      <h3>Own the Afrobeat Category</h3>
+      <p>We're building specifically for Afrobeat, Amapiano, and Trap — be part of defining what that looks like from day one.</p>
+    </div>
+  </div>
+</section>
+
+<section class="producers">
+  <div class="accent-bar" style="margin:0 auto 18px;"></div>
+  <h2>Top Producers</h2>
+  <div class="producer-slider">
+    <div class="producer-track" id="producerTrack">
+      <!-- Populated by DATA_API.initProducerSlider() below -->
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    DATA_API.initProducerSlider("#producerTrack");
+  });
+</script>
+  
+<section class="features">
+ <span class="section-eyebrow">SIDE B</span>
+ <h2>Everything You Need as a Modern Producer</h2> <div class="feature-grid">
+    <div class="feature-card">
+      <span class="track-num">01</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 8h16l-1.5 11a2 2 0 01-2 1.8H7.5a2 2 0 01-2-1.8L4 8z"></path>
+          <path d="M8 8V6a4 4 0 018 0v2"></path>
+        </svg>
+      </div>
+      <h3>Beat Marketplace</h3>
+      <p>Upload, sell, and license your beats globally, with room to negotiate price.</p>
+    </div>
+
+        <div class="feature-card">
+      <span class="track-num">02</span> 
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 7v10M9.5 9.5a2.5 2.5 0 012.5-1c1.5 0 2.5.8 2.5 2s-1 1.7-2.5 2-2.5.8-2.5 2 1 2 2.5 2a2.5 2.5 0 002.5-1"></path>
+        </svg>
+      </div>
+      <h3>Monetize Your Sound</h3>
+      <p>Earn from leases, exclusives, and royalties directly from your audience and other artists.</p>
+    </div>
+
+
+     <div class="feature-card">
+      <span class="track-num">03</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 17l6-6 4 4 8-8"></path>
+          <path d="M15 7h6v6"></path>
+        </svg>
+      </div>
+      <h3>Discover Trending Beats</h3>
+      <p>Find Afrobeat, Amapiano, Trap, and Drill beats trending in real time.</p>
+    </div>
+
+        <div class="feature-card">
+      <span class="track-num">04</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 12a3 3 0 003 3h3a3 3 0 000-6h-1"></path>
+          <path d="M15 12a3 3 0 00-3-3H9a3 3 0 000 6h1"></path>
+        </svg>
+      </div>
+      <h3>Artist + Producer Link</h3>
+      <p>Connect with artists who are actively searching for your sound.</p>
+    </div>
+
+      <div class="feature-card">
+      <span class="track-num">05</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"></path>
+          <path d="M9.5 12l1.8 1.8L15 10"></path>
+        </svg>
+      </div>
+      <h3>Instant Licensing</h3>
+      <p>Buy or lease beats instantly with automated license delivery.</p>
+    </div>
+
+     <div class="feature-card">
+      <span class="track-num">06</span>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z"></path>
+        </svg>
+      </div>
+      <h3>Global Afrobeat Hub</h3>
+      <p>A platform built to push African sound onto the global stage.</p>
+    </div>
+
+  </div>
+  </section>
+  
+  <div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 30 Q 30 5, 60 30 T 120 30 T 180 30 T 240 30 T 300 30 T 360 30 T 420 30 T 480 30 T 540 30 T 600 30 T 660 30 T 720 30 T 780 30 T 840 30 T 900 30 T 960 30 T 1020 30 T 1080 30 T 1140 30 T 1200 30"
+      fill="none" stroke="url(#featureIconGradient)" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</div> 
+
+
+<section class="showcase">
+  <video autoplay muted loop playsinline class="showcase-video" data-fallback-label="LyTune showcase reel">
+    <source src="assets/videos/showcase1.mp4" type="video/mp4" />
+  </video>
+ 
+  <div class="showcase-overlay"></div>
+ 
+  <div class="showcase-content">
+    <h2>Why LyTune Studio X</h2>
+    <p>Built for producers who want speed, reach, and real results.</p>
+
+  
+    <div class="why-grid">
+      <div class="why-card">
+        <img src="assets/images/slide2.jpg" alt="Fast beat uploads">
+        <h3>Built for Speed</h3>
+        <p>Upload, tag, and publish a beat in under a minute — no friction, no delays.</p>
+      </div>
+      <div class="why-card">
+        <img src="assets/images/slide1.jpg" alt="Global producer reach">
+        <h3>Real Global Reach</h3>
+        <p>Get discovered by artists and listeners searching for Afrobeat, Amapiano, and Trap sounds worldwide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+    <script>
+      (function(){
+        const el = document.getElementById('heroEqualizer');
+        const n = 26;
+        let html = '';
+        for (let i = 0; i < n; i++){
+          const h = 35 + Math.round(Math.random() * 63);       
+          const delay = (Math.random() * 1.6).toFixed(2);        
+          const dur = (1.8 + Math.random()).toFixed(2);          
+          html += `<div class="eq-bar" style="height:${h}px;animation-delay:${delay}s;animation-duration:${dur}s;"></div>`;
+        }
+        el.innerHTML = html;
+      })();
+    </script>
+
+<section class="cook-with-me">
+  <div class="accent-bar" style="margin:0 auto 18px;"></div>
+  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">BEHIND THE BEAT</span>
+  <h2 style="text-align:center;">Cook With Me</h2>
+  <p style="text-align:center;color:var(--text-secondary);max-width:600px;margin:0 auto 40px;">
+    Watch producers build a beat from scratch — loop to final mix, no cuts.
+  </p>
+
+  <div class="cook-grid">
+    <div class="cook-card">
+      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Kabza De Small builds an Amapiano log drum">
+        <source src="assets/videos/showcase1.mp4" type="video/mp4">
+      </video>
+      <div class="cook-label">Kabza De Small builds an Amapiano log drum</div>
+    </div>
+    <div class="cook-card">
+      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Metro Boomin layers a trap melody">
+        <source src="assets/videos/cook-2.mp4" type="video/mp4">
+      </video>
+      <div class="cook-label">Metro Boomin layers a trap melody</div>
+    </div>
+    <div class="cook-card">
+      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Pheelz mixes down a full track">
+        <source src="assets/videos/cook-3.mp4" type="video/mp4">
+      </video>
+      <div class="cook-label">Pheelz mixes down a full track</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="mini-logo" style="width:44px;height:44px;">
+          <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LyTune Studio X logo">
+            <path
+              d="M48 165 L82 65 Q86 50 98 47 Q110 44 121 56 L174 118 Q184 130 180 145 Q175 159 160 160 Q149 161 141 152 L109 116 L82 166 Q76 176 64 176 Q53 176 48 165"
+              fill="none" stroke="url(#featureIconGradient)" stroke-width="24"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+      <h3>LyTune Studio X</h3>
+      <p>The beat marketplace built for the next generation of African producers. Upload, sell, and get discovered.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="explore.html">Explore Beats</a>
+        <a href="trending.html">Trending</a>
+        <a href="creators.html">Creators</a>
+        <a href="market.html">Market</a>
+      </div>
+      <div class="footer-col">
+        <h4>Producers</h4>
+        <a href="signup.html">Start Selling</a>
+        <a href="ai-search.html">AI Search</a>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <a href="login.html">Log In</a>
+        <a href="signup.html">Sign Up</a>
+        <a href="message.html">Messages</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 LyTune Studio X. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="#" aria-label="LyTune on Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+          <circle cx="12" cy="12" r="4.2"></circle>
+          <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"></circle>
+        </svg>
+      </a>
+      <a href="#" aria-label="LyTune on X">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <path d="M18.146 2H21.5l-7.31 8.35L22.8 22h-6.77l-5.3-6.93L4.63 22H1.27l7.82-8.94L1 2h6.94l4.79 6.34L18.146 2Zm-1.19 18h1.86L7.13 3.9H5.13l11.826 16.1Z"></path>
+        </svg>
+      </a>
+      <a href="#" aria-label="LyTune on TikTok">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <path d="M16.6 2h-3.2v13.3a2.9 2.9 0 1 1-2.05-2.77V9.2a6 6 0 1 0 5.25 5.95V8.63a7.6 7.6 0 0 0 4.4 1.4V6.83a4.3 4.3 0 0 1-4.4-4.3V2Z"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===== GENRE / FOUNDER TICKER =====
+   Honest scrolling strip — LyTune hasn't launched to producers yet,
+   so this shows what the platform covers and why to join, rather
+   than fabricated "someone just bought a beat" notifications. */
+const tickerMessages = [
+  '🎧 Afrobeat producers — applications open',
+  '🎹 Amapiano log-drum specialists wanted',
+  '🥁 Trap & Street Vibes producers — apply now',
+  '🚀 Founding-producer rates end at launch',
+  '🌍 Built for African sound, from day one',
+  '🤝 Direct connections with artists searching for beats',
+];
+
+function generateTickerItems() {
+  const items = tickerMessages.map((m) => `<span class="ticker-item">${m}</span>`).join('');
+  return items + items; // Double for seamless loop
+}
+
+function initTicker() {
+  const track = document.getElementById('tickerTrack');
+  if (!track) return;
+  track.innerHTML = generateTickerItems();
+}
+
+/* ===== EARNINGS CALCULATOR ===== */
+function initCalculator() {
+  const beatsSlider = document.getElementById('beatsSlider');
+  const priceSlider = document.getElementById('priceSlider');
+  const exclusiveSlider = document.getElementById('exclusiveSlider');
+  const beatsValue = document.getElementById('beatsValue');
+  const priceValue = document.getElementById('priceValue');
+  const exclusiveValue = document.getElementById('exclusiveValue');
+  const calcMonthly = document.getElementById('calcMonthly');
+  const calcYearly = document.getElementById('calcYearly');
+  const calcBarFill = document.getElementById('calcBarFill');
+
+  if (!beatsSlider) return;
+
+  function updateCalc() {
+    const beats = parseInt(beatsSlider.value);
+    const price = parseInt(priceSlider.value);
+    const exclusives = parseInt(exclusiveSlider.value);
+    
+    beatsValue.textContent = beats;
+    priceValue.textContent = `$${price}`;
+    exclusiveValue.textContent = exclusives;
+
+    const monthly = (beats * price) + (exclusives * price * 3);
+    const yearly = monthly * 12;
+    const maxPotential = 200 * 500 + 20 * 500 * 3; /* 200*500 + 20*1500 = 130k */
+    const pct = Math.min((monthly / maxPotential) * 100, 100);
+
+    calcMonthly.textContent = `$${monthly.toLocaleString()}`;
+    calcYearly.textContent = `$${yearly.toLocaleString()}`;
+    calcBarFill.style.width = pct + '%';
+  }
+
+  beatsSlider.addEventListener('input', updateCalc);
+  priceSlider.addEventListener('input', updateCalc);
+  exclusiveSlider.addEventListener('input', updateCalc);
+  updateCalc();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initTicker();
+  initCalculator();
+});
+</script>
+</body>
+</html>

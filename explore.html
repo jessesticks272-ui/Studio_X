@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse and filter beats on LyTune Studio X — Afrobeat, Amapiano, and Trap, by genre, price, and license type." />
+  <title>Explore Beats — LyTune Studio X</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+  <link rel="alternate icon" type="image/png" href="assets/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./explore.css">
+
+  <script src="./theme.js"></script>
+  <script src="./auth.js"></script>
+  <script src="./data.js"></script>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="bg-blur blur1"></div>
+  <div class="bg-blur blur2"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="featureIconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#19D7FF"/>
+        <stop offset="55%" stop-color="#007BFF"/>
+        <stop offset="100%" stop-color="#9B2EFF"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mini-logo">
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LyTune Studio X logo">
+          <defs>
+            <linearGradient id="lytuneGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#19D7FF"/>
+              <stop offset="55%" stop-color="#007BFF"/>
+              <stop offset="100%" stop-color="#9B2EFF"/>
+            </linearGradient>
+          </defs>
+          <path
+            d="M48 165 L82 65 Q86 50 98 47 Q110 44 121 56 L174 118 Q184 130 180 145 Q175 159 160 160 Q149 161 141 152 L109 116 L82 166 Q76 176 64 176 Q53 176 48 165"
+            fill="none" stroke="url(#lytuneGradient1)" stroke-width="24"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <span>LyTune Studio X</span>
+    </div>
+
+    <nav class="navbar-links">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" placeholder="Search Afrobeats, Amapiano, Trap..." aria-label="Search beats">
+        <button class="search-btn" type="button">Search</button>
+      </div>
+      <a href="index.html">Home</a>
+      <a href="explore.html" aria-current="page">Explore</a>
+      <a href="creators.html">Creators</a>
+      <a href="trending.html">Trending</a>
+      <a href="market.html">Market</a>
+      <a href="message.html">Messages</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="signup.html" class="main-btn">Get Started</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme" title="Toggle theme">
+        <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+        </svg>
+        <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="explore-hero">
+    <h1>Explore Beats</h1>
+    <p>Browse by genre, price, and license type. New producers are joining right now — check back often, or apply to be one of the first.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- AUDIENCE SPLIT — the two reasons someone lands here, each     -->
+  <!-- with its own clear next step. -->
+  <!-- ============================================================ -->
+  <section class="audience-split">
+    <div class="audience-card">
+      <div class="founder-icon">🛒</div>
+      <h2>Ready to Buy a Beat?</h2>
+      <p>Preview and filter freely — no account needed until you're ready to check out. Every purchase includes an instant license delivery.</p>
+      <a href="#beatGrid" class="main-btn">Start Browsing</a>
+    </div>
+    <div class="audience-card">
+      <div class="founder-icon">🎹</div>
+      <h2>Want to Sell Your Beats Here?</h2>
+      <p>This is the page artists will filter through to find you. Founding producers get listed with almost zero competition right now.</p>
+      <a href="signup.html" class="main-btn">Apply as a Producer</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- HOW LICENSING WORKS — explains the three tiers before anyone  -->
+  <!-- has to guess what Lease/Premium/Exclusive actually mean.      -->
+  <!-- ============================================================ -->
+  <section class="license-explainer">
+    <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">BEFORE YOU BUY</span>
+    <h2>How Licensing Works</h2>
+    <div class="license-explainer-grid">
+      <div class="license-explainer-card">
+        <div class="genre-spotlight-icon">📄</div>
+        <h3>Lease</h3>
+        <p>MP3 + WAV, capped streams, producer keeps most of the royalties. The affordable way to try a beat out.</p>
+      </div>
+      <div class="license-explainer-card">
+        <div class="genre-spotlight-icon">💽</div>
+        <h3>Premium Lease</h3>
+        <p>Adds stems and a much higher stream cap, with no tags on the audio — for artists ready to release properly.</p>
+      </div>
+      <div class="license-explainer-card">
+        <div class="genre-spotlight-icon">👑</div>
+        <h3>Exclusive Rights</h3>
+        <p>Full ownership transfer, unlimited streams, no ongoing royalties. The beat is pulled from the marketplace once sold.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="type-beat-row">
+    <span class="type-beat-label">🔥 Trending searches:</span>
+    <div class="type-beat-chips">
+      <button class="type-beat-chip" type="button" data-query="Wizkid type beat">Wizkid Type Beat</button>
+      <button class="type-beat-chip" type="button" data-query="Burna Boy type beat">Burna Boy Type Beat</button>
+      <button class="type-beat-chip" type="button" data-query="Asake type beat">Asake Type Beat</button>
+      <button class="type-beat-chip" type="button" data-query="Rema type beat">Rema Type Beat</button>
+      <button class="type-beat-chip" type="button" data-query="Kabza De Small type beat">Kabza De Small Type Beat</button>
+    </div>
+  </div>
+
+  <div class="explore-layout">
+    <button class="sidebar-toggle-btn" id="sidebarToggleBtn" type="button" aria-expanded="false" aria-controls="exploreSidebar">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+      Filters
+    </button>
+
+    <aside class="explore-sidebar" id="exploreSidebar">
+      <div class="sidebar-header">
+        <h3>Filters</h3>
+        <button class="filter-clear-btn" id="clearFiltersBtn" type="button">Clear All</button>
+      </div>
+
+      <div class="filter-group">
+        <h4>Genre</h4>
+        <label class="filter-checkbox"><input type="checkbox" class="genre-check" value="afrobeat"> Afrobeat</label>
+        <label class="filter-checkbox"><input type="checkbox" class="genre-check" value="amapiano"> Amapiano</label>
+        <label class="filter-checkbox"><input type="checkbox" class="genre-check" value="trap"> Trap</label>
+        <label class="filter-checkbox"><input type="checkbox" class="genre-check" value="drill"> Drill</label>
+        <label class="filter-checkbox"><input type="checkbox" class="genre-check" value="street"> Street Vibes</label>
+        <label class="filter-checkbox"><input type="checkbox" class="genre-check" value="hiphop"> Hip Hop</label>
+        <label class="filter-checkbox"><input type="checkbox" class="genre-check" value="rnb"> R&amp;B</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>Mood</h4>
+        <label class="filter-checkbox"><input type="checkbox" class="mood-check" value="dark"> Dark</label>
+        <label class="filter-checkbox"><input type="checkbox" class="mood-check" value="chill"> Chill</label>
+        <label class="filter-checkbox"><input type="checkbox" class="mood-check" value="energetic"> Energetic</label>
+        <label class="filter-checkbox"><input type="checkbox" class="mood-check" value="sad"> Sad</label>
+        <label class="filter-checkbox"><input type="checkbox" class="mood-check" value="hype"> Hype</label>
+        <label class="filter-checkbox"><input type="checkbox" class="mood-check" value="romantic"> Romantic</label>
+      </div>
+
+      <div class="filter-group">
+        <h4>BPM Range</h4>
+        <div class="range-inputs">
+          <input type="number" id="bpmMin" class="range-input" placeholder="Min" min="40" max="220" aria-label="Minimum BPM">
+          <span aria-hidden="true">–</span>
+          <input type="number" id="bpmMax" class="range-input" placeholder="Max" min="40" max="220" aria-label="Maximum BPM">
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Key</h4>
+        <select id="keyFilter" class="filter-select-full" aria-label="Filter by musical key">
+          <option value="all">Any Key</option>
+          <option value="C">C Major</option>
+          <option value="Cm">C Minor</option>
+          <option value="D">D Major</option>
+          <option value="Dm">D Minor</option>
+          <option value="E">E Major</option>
+          <option value="Em">E Minor</option>
+          <option value="F">F Major</option>
+          <option value="Fm">F Minor</option>
+          <option value="G">G Major</option>
+          <option value="Gm">G Minor</option>
+          <option value="A">A Major</option>
+          <option value="Am">A Minor</option>
+          <option value="B">B Major</option>
+          <option value="Bm">B Minor</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <h4>Price Range</h4>
+        <div class="range-inputs">
+          <input type="number" id="priceMin" class="range-input" placeholder="$ Min" min="0" aria-label="Minimum price">
+          <span aria-hidden="true">–</span>
+          <input type="number" id="priceMax" class="range-input" placeholder="$ Max" min="0" aria-label="Maximum price">
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>License Type</h4>
+        <label class="filter-checkbox"><input type="checkbox" class="license-check" value="lease"> Lease</label>
+        <label class="filter-checkbox"><input type="checkbox" class="license-check" value="premium"> Premium Lease</label>
+        <label class="filter-checkbox"><input type="checkbox" class="license-check" value="exclusive"> Exclusive Rights</label>
+      </div>
+    </aside>
+
+    <div class="explore-main">
+      <div class="explore-toolbar">
+        <div class="explore-search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="beatSearchInput" placeholder="Search by title, producer, or tag..." aria-label="Search beats">
+        </div>
+
+        <div class="toolbar-controls">
+          <select class="filter-select" id="sortSelect" aria-label="Sort beats">
+            <option value="trending">Sort: Trending</option>
+            <option value="newest">Newest</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="bpm-asc">BPM: Low to High</option>
+            <option value="bpm-desc">BPM: High to Low</option>
+          </select>
+
+          <div class="view-toggle" role="group" aria-label="Grid or list view">
+            <button class="view-btn active" id="gridViewBtn" type="button" aria-label="Grid view">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+            </button>
+            <button class="view-btn" id="listViewBtn" type="button" aria-label="List view">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+            </button>
+          </div>
+
+          <button class="cart-btn" id="cartBtn" type="button" aria-label="Cart">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="explore-results-bar">
+        <span id="resultsCount">Loading beats…</span>
+        <span id="modeIndicator"></span>
+      </div>
+
+      <section class="explore-grid-section">
+        <div class="beat-grid" id="beatGrid">
+          <!-- Populated by explore.js: real beats when online with data,
+               otherwise the honest empty state below. -->
+          <div class="explore-empty">
+            <div class="founder-icon">🎧</div>
+            <h2>No beats yet — you could be the first</h2>
+            <p>
+              We're onboarding our very first producers right now. Nothing's
+              uploaded yet, which means whatever you add gets maximum visibility
+              from day one.
+            </p>
+            <div class="explore-empty-actions">
+              <a href="signup.html" class="main-btn">Apply as a Producer</a>
+              <a href="index.html#why-lytune" class="ghost-btn">Why Join Now</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Persistent mini-player, BeatStars/Airbit-style. Hidden until a
+       preview button is clicked. No real audio exists yet (no beats
+       uploaded), so this shows an honest message rather than faking
+       playback — see explore.js. -->
+  <div class="mini-player is-hidden" id="miniPlayer">
+    <div class="mini-player-info">
+      <div class="mini-player-art" aria-hidden="true"></div>
+      <div class="mini-player-text">
+        <div class="mini-player-title" id="playerTitle">—</div>
+        <div class="mini-player-sub" id="playerSub">—</div>
+      </div>
+    </div>
+    <div class="mini-player-center">
+      <button class="mini-player-play" id="playerPlayBtn" type="button" aria-label="Play">▶</button>
+      <div class="mini-player-bar"><div class="mini-player-fill" id="playerFill"></div></div>
+    </div>
+    <div class="mini-player-msg" id="playerMsg"></div>
+    <button class="mini-player-close" id="playerCloseBtn" type="button" aria-label="Close player">✕</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- FAQ — answers the questions someone browsing beats actually   -->
+  <!-- has, especially around licensing and why the grid is empty.   -->
+  <!-- ============================================================ -->
+  <section class="creators-faq">
+    <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">QUESTIONS</span>
+    <h2>Before You Buy</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Do I need an account to browse or preview beats?</summary>
+        <p>No — filtering, searching, and previewing are all free with no account. You'll only be asked to sign up at checkout.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What's the difference between the license types?</summary>
+        <p>Lease is the affordable entry point (capped streams, producer keeps most royalties). Premium Lease adds stems and a higher cap. Exclusive Rights transfers full ownership and removes the beat from sale entirely. See "How Licensing Works" above for details.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I get a refund after buying a license?</summary>
+        <p>Digital license policies vary by producer and will be shown at checkout before you pay — nothing is charged without you seeing the terms first.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Why is the grid empty right now?</summary>
+        <p>LyTune is pre-launch for producers — nobody's uploaded a beat yet. The filters, search, and licensing all work exactly the same once real beats start coming in.</p>
+      </details>
+      <details class="faq-item">
+        <summary>I'm a producer — how do I get my beats listed here?</summary>
+        <p><a href="signup.html">Apply as a founding producer</a>. Early producers get listed with far less competition than producers who join after launch.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="mini-logo" style="width:44px;height:44px;">
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LyTune Studio X logo">
+              <path
+                d="M48 165 L82 65 Q86 50 98 47 Q110 44 121 56 L174 118 Q184 130 180 145 Q175 159 160 160 Q149 161 141 152 L109 116 L82 166 Q76 176 64 176 Q53 176 48 165"
+                fill="none" stroke="url(#featureIconGradient)" stroke-width="24"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+        <h3>LyTune Studio X</h3>
+        <p>The beat marketplace built for the next generation of African producers. Upload, sell, and get discovered.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="explore.html">Explore Beats</a>
+          <a href="trending.html">Trending</a>
+          <a href="creators.html">Creators</a>
+          <a href="market.html">Market</a>
+        </div>
+        <div class="footer-col">
+          <h4>Producers</h4>
+          <a href="signup.html">Start Selling</a>
+          <a href="ai-search.html">AI Search</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="login.html">Log In</a>
+          <a href="signup.html">Sign Up</a>
+          <a href="message.html">Messages</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 LyTune Studio X. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LyTune on Instagram">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"></circle>
+          </svg>
+        </a>
+        <a href="#" aria-label="LyTune on X">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M18.146 2H21.5l-7.31 8.35L22.8 22h-6.77l-5.3-6.93L4.63 22H1.27l7.82-8.94L1 2h6.94l4.79 6.34L18.146 2Zm-1.19 18h1.86L7.13 3.9H5.13l11.826 16.1Z"></path>
+          </svg>
+        </a>
+        <a href="#" aria-label="LyTune on TikTok">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M16.6 2h-3.2v13.3a2.9 2.9 0 1 1-2.05-2.77V9.2a6 6 0 1 0 5.25 5.95V8.63a7.6 7.6 0 0 0 4.4 1.4V6.83a4.3 4.3 0 0 1-4.4-4.3V2Z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./explore.js"></script>
+</body>
+</html>

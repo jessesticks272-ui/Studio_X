@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The LyTune Market — beats, stems, sound kits, drum kits, presets, full song placements, and production services, all in one place." />
+  <title>Market — LyTune Studio X</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+  <link rel="alternate icon" type="image/png" href="assets/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./market.css">
+
+  <script src="./theme.js"></script>
+  <script src="./auth.js"></script>
+  <script src="./data.js"></script>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="bg-blur blur1"></div>
+  <div class="bg-blur blur2"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="featureIconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#19D7FF"/>
+        <stop offset="55%" stop-color="#007BFF"/>
+        <stop offset="100%" stop-color="#9B2EFF"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mini-logo">
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LyTune Studio X logo">
+          <defs>
+            <linearGradient id="lytuneGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#19D7FF"/>
+              <stop offset="55%" stop-color="#007BFF"/>
+              <stop offset="100%" stop-color="#9B2EFF"/>
+            </linearGradient>
+          </defs>
+          <path
+            d="M48 165 L82 65 Q86 50 98 47 Q110 44 121 56 L174 118 Q184 130 180 145 Q175 159 160 160 Q149 161 141 152 L109 116 L82 166 Q76 176 64 176 Q53 176 48 165"
+            fill="none" stroke="url(#lytuneGradient1)" stroke-width="24"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <span>LyTune Studio X</span>
+    </div>
+
+    <nav class="navbar-links">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" placeholder="Search Afrobeats, Amapiano, Trap..." aria-label="Search beats">
+        <button class="search-btn" type="button">Search</button>
+      </div>
+      <a href="index.html">Home</a>
+      <a href="explore.html">Explore</a>
+      <a href="creators.html">Creators</a>
+      <a href="trending.html">Trending</a>
+      <a href="market.html" aria-current="page">Market</a>
+      <a href="message.html">Messages</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="signup.html" class="main-btn">Get Started</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme" title="Toggle theme">
+        <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+        </svg>
+        <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="market-hero">
+    <h1>The LyTune Market</h1>
+    <p>More than beats — stems, sound kits, drum kits, presets, full song placements, and production services, all in one place.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CATEGORY GRID — only Beats is actually live (it's the same    -->
+  <!-- catalog powering Explore/Trending). Every other category is   -->
+  <!-- honestly marked "Coming Soon" rather than faked with demo      -->
+  <!-- listings.                                                      -->
+  <!-- ============================================================ -->
+  <section class="market-categories">
+    <div class="market-category-grid">
+      <div class="market-category-card is-live">
+        <span class="market-status-badge live">Live</span>
+        <div class="market-category-icon">🎧</div>
+        <h3>Beats</h3>
+        <p>Full instrumentals across Afrobeat, Amapiano, Trap, Drill, and Street Vibes. Lease or buy exclusive rights.</p>
+        <a href="explore.html" class="main-btn">Browse Beats</a>
+      </div>
+
+      <div class="market-category-card">
+        <span class="market-status-badge soon">Coming Soon</span>
+        <div class="market-category-icon">🎛️</div>
+        <h3>Stems</h3>
+        <p>Individual track layers (drums, bass, melody, vocals) sold separately for artists who want full mixing control.</p>
+        <a href="signup.html" class="ghost-btn">Get Notified</a>
+      </div>
+
+      <div class="market-category-card">
+        <span class="market-status-badge soon">Coming Soon</span>
+        <div class="market-category-icon">🥁</div>
+        <h3>Drum Kits</h3>
+        <p>Producer-made kicks, snares, hi-hats, and log drum one-shots to build your own beats from scratch.</p>
+        <a href="signup.html" class="ghost-btn">Get Notified</a>
+      </div>
+
+      <div class="market-category-card">
+        <span class="market-status-badge soon">Coming Soon</span>
+        <div class="market-category-icon">🎚️</div>
+        <h3>Sound Kits</h3>
+        <p>Full sample packs — loops, one-shots, and MIDI — built around Afrobeat, Amapiano, and Trap production.</p>
+        <a href="signup.html" class="ghost-btn">Get Notified</a>
+      </div>
+
+      <div class="market-category-card">
+        <span class="market-status-badge soon">Coming Soon</span>
+        <div class="market-category-icon">🎹</div>
+        <h3>Presets</h3>
+        <p>Synth and plugin presets tuned to the log drums, keys, and leads that define these genres.</p>
+        <a href="signup.html" class="ghost-btn">Get Notified</a>
+      </div>
+
+      <div class="market-category-card">
+        <span class="market-status-badge soon">Coming Soon</span>
+        <div class="market-category-icon">🎙️</div>
+        <h3>Full Song Placements</h3>
+        <p>Finished, ready-to-release tracks available for placement or feature — beyond just an instrumental.</p>
+        <a href="signup.html" class="ghost-btn">Get Notified</a>
+      </div>
+
+      <div class="market-category-card">
+        <span class="market-status-badge soon">Coming Soon</span>
+        <div class="market-category-icon">🎚️</div>
+        <h3>Mixing &amp; Mastering</h3>
+        <p>Book a producer directly for mixing, mastering, or a fully custom beat built to your reference.</p>
+        <a href="signup.html" class="ghost-btn">Get Notified</a>
+      </div>
+
+      <div class="market-category-card">
+        <span class="market-status-badge soon">Coming Soon</span>
+        <div class="market-category-icon">📦</div>
+        <h3>Bundles &amp; Collections</h3>
+        <p>Curated packs — genre bundles, producer collections, beat-plus-stems packages at a combined price.</p>
+        <a href="signup.html" class="ghost-btn">Get Notified</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- WHY SELL MORE THAN BEATS — producer-facing benefits of        -->
+  <!-- diversifying beyond single beat sales.                        -->
+  <!-- ============================================================ -->
+  <section class="market-seller-benefits">
+    <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">FOR PRODUCERS</span>
+    <h2>Why Sell More Than Beats</h2>
+    <div class="market-benefits-grid">
+      <div class="market-benefit-card">
+        <div class="genre-spotlight-icon">💰</div>
+        <h3>More Revenue Streams</h3>
+        <p>Stems, kits, and services sell to artists and other producers, not just beat buyers.</p>
+      </div>
+      <div class="market-benefit-card">
+        <div class="genre-spotlight-icon">🔁</div>
+        <h3>Repeat Customers</h3>
+        <p>A drum kit or preset pack can sell over and over, long after a single beat's exclusive sells once.</p>
+      </div>
+      <div class="market-benefit-card">
+        <div class="genre-spotlight-icon">🏆</div>
+        <h3>Showcase Your Range</h3>
+        <p>Mixing, mastering, and custom work show artists what you can do beyond a finished beat.</p>
+      </div>
+      <div class="market-benefit-card">
+        <div class="genre-spotlight-icon">🚀</div>
+        <h3>First-Mover Advantage</h3>
+        <p>These categories are opening soon with zero existing sellers — early producers set the bar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- BUNDLES & COLLECTIONS PREVIEW — honest empty state            -->
+  <!-- ============================================================ -->
+  <section class="market-bundles">
+    <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">FEATURED</span>
+    <h2>Bundles &amp; Collections</h2>
+    <p class="market-bundles-intro">Curated multi-item packages — once producers start building them.</p>
+    <div class="market-empty">
+      <div class="founder-icon">📦</div>
+      <h3>No bundles yet</h3>
+      <p>Nobody's built a collection yet — this is one of the easiest ways for a founding producer to stand out early.</p>
+      <a href="signup.html" class="main-btn">Apply as a Producer</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- BOTTOM CTA                                                    -->
+  <!-- ============================================================ -->
+  <section class="market-cta">
+    <div class="accent-bar" style="margin:0 auto 18px;"></div>
+    <h2>Want to Sell More Than Beats?</h2>
+    <p>Apply now and be first in line when stems, kits, and services open up.</p>
+    <a href="signup.html" class="main-btn">Apply as a Producer</a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FAQ                                                           -->
+  <!-- ============================================================ -->
+  <section class="creators-faq">
+    <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">QUESTIONS</span>
+    <h2>About the Market</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>What's the difference between Market and Explore?</summary>
+        <p>Explore is specifically for browsing and filtering beats. Market is the wider hub — beats plus stems, sound kits, presets, full song placements, and services, all in one place.</p>
+      </details>
+      <details class="faq-item">
+        <summary>When will stems, kits, and services be available?</summary>
+        <p>Those categories open once the first producers start uploading to them. Tap "Get Notified" on any category and we'll reach out when it goes live.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I offer mixing or mastering as a producer?</summary>
+        <p>That's the plan for the Mixing &amp; Mastering category. <a href="signup.html">Apply now</a> and you'll be part of the first wave once it opens.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How do bundles work?</summary>
+        <p>A bundle groups multiple items — a beat with its stems, a themed pack, a producer's full kit — at one combined price. Any producer will be able to build one once the feature opens.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="mini-logo" style="width:44px;height:44px;">
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LyTune Studio X logo">
+              <path
+                d="M48 165 L82 65 Q86 50 98 47 Q110 44 121 56 L174 118 Q184 130 180 145 Q175 159 160 160 Q149 161 141 152 L109 116 L82 166 Q76 176 64 176 Q53 176 48 165"
+                fill="none" stroke="url(#featureIconGradient)" stroke-width="24"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+        <h3>LyTune Studio X</h3>
+        <p>The beat marketplace built for the next generation of African producers. Upload, sell, and get discovered.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="explore.html">Explore Beats</a>
+          <a href="trending.html">Trending</a>
+          <a href="creators.html">Creators</a>
+          <a href="market.html">Market</a>
+        </div>
+        <div class="footer-col">
+          <h4>Producers</h4>
+          <a href="signup.html">Start Selling</a>
+          <a href="ai-search.html">AI Search</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="login.html">Log In</a>
+          <a href="signup.html">Sign Up</a>
+          <a href="message.html">Messages</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 LyTune Studio X. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="LyTune on Instagram">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"></circle>
+          </svg>
+        </a>
+        <a href="#" aria-label="LyTune on X">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M18.146 2H21.5l-7.31 8.35L22.8 22h-6.77l-5.3-6.93L4.63 22H1.27l7.82-8.94L1 2h6.94l4.79 6.34L18.146 2Zm-1.19 18h1.86L7.13 3.9H5.13l11.826 16.1Z"></path>
+          </svg>
+        </a>
+        <a href="#" aria-label="LyTune on TikTok">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M16.6 2h-3.2v13.3a2.9 2.9 0 1 1-2.05-2.77V9.2a6 6 0 1 0 5.25 5.95V8.63a7.6 7.6 0 0 0 4.4 1.4V6.83a4.3 4.3 0 0 1-4.4-4.3V2Z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
