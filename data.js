@@ -1,4 +1,18 @@
+/* ===== data.js =====
+   Implements window.DATA_API, currently just initProducerSlider(),
+   which the inline script at the bottom of index.html calls.
 
+   Depends on auth.js having run first (uses window.LytuneAuth).
+
+   Online-mode note: the current server (server/routes/beats.js) has
+   no public "list producers" endpoint — GET /api/beats returns raw
+   beat rows with a producerId, but no producer name/avatar, and the
+   in-memory store starts empty on every restart. So even in online
+   mode, until a real producers endpoint exists, this renders curated
+   demo producers (the same ones featured in the Success Stories
+   section) rather than partial/anonymous data. Swap DEMO_PRODUCERS
+   for a real fetch once server/routes/ exposes producer profiles.
+*/
 window.DATA_API = (function () {
   const DEMO_PRODUCERS = [
     { name: 'Kay_Drumz', role: 'Afrobeat Producer · Lagos', initial: 'K', gradient: 'linear-gradient(135deg,#19D7FF,#007BFF)' },

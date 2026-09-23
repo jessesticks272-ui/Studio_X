@@ -1,4 +1,8 @@
-
+/* ===== theme.js =====
+   Dark/light theme toggle. Works fully offline — no network calls,
+   just localStorage + the [data-theme] attribute that style.css and
+   theme.css already key off of.
+*/
 (function () {
   const STORAGE_KEY = 'lytune-theme';
   const root = document.documentElement;
@@ -7,7 +11,8 @@
     try {
       return localStorage.getItem(STORAGE_KEY);
     } catch (err) {
-    
+      // localStorage can throw in locked-down/private browsing contexts —
+      // fall back to no stored preference rather than crashing the page.
       return null;
     }
   }

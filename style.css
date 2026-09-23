@@ -1,4 +1,26 @@
+/* ============================================================
+   index.css — all styles for index.html (LyTune Studio X landing page)
 
+   One CSS file per HTML page, matching the page's name. This file is
+   organized in three sections, in this order (order matters — later
+   sections override/extend earlier ones):
+     1. BASE STYLES        — layout, components, desktop-first rules
+     2. MOBILE OVERRIDES    — small-screen media queries
+     3. THEME TOKENS        — CSS variables the base styles reference
+                              but don't define, plus light/dark theme
+                              specifics and small accessibility defaults
+
+   When the next page (explore.html, signup.html, etc.) is built, give
+   it its own matching CSS file (explore.css, signup.css, ...) rather
+   than adding to this one — copy over whatever shared component
+   styles it needs (buttons, cards, nav) from here as a starting point.
+   ============================================================ */
+
+/* ---------------------------------------------------------- */
+/* 1. BASE STYLES                                              */
+/* ---------------------------------------------------------- */
+
+/* ===== LyTune Studio X - Main Styles ===== */
 :root {
   color-scheme: dark;
   --accent-1: #19D7FF;
@@ -401,7 +423,7 @@ display:flex;
 .search-box {
 display:flex;
   align-items:center;
-  width: 400px;
+  width: clamp(200px, 22vw, 420px);
   height:60px;
   padding:0px 8px 0px 16px;
   border-radius:16px;
@@ -440,7 +462,7 @@ display:flex;
 
 .search-btn {
    width:60px;
-  height:40px; 
+  height:40px;
   display:flex;
   align-items:center;
   justify-content:center;
