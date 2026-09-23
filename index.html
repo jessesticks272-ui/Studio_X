@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
- <title>LyTune Studio X</title> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
-    <link rel="alternate icon" type="image/png" href="assets/images/logo.png">
-  <meta name="description" content="LyTune Studio X — a beat marketplace built for Afrobeat, Amapiano, and Trap producers to upload, sell, and license beats to artists worldwide." />
+  <meta name="description" content="LyTune Studio X is a beat marketplace for African producers and artists. Discover, buy, sell and license Afrobeat, Amapiano, Trap and more." />
+  <title>LyTune Studio X | Buy, Sell &amp; Discover Beats</title>
   <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
   <link rel="alternate icon" type="image/png" href="assets/images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./index.css">
+
+  <!-- Loaded in <head>, before the body renders, so:
+       - theme.js can set the saved theme before first paint (no flash)
+       - auth.js / data.js are ready before any inline scripts further
+         down the page call window.LytuneAuth / window.DATA_API -->
   <script src="./theme.js"></script>
   <script src="./auth.js"></script>
   <script src="./data.js"></script>
@@ -312,9 +315,9 @@
   <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">YOUR STORY STARTS HERE</span>
   <h2 style="text-align:center;">Producers <span style="background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Earning Big</span> — Coming Soon</h2>
   <p style="text-align:center;color:var(--text-secondary);max-width:640px;margin:0 auto 40px;">
-    We're onboarding our very first producers right now. We're looking for the kind of
-    talent and work ethic you see from names like Pheelz, Sarz, and Rexxie — if that's you,
-    this spot could be yours.
+    We're onboarding our very first producers right now. We're looking for
+    top-tier Afrobeat, Amapiano, and Trap talent — if that's you, this spot
+    could be yours.
   </p>
 
   <div class="success-grid">
@@ -357,8 +360,11 @@
 <!-- ============================================================ -->
 <section class="earnings-calc">
   <div class="accent-bar" style="margin:0 auto 18px;"></div>
-  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">🧮 CALCULATE YOUR POTENTIAL</span>
+  <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">🧮 EXAMPLE EARNINGS CALCULATOR</span>
   <h2 style="text-align:center;">How Much <span style="background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Could You Earn</span>?</h2>
+  <p style="text-align:center;color:var(--text-secondary);max-width:560px;margin:0 auto 32px;font-size:0.9rem;">
+    This is an illustrative example, not a promise or a guarantee. Actual earnings depend on sales, pricing, licensing, and demand.
+  </p>
 
   <div class="calc-grid">
     <div class="calc-controls">
@@ -381,17 +387,17 @@
 
     <div class="calc-result" id="calcResult">
       <div class="calc-monthly">
-        <span class="calc-label">Monthly Earnings</span>
+        <span class="calc-label">Example Monthly Earnings</span>
         <span class="calc-number" id="calcMonthly">$1,350</span>
         <div class="calc-bar">
           <div class="calc-bar-fill" id="calcBarFill" style="width:27%"></div>
         </div>
       </div>
       <div class="calc-yearly">
-        <span class="calc-label">Yearly Projection</span>
+        <span class="calc-label">Example Yearly Projection</span>
         <span class="calc-number" id="calcYearly">$16,200</span>
       </div>
-      <p class="calc-note">🎯 That's just from beat sales. Royalties & placements pay extra!</p>
+      <p class="calc-note">Based only on the numbers above — not a forecast of what any producer will actually earn.</p>
     </div>
   </div>
 </section>
@@ -450,7 +456,7 @@
               <div class="phone-result-thumb"></div>
               <div class="phone-result-info">
                 <strong>Amapiano Log Drum Loop</strong>
-                <span>by Kabza De Small style</span>
+                <span>Deep bass, jazzy chords</span>
               </div>
               <div class="phone-result-match">97%</div>
             </div>
@@ -458,7 +464,7 @@
               <div class="phone-result-thumb"></div>
               <div class="phone-result-info">
                 <strong>Afro Trap Bounce</strong>
-                <span>by Rexxie style</span>
+                <span>Hard 808s, bouncy hi-hats</span>
               </div>
               <div class="phone-result-match">89%</div>
             </div>
@@ -466,7 +472,7 @@
               <div class="phone-result-thumb"></div>
               <div class="phone-result-info">
                 <strong>Street Vibes Anthem</strong>
-                <span>by Sarz style</span>
+                <span>Raw, energetic street-pop</span>
               </div>
               <div class="phone-result-match">84%</div>
             </div>
@@ -474,7 +480,7 @@
               <div class="phone-result-thumb"></div>
               <div class="phone-result-info">
                 <strong>Midnight Log Drum</strong>
-                <span>by Kabza De Small style</span>
+                <span>Dark, moody Amapiano</span>
               </div>
               <div class="phone-result-match">79%</div>
             </div>
@@ -482,7 +488,7 @@
               <div class="phone-result-thumb"></div>
               <div class="phone-result-info">
                 <strong>Energy (Afro Trap)</strong>
-                <span>by Metro Boomin style</span>
+                <span>High-energy trap melody</span>
               </div>
               <div class="phone-result-match">72%</div>
             </div>
@@ -561,7 +567,7 @@
 <!-- before Top Producers so visitors see the advantage of joining -->
 <!-- early before scrolling into the producer showcase.             -->
 <!-- ============================================================ -->
-<section class="why-lytune">
+<section class="why-lytune" id="why-lytune">
   <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">WHY WE'RE LAUNCHING LYTUNE</span>
   <h2 style="text-align:center;">Why Join <span style="background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Right Now</span></h2>
   <p style="text-align:center;color:var(--text-secondary);max-width:640px;margin:0 auto 40px;">
@@ -624,7 +630,7 @@
     </div>
 
         <div class="feature-card">
-      <span class="track-num">02</span> 
+      <span class="track-num">02</span>
       <div class="feature-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="9"></circle>
@@ -697,7 +703,7 @@
 
 <section class="showcase">
   <video autoplay muted loop playsinline class="showcase-video" data-fallback-label="LyTune showcase reel">
-    <source src="assets/videos/showcase1.mp4" type="video/mp4" />
+    <source src="assets/videos/showcase.mp4" type="video/mp4" />
   </video>
  
   <div class="showcase-overlay"></div>
@@ -746,22 +752,22 @@
 
   <div class="cook-grid">
     <div class="cook-card">
-      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Kabza De Small builds an Amapiano log drum">
+      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Building an Amapiano log drum">
         <source src="assets/videos/showcase1.mp4" type="video/mp4">
       </video>
-      <div class="cook-label">Kabza De Small builds an Amapiano log drum</div>
+      <div class="cook-label">Building an Amapiano log drum from scratch</div>
     </div>
     <div class="cook-card">
-      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Metro Boomin layers a trap melody">
+      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Layering a trap melody">
         <source src="assets/videos/cook-2.mp4" type="video/mp4">
       </video>
-      <div class="cook-label">Metro Boomin layers a trap melody</div>
+      <div class="cook-label">Layering a trap melody</div>
     </div>
     <div class="cook-card">
-      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Pheelz mixes down a full track">
+      <video class="cook-video" muted loop playsinline autoplay data-fallback-label="Mixing down a full track">
         <source src="assets/videos/cook-3.mp4" type="video/mp4">
       </video>
-      <div class="cook-label">Pheelz mixes down a full track</div>
+      <div class="cook-label">Mixing down a full track</div>
     </div>
   </div>
 </section>
