@@ -1,13 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LyTune Studio X</title>
-  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
-  <link rel="alternate icon" type="image/png" href="assets/images/logo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
-  </head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="LyTune Studio X AI Search. Find beats by sound, mood, genre and audio.">
+<title>AI Beat Search | LyTune Studio X</title>
+<link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+<script src="./theme.js"></script>
+<script src="./auth.js"></script>
+<style>
+.ai-page{min-height:100vh;padding:0 24px 80px;position:relative;overflow:hidden}.ai-wrap{max-width:1120px;margin:auto;position:relative;z-index:1}.ai-top{padding:30px 0;display:flex;justify-content:space-between}.ai-top a{color:var(--text-secondary);text-decoration:none}.ai-kicker{display:inline-block;padding:7px 12px;border:1px solid rgba(25,215,255,.28);border-radius:999px;background:rgba(25,215,255,.06);color:var(--accent-1);font-size:.68rem;font-weight:800;letter-spacing:.12em}.ai-hero{text-align:center;padding:35px 0 45px}.ai-hero h1{font-size:clamp(2.6rem,7vw,5.8rem);line-height:.95;letter-spacing:-.06em;margin:18px 0}.ai-hero h1 span{background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);-webkit-background-clip:text;color:transparent}.ai-hero p{max-width:670px;margin:auto;color:var(--text-secondary);line-height:1.7}.lab{display:grid;grid-template-columns:1.08fr .92fr;gap:22px}.card{background:rgba(255,255,255,.035);border:1px solid var(--border-color);border-radius:24px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.18);backdrop-filter:blur(18px)}.card h2{font-size:1.1rem;margin:0 0 5px}.muted{color:var(--text-secondary);font-size:.8rem;line-height:1.55}.drop{margin-top:18px;border:1px dashed rgba(25,215,255,.4);border-radius:20px;padding:30px 18px;text-align:center;cursor:pointer;background:linear-gradient(145deg,rgba(25,215,255,.05),rgba(155,46,255,.05));transition:.2s}.drop:hover,.drag{border-color:var(--accent-1);transform:translateY(-2px)}.drop b{display:block;margin-bottom:5px}.drop small{color:var(--text-secondary)}#file{display:none}.pill{display:none;margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);font-size:.75rem;justify-content:space-between}.show{display:flex}.wave{display:none;margin-top:12px;background:rgba(0,0,0,.15);border-radius:14px;padding:10px}.wave canvas{width:100%;height:65px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.field.full{grid-column:1/-1}.field label{display:block;color:var(--text-secondary);font-size:.72rem;margin-bottom:7px}.field select,.field input{width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1px solid var(--border-color);background:rgba(255,255,255,.045);color:var(--text-primary);font:inherit;font-size:.8rem}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);border-radius:999px;padding:7px 11px;font:inherit;font-size:.7rem;cursor:pointer}.chip.active{border-color:rgba(25,215,255,.55);background:rgba(25,215,255,.1);color:#fff}.search{width:100%;margin-top:17px;border:0;border-radius:13px;padding:14px;background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);color:#fff;font:inherit;font-weight:800;cursor:pointer}.search:disabled{opacity:.5;cursor:not-allowed}.status{text-align:center;color:var(--text-secondary);font-size:.7rem;min-height:18px;margin-top:9px}.results{display:flex;flex-direction:column;gap:9px;max-height:600px;overflow:auto}.result{display:grid;grid-template-columns:52px 1fr auto;gap:11px;align-items:center;padding:11px;border-radius:15px;background:rgba(255,255,255,.035);border:1px solid transparent}.result:hover{border-color:rgba(25,215,255,.2)}.art{width:52px;height:52px;border-radius:13px;display:grid;place-items:center;color:#fff;font-weight:800;background:linear-gradient(135deg,#19D7FF,#007BFF)}.result:nth-child(2n) .art{background:linear-gradient(135deg,#9B2EFF,#19D7FF)}.result:nth-child(3n) .art{background:linear-gradient(135deg,#007BFF,#9B2EFF)}.result strong{display:block;font-size:.82rem}.result span{display:block;color:var(--text-secondary);font-size:.68rem;margin-top:3px}.score{color:var(--accent-1);font-size:.7rem;font-weight:800}.empty{text-align:center;color:var(--text-secondary);padding:70px 15px;font-size:.78rem}.how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}.how .card{padding:18px}.how h3{font-size:.85rem;margin:7px 0}.how p{font-size:.72rem;color:var(--text-secondary);line-height:1.5;margin:0}.notice{margin-top:15px;color:var(--text-secondary);font-size:.68rem;line-height:1.5;padding:11px;border-radius:12px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.16)}
+@media(max-width:850px){.lab{grid-template-columns:1fr}.how{grid-template-columns:1fr}}@media(max-width:560px){.ai-page{padding:0 14px 55px}.ai-kicker{display:none}.card{padding:18px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.result{grid-template-columns:48px 1fr}.art{width:48px;height:48px}.score{display:none}}
+</style>
+</head>
+<body>
+<div class="noise"></div><div class="bg-blur blur1"></div><div class="bg-blur blur2"></div>
+<main class="ai-page"><div class="ai-wrap">
+<div class="ai-top"><a href="index.html">← Back to LyTune Studio X</a><span class="ai-kicker">✦ AI POWERED DISCOVERY</span></div>
+<section class="ai-hero"><span class="ai-kicker">SOUND → SEARCH → DISCOVER</span><h1>Find the beat that <span>sounds right.</span></h1><p>Upload a voice note, freestyle, melody, MP3 or MP4. LyTune turns your idea into a searchable sound profile and surfaces matching beats.</p></section>
+<section class="lab">
+<div class="card">
+<h2>1. Give LyTune a sound</h2><p class="muted">Start with audio, then add a vibe or genre to sharpen the search.</p>
+<label class="drop" id="drop" for="file"><div style="font-size:1.8rem;margin-bottom:10px">🎧</div><b>Drop audio here or choose a file</b><small>MP3, WAV, M4A, OGG or MP4</small></label>
+<input id="file" type="file" accept="audio/*,video/*">
+<div class="pill" id="pill"><span id="name"></span><span id="meta"></span></div>
+<div class="wave" id="wave"><canvas id="canvas" width="900" height="130"></canvas></div>
+<div class="grid">
+<div class="field"><label>Genre</label><select id="genre"><option value="any">Any genre</option><option>Afrobeat</option><option>Amapiano</option><option>Trap</option><option>Afro-fusion</option><option>Afro-drill</option></select></div>
+<div class="field"><label>Tempo</label><select id="tempo"><option value="any">Any tempo</option><option value="slow">Slow • 70–95 BPM</option><option value="mid">Mid • 96–115 BPM</option><option value="fast">Fast • 116–145 BPM</option></select></div>
+<div class="field full"><label>Vibe</label><div class="chips" id="chips"><button class="chip active" data-vibe="any" type="button">Any vibe</button><button class="chip " data-vibe="dark" type="button">Dark</button><button class="chip " data-vibe="chill" type="button">Chill</button><button class="chip " data-vibe="energetic" type="button">Energetic</button><button class="chip " data-vibe="romantic" type="button">Romantic</button><button class="chip " data-vibe="street" type="button">Street</button></div></div>
+<div class="field full"><label>Extra direction</label><input id="keywords" placeholder="e.g. log drums, late-night, street bounce..."></div>
+</div>
+<button class="search" id="search" disabled>Find Matching Beats</button><div class="status" id="status">Upload a sound to begin.</div>
+<div class="notice">The page is production-ready as a search interface. Its current matcher uses browser audio analysis plus bundled demo metadata. A real AI/vector-search endpoint can plug into the same UI later.</div>
+</div>
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:14px"><div><h2>2. Matching beats</h2><div class="muted" id="count">Waiting for a search</div></div><span class="ai-kicker">LIVE UI</span></div>
+<div class="results" id="results"><div class="empty">◌<br><br>Upload a sound to wake up the search.</div></div>
+</div>
+</section>
+<section class="how"><div class="card"><small style="color:var(--accent-1)">01 / LISTEN</small><h3>Extract the idea</h3><p>The browser reads the selected file and creates a lightweight audio profile from its waveform and duration.</p></div><div class="card"><small style="color:var(--accent-1)">02 / UNDERSTAND</small><h3>Combine your direction</h3><p>Genre, tempo, vibe and keywords become search signals alongside the audio profile.</p></div><div class="card"><small style="color:var(--accent-1)">03 / MATCH</small><h3>Surface candidates</h3><p>Beat metadata is ranked instantly. A production AI service can replace this ranking layer later.</p></div></section>
+</div></main>
+<script>
+const beats=[
+["Lagos After Dark","Kay_Drumz","afrobeat","mid","street",104,"$29",94],
+["Palmwine Skies","PianoKeysSA","afrobeat","slow","chill",92,"$25",91],
+["Log Drum Pressure","Talemo_Beats","amapiano","mid","energetic",112,"$35",89],
+["Blue Hour","BeatMason","afrofusion","slow","romantic",88,"$30",87],
+["Concrete Flow","Spanky_Drill","drill","fast","street",138,"$22",86],
+["Neon Bounce","DJ Kaywise","afrobeat","fast","energetic",121,"$40",84],
+["Midnight Amapiano","Talemo_Beats","amapiano","slow","dark",94,"$32",82],
+["No Sleep","Spanky_Drill","trap","fast","dark",140,"$27",80]
+];
+let fileReady=false,vibe="any",duration=0;
+const $=id=>document.getElementById(id),ctx=$("canvas").getContext("2d");
+function drawFallback(){ctx.clearRect(0,0,900,130);ctx.beginPath();for(let x=0;x<900;x+=8){let h=10+Math.abs(Math.sin(x*.035))*42;ctx.moveTo(x,65-h);ctx.lineTo(x,65+h)}ctx.strokeStyle="#19D7FF";ctx.lineWidth=2;ctx.stroke()}
+async function loadFile(f){
+if(!f)return;fileReady=true;$("name").textContent=f.name;$("meta").textContent=(f.size/1048576).toFixed(1)+" MB";$("pill").classList.add("show");$("wave").style.display="block";$("search").disabled=false;$("status").textContent="Reading your sound profile…";
+try{let u=URL.createObjectURL(f),a=document.createElement("audio");a.preload="metadata";await new Promise((res,rej)=>{a.onloadedmetadata=res;a.onerror=rej;a.src=u});duration=a.duration||0;URL.revokeObjectURL(u)}catch(e){}
+drawFallback();
+try{let r=new FileReader();r.onload=async e=>{try{let ac=new AudioContext(),b=await ac.decodeAudioData(e.target.result.slice(0)),d=b.getChannelData(0),n=100,s=Math.max(1,Math.floor(d.length/n));ctx.clearRect(0,0,900,130);ctx.beginPath();for(let i=0;i<n;i++){let sum=0;for(let j=0;j<s&&i*s+j<d.length;j++)sum+=Math.abs(d[i*s+j]);let h=8+Math.min(50,sum/s*3.5),x=i*9;ctx.moveTo(x,65-h);ctx.lineTo(x,65+h)}ctx.strokeStyle="#19D7FF";ctx.lineWidth=3;ctx.stroke();await ac.close()}catch(e){}};r.readAsArrayBuffer(f)}catch(e){}
+$("status").textContent="Sound ready • "+(duration?Math.round(duration)+" sec • ":"")+"choose filters or search now.";
+}
+$("file").onchange=e=>loadFile(e.target.files[0]);["dragenter","dragover"].forEach(x=>$("drop").addEventListener(x,e=>{e.preventDefault();$("drop").classList.add("drag")}));["dragleave","drop"].forEach(x=>$("drop").addEventListener(x,e=>{e.preventDefault();$("drop").classList.remove("drag")}));$("drop").addEventListener("drop",e=>loadFile(e.dataTransfer.files[0]));
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");vibe=c.dataset.vibe});
+function rank(b){let s=b[7],g=$("genre").value.toLowerCase(),t=$("tempo").value;if(g!=="any")s+=b[2]===g?18:-8;if(t!=="any")s+=b[3]===t?12:-5;if(vibe!=="any")s+=b[4]===vibe?14:-4;let k=$("keywords").value.toLowerCase();if(k&&[b[0],b[1],b[2],b[4]].some(x=>k.includes(x)))s+=5;return Math.max(50,Math.min(99,Math.round(s)))}
+$("search").onclick=()=>{if(!fileReady)return;$("status").textContent="Matching your sound…";$("search").disabled=true;setTimeout(()=>{let r=beats.map(b=>[...b,rank(b)]).sort((a,b)=>b[8]-a[8]);$("count").textContent=r.length+" candidate beats ranked by your search";$("results").innerHTML=r.map((b,i)=>'<article class="result"><div class="art">'+String(i+1).padStart(2,"0")+'</div><div><strong>'+b[0]+'</strong><span>'+b[1]+' • '+b[2]+' • '+b[5]+' BPM • '+b[6]+'</span></div><div class="score">'+b[8]+'% match</div></article>').join("");$("search").disabled=false;$("search").textContent="Search Again";$("status").textContent="Search complete • adjust a filter and search again."},400)}
+</script>
+</body></html>
