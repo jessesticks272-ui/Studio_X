@@ -151,7 +151,7 @@ async function separateStems(){
   results.innerHTML="";
 
   try{
-    const { upload } = await import("https://cdn.jsdelivr.net/npm/@vercel/blob@2.6.1/+esm");
+    const { upload } = await import("https://cdn.jsdelivr.net/npm/@vercel/blob@2.6.1/client/+esm");
     const blob=await upload("lytune-stems/"+Date.now()+"-"+stemFile.name.replace(/[^a-zA-Z0-9._-]/g,"_"),stemFile,{
       access:"public",
       handleUploadUrl:"/api/blob-upload",
