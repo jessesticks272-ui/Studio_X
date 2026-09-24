@@ -38,14 +38,14 @@
 <div class="field full"><label>Extra direction</label><input id="keywords" placeholder="e.g. log drums, late-night, street bounce..."></div>
 </div>
 <button class="search" id="search" disabled>Find Matching Beats</button><div class="status" id="status">Upload a sound to begin.</div>
-<div class="notice">The page is production-ready as a search interface. Its current matcher uses browser audio analysis plus bundled demo metadata. A real AI/vector-search endpoint can plug into the same UI later.</div>
+<div class="notice">This search now uses the LyTune AI backend to understand your direction and rank the supplied beat catalog. Audio feature extraction and the full producer catalog will be connected in the next phases.</div>
 </div>
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:14px"><div><h2>2. Matching beats</h2><div class="muted" id="count">Waiting for a search</div></div><span class="ai-kicker">LIVE UI</span></div>
 <div class="results" id="results"><div class="empty">◌<br><br>Upload a sound to wake up the search.</div></div>
 </div>
 </section>
-<section class="how"><div class="card"><small style="color:var(--accent-1)">01 / LISTEN</small><h3>Extract the idea</h3><p>The browser reads the selected file and creates a lightweight audio profile from its waveform and duration.</p></div><div class="card"><small style="color:var(--accent-1)">02 / UNDERSTAND</small><h3>Combine your direction</h3><p>Genre, tempo, vibe and keywords become search signals alongside the audio profile.</p></div><div class="card"><small style="color:var(--accent-1)">03 / MATCH</small><h3>Surface candidates</h3><p>Beat metadata is ranked instantly. A production AI service can replace this ranking layer later.</p></div></section><section class="ai-next">
+<section class="how"><div class="card"><small style="color:var(--accent-1)">01 / LISTEN</small><h3>Extract the idea</h3><p>LyTune reads your search signals and sends them securely to the AI backend for musical interpretation.</p></div><div class="card"><small style="color:var(--accent-1)">02 / UNDERSTAND</small><h3>Combine your direction</h3><p>Genre, tempo, vibe and keywords become search signals alongside the audio profile.</p></div><div class="card"><small style="color:var(--accent-1)">03 / MATCH</small><h3>Surface candidates</h3><p>The AI backend interprets the request, ranks catalog candidates and explains the match.</p></div></section><section class="ai-next">
 <div class="card dna"><h2>✦ Your Sound DNA</h2><p class="muted">Not just a search result. LyTune turns your upload into a creative fingerprint.</p><div class="dna-ring"></div><div class="stat-grid"><div class="stat"><b id="dnaEnergy">--</b><span>ENERGY</span></div><div class="stat"><b id="dnaMotion">--</b><span>MOTION</span></div><div class="stat"><b id="dnaLength">--</b><span>LENGTH</span></div></div></div>
 <div class="card"><h2>⚡ AI Creative Director</h2><p class="muted">Once your sound is loaded, LyTune can turn the fingerprint into creative next moves.</p><div class="ideas">
 <div class="idea" data-idea="Build a darker intro, then open into a wider Afro-fusion chorus."><b>🎬 Arrange my song</b><p>Suggest an intro, verse, pre-chorus and hook energy arc from the sound profile.</p></div>
@@ -78,7 +78,26 @@ $("file").onchange=e=>loadFile(e.target.files[0]);["dragenter","dragover"].forEa
 document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");vibe=c.dataset.vibe});
 function rank(b){let s=b[7],g=$("genre").value.toLowerCase(),t=$("tempo").value;if(g!=="any")s+=b[2]===g?18:-8;if(t!=="any")s+=b[3]===t?12:-5;if(vibe!=="any")s+=b[4]===vibe?14:-4;let k=$("keywords").value.toLowerCase();let hay=[b[0],b[1],b[2],b[4]].join(" ").toLowerCase();if(k&&k.split(/[^a-z0-9]+/).filter(Boolean).some(w=>w.length>2&&hay.includes(w)))s+=5;return Math.max(50,Math.min(99,Math.round(s)))}
 function matchReasons(b){let a=[];let g=$("genre").value.toLowerCase(),t=$("tempo").value;if(g!=="any"&&b[2]===g)a.push("Genre aligned");if(t!=="any"&&b[3]===t)a.push("Tempo aligned");if(vibe!=="any"&&b[4]===vibe)a.push("Vibe aligned");let k=$("keywords").value.toLowerCase();if(k&&k.split(/[^a-z0-9]+/).filter(Boolean).some(w=>w.length>2&&[b[0],b[1],b[2],b[4]].join(" ").toLowerCase().includes(w)))a.push("Direction matched");if(!a.length)a.push("Catalog similarity");return a.slice(0,3)}
-$("search").onclick=()=>{if(!fileReady)return;$("status").textContent="Matching your sound…";$("search").disabled=true;setTimeout(()=>{let r=beats.map(b=>[...b,rank(b)]).sort((a,b)=>b[8]-a[8]);$("count").textContent=r.length+" candidate beats ranked by your search";$("results").innerHTML=r.map((b,i)=>'<article class="result" tabindex="0" data-index="'+i+'"><div class="art">'+String(i+1).padStart(2,"0")+'</div><div><strong>'+b[0]+'</strong><span>'+b[1]+' • '+b[2]+' • '+b[5]+' BPM • '+b[6]+'</span><div class="match-reasons">'+matchReasons(b).map(x=>'<span class="reason">✓ '+x+'</span>').join("")+'</div></div><div class="score">'+b[8]+'% match</div></article>').join("");document.querySelectorAll(".result").forEach(el=>{const show=()=>{if(el.querySelector(".xray"))return;const b=r[Number(el.dataset.index)],box=document.createElement("div");box.className="xray";box.innerHTML="<b>Match X-Ray:</b> "+matchReasons(b).join(" • ")+". This explains the current catalog signals.";el.appendChild(box)};el.addEventListener("click",show);el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();show()}})});$("search").disabled=false;$("search").textContent="Search Again";$("status").textContent="Search complete • adjust a filter and search again."},400)}
+async function runAISearch(){
+ if(!fileReady)return;
+ const button=$("search");
+ button.disabled=true;
+ button.textContent="AI is listening…";
+ $("status").textContent="LyTune AI is understanding your direction…";
+ const catalog=beats.map(b=>({title:b[0],producer:b[1],genre:b[2],tempo:b[3],vibe:b[4],bpm:b[5],price:b[6]}));
+ try{
+   const response=await fetch("/api/ai-search",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:$("keywords").value,genre:$("genre").value,tempo:$("tempo").value,vibe,duration,catalog})});
+   const data=await response.json();
+   if(!response.ok) throw new Error(data.error||"AI search failed");
+   const profile=data.soundProfile||{};
+   const ranked=(data.matches||[]).map(m=>{const b=beats[m.catalogId];return b?{b,score:m.score,reasons:m.reasons||[],explanation:m.explanation||""}:null}).filter(Boolean);
+   $("count").textContent=ranked.length+" AI-ranked candidate beats";
+   $("results").innerHTML=ranked.length?ranked.map((m,i)=>{const b=m.b;return '<article class="result" tabindex="0"><div class="art">'+String(i+1).padStart(2,"0")+'</div><div><strong>'+b[0]+'</strong><span>'+b[1]+' • '+b[2]+' • '+b[5]+' BPM • '+b[6]+'</span><div class="match-reasons">'+m.reasons.map(x=>'<span class="reason">✓ '+x+'</span>').join("")+'</div><div class="xray"><b>AI Match X-Ray:</b> '+m.explanation+'</div></div><div class="score">'+m.score+'% match</div></article>'}).join(""):'<div class="empty">The AI could not find a strong catalog match. Try another direction.</div>';
+   $("status").textContent="AI search complete • "+(profile.direction||"your sound direction");
+   button.textContent="Search Again";
+ }catch(error){console.error(error);$("status").textContent=error.message||"AI search failed.";button.textContent="Try Again";}finally{button.disabled=false;}
+}
+$("search").onclick=runAISearch;
 
 // Creative intelligence layer
 function updateDNA(){
