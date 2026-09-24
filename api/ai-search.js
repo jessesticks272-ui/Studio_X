@@ -79,7 +79,7 @@ export async function POST(request) {
         text: {
           format: {
             type: "json_schema",
-            name: "ly tune_ai_search",
+            name: "ly_tune_ai_search",
             strict: true,
             schema: {
               type: "object",
