@@ -18,6 +18,8 @@
 </style>
 <style>
 .ai-next{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}.dna{min-height:250px}.dna-ring{width:180px;height:180px;border-radius:50%;margin:20px auto;display:grid;place-items:center;background:conic-gradient(#19D7FF 0 28%,#007BFF 28% 57%,#9B2EFF 57% 79%,rgba(255,255,255,.08) 79% 100%);position:relative}.dna-ring:after{content:"SOUND DNA";width:128px;height:128px;border-radius:50%;display:grid;place-items:center;background:#090d18;border:1px solid var(--border-color);font-size:.7rem;font-weight:800}.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{padding:10px;border-radius:12px;background:rgba(255,255,255,.035);text-align:center}.stat b{display:block;font-size:1rem}.stat span{font-size:.6rem;color:var(--text-secondary)}.ideas{display:grid;gap:9px;margin-top:13px}.idea{padding:12px;border:1px solid var(--border-color);border-radius:13px;background:rgba(255,255,255,.025);cursor:pointer}.idea:hover{border-color:rgba(25,215,255,.35)}.idea b{font-size:.76rem}.idea p{font-size:.66rem;color:var(--text-secondary);margin:4px 0 0;line-height:1.45}.lab-btn{border:1px solid var(--border-color);background:rgba(255,255,255,.04);color:var(--text-primary);padding:9px 11px;border-radius:10px;font:inherit;font-size:.68rem;cursor:pointer}.producer-fit{display:flex;align-items:center;gap:12px;margin-top:13px;padding:13px;border-radius:14px;background:linear-gradient(100deg,rgba(25,215,255,.06),rgba(155,46,255,.06));border:1px solid var(--border-color)}.fit-orb{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#19D7FF,#9B2EFF);font-weight:800;color:#fff}.match-reasons{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.reason{font-size:.58rem;padding:4px 7px;border-radius:999px;background:rgba(25,215,255,.07);border:1px solid rgba(25,215,255,.16);color:var(--text-secondary)}.result{cursor:pointer}.result:focus{outline:2px solid rgba(25,215,255,.45);outline-offset:2px}.xray{margin-top:10px;padding:10px 11px;border-radius:12px;background:rgba(25,215,255,.045);border:1px solid rgba(25,215,255,.14);font-size:.66rem;color:var(--text-secondary);line-height:1.45}.xray b{color:var(--text-primary)}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#111827;color:#fff;border:1px solid var(--border-color);padding:11px 15px;border-radius:999px;font-size:.72rem;transition:.25s;z-index:20}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}@media(max-width:850px){.ai-next{grid-template-columns:1fr}}
+
+.stem-card{margin-top:20px}.stem-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.stem-option{padding:14px;border:1px solid var(--border-color);border-radius:15px;background:rgba(255,255,255,.025)}.stem-option b{font-size:.8rem}.stem-option p{font-size:.67rem;color:var(--text-secondary);line-height:1.45;margin:5px 0 0}.stem-progress{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:13px}.stem-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#19D7FF,#007BFF,#9B2EFF);transition:width .25s}.stem-status{margin-top:9px;color:var(--text-secondary);font-size:.68rem;min-height:18px}.stem-results{display:grid;gap:8px;margin-top:14px}.stem-row{display:grid;grid-template-columns:82px 1fr auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--border-color);border-radius:13px;background:rgba(255,255,255,.025)}.stem-row b{font-size:.72rem}.stem-row audio{width:100%;height:32px}.stem-row a{font-size:.62rem;color:var(--accent-1);text-decoration:none;white-space:nowrap}.stem-tag{font-size:.58rem;color:var(--text-secondary)}@media(max-width:700px){.stem-grid{grid-template-columns:1fr}.stem-row{grid-template-columns:1fr}.stem-row audio{width:100%}}
 </style></head>
 <body>
 <div class="noise"></div><div class="bg-blur blur1"></div><div class="bg-blur blur2"></div>
@@ -52,6 +54,26 @@
 <div class="idea" data-idea="Try 104–112 BPM with syncopated percussion and a spacious hook."><b>🥁 Find my pocket</b><p>Generate a producer-ready tempo and groove direction.</p></div>
 <div class="idea" data-idea="Your strongest lane is an energetic Afrobeat/Amapiano crossover."><b>🌍 Discover my lane</b><p>Reveal genre crossover ideas instead of forcing your music into one box.</p></div>
 </div><div class="producer-fit"><div class="fit-orb">P</div><div><b style="font-size:.76rem">Producer Match Radar</b><div class="muted">Find producers whose catalog matches your Sound DNA.</div></div><button class="lab-btn" id="producerBtn" type="button">Explore</button></div></div>
+
+<section class="card stem-card">
+  <div style="display:flex;justify-content:space-between;align-items:end;gap:12px">
+    <div>
+      <h2>✂️ AI Stem Separation</h2>
+      <p class="muted">Separate an uploaded song into independent parts such as vocals, drums, bass and other instruments. This uses a real source-separation model, not a visual demo.</p>
+    </div>
+    <span class="ai-kicker">DEMUCS AI</span>
+  </div>
+  <div class="stem-grid">
+    <div class="stem-option"><b>🎤 Vocals</b><p>Isolate the vocal performance for practice, remixing or analysis.</p></div>
+    <div class="stem-option"><b>🥁 Drums</b><p>Extract the drum/percussion layer from the full mix.</p></div>
+    <div class="stem-option"><b>🎸 Bass</b><p>Pull out the bass layer from the song.</p></div>
+    <div class="stem-option"><b>🎹 Other</b><p>Capture the remaining musical material after the main stems are separated.</p></div>
+  </div>
+  <button class="search" id="stemBtn" type="button" disabled>Separate My Song</button>
+  <div class="stem-progress"><i id="stemProgress"></i></div>
+  <div class="stem-status" id="stemStatus">Choose an audio file above to enable stem separation.</div>
+  <div class="stem-results" id="stemResults"></div>
+</section>
 </section></div><div class="toast" id="toast"></div></main>
 <script>
 const beats=[
@@ -115,5 +137,108 @@ document.querySelectorAll(".idea").forEach(x=>x.addEventListener("click",()=>{
 $("producerBtn").addEventListener("click",()=>{
  const t=$("toast");t.textContent="Producer Match Radar is ready for live producer profiles.";t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200);
 });
+
+let stemFile=null, stemBusy=false;
+
+async function separateStems(){
+  if(!stemFile || stemBusy)return;
+  stemBusy=true;
+  const btn=$("stemBtn"), status=$("stemStatus"), progress=$("stemProgress"), results=$("stemResults");
+  btn.disabled=true;
+  btn.textContent="Uploading securely…";
+  status.textContent="Uploading the audio directly to storage…";
+  progress.style.width="8%";
+  results.innerHTML="";
+
+  try{
+    const { upload } = await import("https://esm.sh/@vercel/blob@2.6.1/client");
+    const blob=await upload("lytune-stems/"+Date.now()+"-"+stemFile.name.replace(/[^a-zA-Z0-9._-]/g,"_"),stemFile,{
+      access:"public",
+      handleUploadUrl:"/api/blob-upload",
+      multipart:true,
+      onUploadProgress(e){
+        const p=Math.max(8,Math.min(45,8+Math.round(e.percentage*.37)));
+        progress.style.width=p+"%";
+        status.textContent="Uploading audio… "+Math.round(e.percentage)+"%";
+      }
+    });
+
+    btn.textContent="AI is separating stems…";
+    status.textContent="Demucs is separating the musical layers. This can take a little while.";
+    progress.style.width="50%";
+
+    const start=await fetch("/api/stems",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({audioUrl:blob.url})
+    });
+    const job=await start.json();
+    if(!start.ok)throw new Error(job.error||"Could not start stem separation.");
+
+    if(job.status==="succeeded"){
+      renderStems(job.output);
+      progress.style.width="100%";
+      status.textContent="Stem separation complete.";
+      btn.textContent="Separate Again";
+      return;
+    }
+
+    let attempts=0;
+    while(attempts<90){
+      await new Promise(r=>setTimeout(r,2500));
+      attempts++;
+      const check=await fetch("/api/stems?id="+encodeURIComponent(job.predictionId));
+      const data=await check.json();
+      if(!check.ok)throw new Error(data.error||"Could not check separation status.");
+
+      const pct=Math.min(96,50+Math.round(attempts/90*46));
+      progress.style.width=pct+"%";
+      status.textContent="AI separation: "+(data.status||"processing")+"…";
+
+      if(data.status==="succeeded"){
+        renderStems(data.output);
+        progress.style.width="100%";
+        status.textContent="Stem separation complete. Your separated tracks are ready.";
+        btn.textContent="Separate Again";
+        return;
+      }
+      if(data.status==="failed"||data.status==="canceled"){
+        throw new Error(data.error||"The stem separation job did not complete.");
+      }
+    }
+    throw new Error("The separation is taking longer than expected. You can try again.");
+  }catch(error){
+    console.error(error);
+    status.textContent=error.message||"Stem separation failed.";
+    btn.textContent="Try Again";
+    progress.style.width="0";
+  }finally{
+    stemBusy=false;
+    btn.disabled=!stemFile;
+  }
+}
+
+function renderStems(output){
+  const results=$("stemResults");
+  if(!output||typeof output!=="object"){
+    results.innerHTML='<div class="stem-status">No stem files were returned.</div>';
+    return;
+  }
+  const order=[["vocals","🎤 Vocals"],["drums","🥁 Drums"],["bass","🎸 Bass"],["other","🎹 Other"],["piano","🎹 Piano"],["guitar","🎸 Guitar"]];
+  results.innerHTML=order.filter(([key])=>output[key]).map(([key,label])=>
+    '<div class="stem-row"><div><b>'+label+'</b><span class="stem-tag">AI separated</span></div><audio controls preload="none" src="'+output[key]+'"></audio><a href="'+output[key]+'" target="_blank" rel="noopener">Open</a></div>'
+  ).join("");
+}
+
+const oldLoadFileForStems=loadFile;
+loadFile=async function(f){
+  stemFile=f||null;
+  $("stemBtn").disabled=!stemFile;
+  $("stemStatus").textContent=stemFile?"Ready to separate "+stemFile.name:"Choose an audio file above to enable stem separation.";
+  $("stemResults").innerHTML="";
+  $("stemProgress").style.width="0";
+  await oldLoadFileForStems(f);
+};
+$("stemBtn").addEventListener("click",separateStems);
 </script>
 </body></html>
