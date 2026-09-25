@@ -107,6 +107,7 @@ function saveAndContinue(user, role) {
   };
   localStorage.setItem("lytune-user", JSON.stringify(profile));
   localStorage.setItem("lytune-pending-role", role);
+  localStorage.setItem("lytune-role", role);
   window.location.href = "index.html";
 }
 
