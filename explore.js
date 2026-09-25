@@ -104,7 +104,7 @@
       '</div>';
 
     card.querySelector('.beat-play-btn').addEventListener('click', () => openPlayer(beat, producerLabel));
-    card.querySelector('.add-to-cart-btn').addEventListener('click', () => addToCart());
+    card.querySelector('.add-to-cart-btn').addEventListener('click', () => addToCart(beat));
 
     return card;
   }
@@ -239,8 +239,13 @@
 
   /* ---------- cart (demo counter — no real cart/checkout backend yet) ---------- */
 
-  function addToCart() {
+  function addToCart(beat) {
     cartCount += 1;
+    try {
+      const items = JSON.parse(localStorage.getItem("lytune-cart") || "[]");
+      items.push({ id: beat && beat.id, title: beat && beat.title, price: Number(beat && beat.price || 0), currency: beat && beat.currency || "USD", licenseType: beat && beat.licenseType || "lease" });
+      localStorage.setItem("lytune-cart", JSON.stringify(items));
+    } catch (err) {}
     if (cartCountEl) cartCountEl.textContent = String(cartCount);
     if (cartBtn) {
       cartBtn.style.transform = 'scale(1.15)';
@@ -299,8 +304,7 @@
     }
 
     if (cartBtn) cartBtn.addEventListener('click', () => {
-      // Demo-only: no cart page exists yet, so just acknowledge the tap
-      // rather than linking somewhere broken.
+      if (localStorage.getItem("lytune-cart")) location.href = "checkout.html";
       cartBtn.style.transform = 'scale(0.92)';
       setTimeout(() => { cartBtn.style.transform = 'scale(1)'; }, 120);
     });
