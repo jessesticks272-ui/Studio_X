@@ -178,7 +178,7 @@ async function separateStems(){
       body:JSON.stringify({audioUrl:blob.url})
     });
     const job=await start.json();
-    if(!start.ok)throw new Error(job.error||"Could not start stem separation.");
+    if(!start.ok)throw new Error(job.detail||job.error||"Could not start stem separation.");
 
     if(job.status==="succeeded"){
       renderStems(job.output);
