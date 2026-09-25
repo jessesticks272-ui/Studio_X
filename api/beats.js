@@ -39,8 +39,15 @@ export async function GET(request) {
     const sql = getDb();
     const url = new URL(request.url);
     const limit = Math.min(Math.max(Number(url.searchParams.get("limit") || 48), 1), 100);
+    const id = (url.searchParams.get("id") || "").trim();
     const q = (url.searchParams.get("q") || "").trim();
     const genre = (url.searchParams.get("genre") || "").trim().toLowerCase();
+
+    if (id) {
+      const rows = await sql` + "`SELECT * FROM beats WHERE is_published = TRUE AND id = ${id} LIMIT 1`" + `;
+      if (!rows.length) return json({ error: "Beat not found." }, 404);
+      return json({ beat: mapBeat(rows[0]) });
+    }
 
     const rows = q
       ? await sql`
