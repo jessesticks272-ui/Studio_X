@@ -6,7 +6,5 @@
     "@vercel/blob": "2.8.0",
     "@neondatabase/serverless": "1.0.0"
   },
-  "scripts": {
-    "build": "node scripts/init-db.js"
-  }
+  "scripts": {}
 }
