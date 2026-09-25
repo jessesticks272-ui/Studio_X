@@ -1,11 +1,12 @@
-// Firebase web configuration for LyTune Studio X.
-// These values come from Firebase Console > Project settings > Your apps.
-// Firebase web config is intended for client-side use. Never put service-account private keys here.
+// LyTune Studio X Firebase web configuration.
+// This client configuration is safe to use in the browser.
+// Never place Firebase service-account private keys in this file.
 export const firebaseConfig = {
-  apiKey: "PASTE_FIREBASE_API_KEY",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_MESSAGING_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyBOwVbkt0_7GCiSFlP8pfevts5613tYY7c",
+  authDomain: "lytune-studio-x.firebaseapp.com",
+  projectId: "lytune-studio-x",
+  storageBucket: "lytune-studio-x.firebasestorage.app",
+  messagingSenderId: "794310559157",
+  appId: "1:794310559157:web:5dc906c31103f56ed2c5fc",
+  measurementId: "G-TX7N5VY0SN"
 };
