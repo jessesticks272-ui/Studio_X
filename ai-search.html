@@ -151,17 +151,22 @@ async function separateStems(){
   results.innerHTML="";
 
   try{
-    const { upload } = await import("https://cdn.jsdelivr.net/npm/@vercel/blob@2.6.1/client/+esm");
-    const blob=await upload("lytune-stems/"+Date.now()+"-"+stemFile.name.replace(/[^a-zA-Z0-9._-]/g,"_"),stemFile,{
-      access:"public",
-      handleUploadUrl:"/api/blob-upload",
-      multipart:true,
-      onUploadProgress(e){
-        const p=Math.max(8,Math.min(45,8+Math.round(e.percentage*.37)));
-        progress.style.width=p+"%";
-        status.textContent="Uploading audio… "+Math.round(e.percentage)+"%";
-      }
+    const pathname="lytune-stems/"+Date.now()+"-"+stemFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const sign=await fetch("/api/blob-upload",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({pathname,contentType:stemFile.type||"application/octet-stream"})
     });
+    const signed=await sign.json();
+    if(!sign.ok)throw new Error(signed.error||"Could not prepare secure Blob upload.");
+
+    const put=await fetch(signed.presignedUrl,{
+      method:"PUT",
+      headers:{"Content-Type":stemFile.type||"application/octet-stream"},
+      body:stemFile
+    });
+    if(!put.ok)throw new Error("Blob upload failed with status "+put.status+".");
+    const blob={url:signed.presignedUrl.split("?")[0]};
 
     btn.textContent="AI is separating stems…";
     status.textContent="Demucs is separating the musical layers. This can take a little while.";
