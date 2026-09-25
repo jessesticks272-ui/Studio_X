@@ -38,7 +38,8 @@ export async function POST(request) {
       method: "POST",
       headers: {
         ...authHeaders(),
-        Prefer: "wait=1"
+        Prefer: "wait=1",
+      Accept: "application/json"
       },
       body: JSON.stringify({
         version: DEMUCS_VERSION,
@@ -57,9 +58,23 @@ export async function POST(request) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Replicate create error:", data);
+      console.error("Replicate create error:", {
+        status: response.status,
+        data
+      });
+
+      const replicateMessage =
+        typeof data?.detail === "string"
+          ? data.detail
+          : typeof data?.error === "string"
+            ? data.error
+            : Array.isArray(data?.errors)
+              ? data.errors.join("; ")
+              : "Replicate rejected the stem separation request.";
+
       return json({
         error: "The stem AI service could not start the separation.",
+        detail: replicateMessage.slice(0, 500),
         code: "REPLICATE_CREATE_FAILED"
       }, 502);
     }
