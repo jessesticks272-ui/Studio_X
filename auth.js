@@ -19,7 +19,7 @@
   // Override by setting `window.LYTUNE_API_BASE = '...'` in an inline
   // <script> before this file loads (e.g. when deploying the backend
   // somewhere other than localhost:4000).
-  const API_BASE = window.LYTUNE_API_BASE || 'http://localhost:4000/api';
+  const API_BASE = window.LYTUNE_API_BASE || (window.location.origin + '/api');
   const TOKEN_KEY = 'lytune-token';
   const USER_KEY = 'lytune-user';
   const PING_TIMEOUT_MS = 2500;
