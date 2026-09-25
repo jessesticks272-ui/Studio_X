@@ -10,7 +10,7 @@
       mobile menu, based on a session token stored in localStorage.
       There's no login page wired up yet in this landing-page phase,
       so in practice this will almost always render "logged out" —
-      but it's built so login.html/signup.html can drop a token in
+      but it's built so login.html/auth.html can drop a token in
       localStorage and the nav updates automatically.
 
    Exposes `window.LytuneAuth` for other scripts to use.
@@ -103,7 +103,7 @@
         '</span>';
     } else {
       cta = document.createElement('a');
-      cta.href = 'signup.html';
+      cta.href = 'auth.html';
       cta.className = 'main-btn';
       cta.textContent = 'Get Started';
     }
