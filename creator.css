@@ -955,3 +955,26 @@ input:focus-visible,
 @media (max-width: 600px) {
   .creators-faq { padding-left: 20px; padding-right: 20px; }
 }
+
+/* ===== REAL CREATOR DIRECTORY UI ===== */
+.creators-section{max-width:1180px}
+.creators-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.creator-card{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;overflow:hidden;min-height:100%;background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));border:1px solid var(--border-color);box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.creator-card:hover{transform:translateY(-6px);border-color:var(--border-hover);box-shadow:0 24px 60px rgba(0,123,255,.16)}
+.creator-cover{height:150px;position:relative;overflow:hidden;background:var(--brand-gradient-diag)}
+.creator-cover:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.35),transparent 28%)}
+.creator-avatar-wrap{position:absolute;left:22px;bottom:-28px;width:76px;height:76px;padding:4px;border-radius:50%;background:var(--bg-1);z-index:2}
+.creator-avatar{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.7rem;font-weight:800}
+.creator-body{padding:42px 20px 20px}
+.creator-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.creator-info h3{font-size:1.15rem;margin:0 0 4px}
+.creator-bio{color:var(--text-secondary);font-size:.84rem;line-height:1.6;min-height:54px;margin-bottom:16px}
+.creator-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.creator-tag{padding:5px 9px;border-radius:999px;font-size:.7rem;font-weight:700;color:var(--accent-1);background:rgba(25,215,255,.08);border:1px solid rgba(25,215,255,.16)}
+.creator-actions{width:100%}
+.creator-actions a,.creator-actions button{flex:1;text-align:center}
+.creator-follow-btn.following{background:rgba(25,215,255,.1);color:var(--accent-1);border:1px solid rgba(25,215,255,.3)}
+.creator-location{color:var(--text-muted);font-size:.75rem}
+.creator-empty-note{grid-column:1/-1;text-align:center;padding:70px 24px;background:var(--bg-card);border:1px dashed var(--border-color);border-radius:var(--radius)}
+@media(max-width:900px){.creators-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.creators-grid{grid-template-columns:1fr}.creator-head{flex-direction:column}.creator-actions{flex-direction:column}}
