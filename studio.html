@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="LyTune Studio X creator workspace for producers. Upload beats, organize releases and use AI to develop your sound.">
+<title>Studio X | LyTune</title>
+<link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./studio.css">
+<script src="./theme.js"></script>
+</head>
+<body>
+<div class="ambient a1"></div><div class="ambient a2"></div>
+
+<header class="studio-nav">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">L</span><span>LyTune <b>Studio X</b></span>
+  </a>
+  <div class="nav-right">
+    <a href="explore.html">Explore</a>
+    <a href="index.html">Home</a>
+    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">◐</button>
+    <div id="userBadge" class="user-badge">X</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="welcome">
+    <div>
+      <span class="eyebrow">CREATOR WORKSPACE</span>
+      <h1>Your sound.<br><span>Your Studio X.</span></h1>
+      <p>Upload beats, prepare releases, and use AI to turn rough ideas into a stronger direction.</p>
+    </div>
+    <div class="status-card">
+      <span class="live-dot"></span>
+      <div><b id="connection">Studio ready</b><small id="accountText">Local workspace</small></div>
+    </div>
+  </section>
+
+  <section class="quick-grid">
+    <button class="quick active" data-panel="upload"><span>↑</span><b>Upload Beat</b><small>Add a new beat to your catalog</small></button>
+    <button class="quick" data-panel="ai"><span>✦</span><b>AI Sound Assistant</b><small>Build a sound direction from an idea</small></button>
+    <button class="quick" data-panel="catalog"><span>♫</span><b>My Catalog</b><small>Manage your Studio X releases</small></button>
+  </section>
+
+  <section id="uploadPanel" class="panel">
+    <div class="panel-head"><div><span class="eyebrow">01 / RELEASE</span><h2>Upload a new beat</h2></div><span class="pill">MP3 • WAV • M4A</span></div>
+    <div id="dropZone" class="drop-zone">
+      <div class="upload-icon">↑</div>
+      <h3>Drop your beat here</h3>
+      <p>or choose an audio file from your computer</p>
+      <label class="primary-btn" for="beatFile">Choose Audio</label>
+      <input id="beatFile" type="file" accept="audio/*">
+      <div id="fileInfo" class="file-info"></div>
+    </div>
+    <div class="release-grid">
+      <label>Beat name<input id="beatName" placeholder="e.g. Lagos After Dark"></label>
+      <label>Genre<select id="beatGenre"><option>Afrobeat</option><option>Amapiano</option><option>Afro-fusion</option><option>Afro-drill</option><option>Trap</option><option>R&B</option></select></label>
+      <label>BPM<input id="beatBpm" type="number" min="40" max="220" placeholder="108"></label>
+      <label>Key<input id="beatKey" placeholder="F# minor"></label>
+    </div>
+    <div class="tag-row"><button class="tag active">Instrumental</button><button class="tag">Drums</button><button class="tag">Melodic</button><button class="tag">Dark</button><button class="tag">Chill</button><button class="tag">Street</button></div>
+    <button id="saveBeat" class="wide-btn">Add to Studio X Catalog</button>
+    <p id="uploadStatus" class="status"></p>
+  </section>
+
+  <section id="aiPanel" class="panel hidden">
+    <div class="panel-head"><div><span class="eyebrow">02 / AI</span><h2>Sound Assistant</h2></div><span class="pill">LYTUNE AI</span></div>
+    <div class="ai-box">
+      <div class="ai-orb">✦</div>
+      <div><h3>Describe the record you want to make</h3><p>Give Studio X a mood, artist direction, tempo or reference idea. It will turn the idea into a practical production brief.</p></div>
+    </div>
+    <textarea id="aiPrompt" placeholder="Example: A warm Afrobeat record for a night drive, melodic guitar, live percussion, around 105 BPM..."></textarea>
+    <div class="ai-actions"><button id="aiGenerate" class="wide-btn">Generate Direction ✦</button><a href="ai-search.html" class="secondary-btn">Open AI Beat Search</a></div>
+    <div id="aiResult" class="ai-result hidden"></div>
+  </section>
+
+  <section id="catalogPanel" class="panel hidden">
+    <div class="panel-head"><div><span class="eyebrow">03 / CATALOG</span><h2>My Catalog</h2></div><span id="catalogCount" class="pill">0 BEATS</span></div>
+    <div id="catalog" class="catalog-empty"><div>♫</div><h3>Your catalog starts here</h3><p>Beats added in this browser will appear here. Firebase Storage can be connected for permanent uploads.</p></div>
+  </section>
+
+  <section class="bottom-grid">
+    <div class="tip-card"><span>✦</span><div><b>Studio X idea</b><p>Use AI Search to find beats from a melody, freestyle, MP3 or MP4, then return here to prepare your own release.</p></div></div>
+    <a class="back-card" href="index.html">← Back to LyTune Studio X <small>Return to the marketplace</small></a>
+  </section>
+</main>
+<script type="module" src="./studio.js"></script>
+</body>
+</html>
