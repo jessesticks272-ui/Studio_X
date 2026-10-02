@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="LyTune Studio X admin dashboard for members, subscriptions and payments.">
+<title>Admin | LyTune Studio X</title>
+<link rel="icon" type="image/svg+xml" href="assets/image/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./admin.css">
+<script src="./theme.js"></script>
+</head>
+<body>
+<div class="admin-shell">
+<header class="admin-topbar">
+<a class="admin-brand" href="index.html"><span class="brand-mark">L</span><span>LyTune <b>Studio X</b></span></a>
+<div class="admin-top-actions">
+<a href="index.html" class="top-link">View site</a>
+<button id="themeToggle" class="icon-btn" aria-label="Toggle theme">◐</button>
+<div class="account-wrap">
+<button id="accountButton" class="account-avatar" aria-expanded="false" aria-haspopup="true">J</button>
+<div id="accountMenu" class="account-menu hidden">
+<strong>Studio X Owner</strong><span>Administrator</span>
+<a href="studio.html">My Studio</a><a href="index.html">Public site</a>
+<button id="logoutButton" type="button">Sign out</button>
+</div></div>
+</div>
+</header>
+
+<div class="admin-layout">
+<aside class="sidebar">
+<div class="side-label">ADMIN</div>
+<a class="side-link active" href="#overview">▦ <span>Overview</span></a>
+<a class="side-link" href="#members">♙ <span>Members</span></a>
+<a class="side-link" href="#payments">₦ <span>Payments</span></a>
+<a class="side-link" href="creators.html">♬ <span>Creators</span></a>
+<a class="side-link" href="studio.html">⚙ <span>Studio</span></a>
+</aside>
+
+<main class="admin-main">
+<section id="overview" class="admin-hero">
+<div><span class="eyebrow">CONTROL ROOM</span><h1>Studio X Admin</h1><p>Monitor registrations, subscriptions and payment status from one place.</p></div>
+<div class="secure-pill"><span></span> Admin workspace</div>
+</section>
+
+<section class="stats-grid">
+<div class="stat-card"><span class="stat-icon">♙</span><div><small>Total members</small><strong id="totalMembers">0</strong></div></div>
+<div class="stat-card"><span class="stat-icon paid">✓</span><div><small>Paid members</small><strong id="paidMembers">0</strong></div></div>
+<div class="stat-card"><span class="stat-icon pending">◷</span><div><small>Pending payments</small><strong id="pendingMembers">0</strong></div></div>
+<div class="stat-card"><span class="stat-icon revenue">₦</span><div><small>Recorded revenue</small><strong id="revenue">₦0</strong></div></div>
+</section>
+
+<section id="members" class="panel">
+<div class="panel-head"><div><span class="eyebrow">MEMBERS</span><h2>Signed-in users</h2></div><button id="exportBtn" class="secondary-btn">Export CSV</button></div>
+<div class="toolbar"><div class="search"><span>⌕</span><input id="memberSearch" placeholder="Search name or email..." aria-label="Search members"></div>
+<div class="filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="paid">Paid</button><button class="filter" data-filter="pending">Pending</button><button class="filter" data-filter="artist">Artists</button><button class="filter" data-filter="producer">Producers</button></div></div>
+<div class="table-wrap"><table><thead><tr><th>Member</th><th>Type</th><th>Plan</th><th>Payment</th><th>Joined</th><th></th></tr></thead><tbody id="memberTable"></tbody></table></div>
+<div id="emptyState" class="empty hidden"><div>♙</div><h3>No members found</h3><p>Try a different search or filter.</p></div>
+</section>
+
+<section id="payments" class="panel">
+<div class="panel-head"><div><span class="eyebrow">PAYMENTS</span><h2>Recent transactions</h2></div><span class="demo-badge">FRONTEND PREVIEW</span></div>
+<div class="payment-list" id="paymentList"></div>
+<div class="preview-note"><span>ⓘ</span><div><strong>Live data comes later</strong><p>This page currently uses sample records so we can finish the interface first. Firebase and your payment provider will replace these records when we connect the backend.</p></div></div>
+</section>
+</main>
+</div>
+</div>
+<script src="./admin.js"></script>
+</body>
+</html>
