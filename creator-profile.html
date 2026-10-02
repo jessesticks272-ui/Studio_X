@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Creator profile on LyTune Studio X.">
+<title>Creator Profile | LyTune Studio X</title>
+<link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="creator-profile.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">L</span><span>LyTune Studio X</span></a>
+  <nav><a href="index.html">Home</a><a href="explore.html">Explore</a><a href="creators.html">Creators</a><a href="studio.html">Studio</a></nav>
+  <a class="back-btn" href="creators.html">← Creators</a>
+</header>
+
+<main>
+<section class="profile-hero">
+  <div class="cover"></div>
+  <div class="profile-main">
+    <div class="avatar" id="avatar">JS</div>
+    <div class="identity">
+      <div class="verified-row"><span class="eyebrow">CREATOR PROFILE</span><span class="verified">✓ VERIFIED CREATOR</span></div>
+      <h1 id="creatorName">Jesse Sticks</h1>
+      <p id="creatorRole">Artist · Producer</p>
+      <p class="location">📍 Lagos, Nigeria</p>
+    </div>
+    <div class="profile-actions">
+      <button class="follow-btn" id="followBtn">Follow</button>
+      <button class="share-btn" id="shareBtn">Share</button>
+    </div>
+  </div>
+</section>
+
+<section class="profile-grid">
+  <aside class="side-card">
+    <h3>About</h3>
+    <p id="bio">Building fresh African sounds, connecting with creators, and turning ideas into records.</p>
+    <div class="stats">
+      <div><strong id="followers">0</strong><span>Followers</span></div>
+      <div><strong>0</strong><span>Following</span></div>
+      <div><strong id="beatCount">0</strong><span>Beats</span></div>
+    </div>
+    <div class="links"><a href="#">Instagram ↗</a><a href="#">TikTok ↗</a><a href="#">YouTube ↗</a></div>
+  </aside>
+
+  <section class="content">
+    <div class="section-head"><div><span class="eyebrow">MUSIC</span><h2>Featured Beats</h2></div><button class="outline-btn" id="editBtn">Edit profile</button></div>
+    <div class="beats" id="beats">
+      <article class="beat-card"><div class="art">♫</div><div class="beat-info"><h3>Midnight Lagos</h3><p>Afrobeat · 104 BPM · C#m</p><div class="bar"><span></span></div></div><button class="play" aria-label="Play Midnight Lagos">▶</button></article>
+      <article class="beat-card"><div class="art alt">♫</div><div class="beat-info"><h3>Street Energy</h3><p>Amapiano · 112 BPM · F#m</p><div class="bar"><span></span></div></div><button class="play" aria-label="Play Street Energy">▶</button></article>
+      <article class="beat-card"><div class="art third">♫</div><div class="beat-info"><h3>After Hours</h3><p>Afro-fusion · 98 BPM · Am</p><div class="bar"><span></span></div></div><button class="play" aria-label="Play After Hours">▶</button></article>
+    </div>
+  </section>
+</section>
+</main>
+<script type="module" src="creator-profile.js"></script>
+</body>
+</html>
