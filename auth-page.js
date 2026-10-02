@@ -22,8 +22,6 @@ const toggle = $("passwordToggle");
 const password = $("password");
 const form = $("authForm");
 const message = $("formMessage");
-const demoBtn = $("demoBtn");
-const guestBtn = $("guestBtn");
 const signupFields = document.querySelectorAll(".signup-only");
 let mode = "login";
 
@@ -124,25 +122,6 @@ toggle.addEventListener("click", () => {
 });
 
 form.addEventListener("submit", async (event) => {
-  // Frontend-only demo account for testing the site before Firebase/backend is connected.
-  // Demo credentials: jessesticks272@gmail.com + any password.
-  const demoEmail = "jessesticks272@gmail.com";
-  const emailPreview = $("email").value.trim().toLowerCase();
-  if (mode === "login" && emailPreview === demoEmail) {
-    event.preventDefault();
-    const demoUser = {
-      uid: "demo-jessesticks272",
-      name: "Jesse Sticks",
-      email: demoEmail,
-      role: localStorage.getItem("lytune-role") || "artist",
-      photoURL: ""
-    };
-    localStorage.setItem("lytune-token", "demo-token");
-    localStorage.setItem("lytune-user", JSON.stringify(demoUser));
-    localStorage.setItem("lytune-demo", "true");
-    window.location.href = "index.html";
-    return;
-  }
   event.preventDefault();
   if (!requireFirebase()) return;
 
@@ -172,36 +151,16 @@ form.addEventListener("submit", async (event) => {
 
     const token = await credential.user.getIdToken();
     localStorage.setItem("lytune-token", token);
-    saveAndContinue(credential.user, mode === "signup" ? role : (localStorage.getItem("lytune-role") || "artist"));
+    saveAndContinue(
+      credential.user,
+      mode === "signup" ? role : (localStorage.getItem("lytune-role") || "artist")
+    );
   } catch (error) {
     setMessage(friendlyError(error));
   } finally {
     submit.disabled = false;
     submit.textContent = mode === "signup" ? "Create account" : "Log in";
   }
-});
-
-demoBtn.addEventListener("click", () => {
-  const demoUser = {
-    uid: "demo-jessesticks272",
-    name: "Jesse Sticks",
-    email: "jessesticks272@gmail.com",
-    role: "artist",
-    photoURL: ""
-  };
-  localStorage.setItem("lytune-token", "demo-token");
-  localStorage.setItem("lytune-user", JSON.stringify(demoUser));
-  localStorage.setItem("lytune-role", "artist");
-  localStorage.setItem("lytune-demo", "true");
-  window.location.href = "index.html";
-});
-
-guestBtn.addEventListener("click", () => {
-  localStorage.removeItem("lytune-token");
-  localStorage.removeItem("lytune-user");
-  localStorage.removeItem("lytune-role");
-  localStorage.removeItem("lytune-demo");
-  window.location.href = "index.html";
 });
 
 $("googleBtn").addEventListener("click", async () => {
