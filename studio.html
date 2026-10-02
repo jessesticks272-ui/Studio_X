@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./studio.css">
 <script src="./theme.js"></script>
+<style>.account-wrap{position:relative}.user-badge{cursor:pointer}.account-menu{position:absolute;right:0;top:48px;width:205px;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:15px;background:#101625;box-shadow:0 18px 45px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:7px;z-index:50}.account-menu strong{font-size:.82rem}.account-menu span{font-size:.68rem;color:#91a0ba;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08)}.account-menu a,.account-menu button{padding:9px;border:0;border-radius:9px;background:none;color:#b5c1d5;text-align:left;text-decoration:none;cursor:pointer}.account-menu a:hover,.account-menu button:hover{background:rgba(255,255,255,.05);color:#fff}.hidden{display:none!important}</style>
 </head>
 <body>
 <div class="ambient a1"></div><div class="ambient a2"></div>
@@ -23,7 +24,7 @@
     <a href="explore.html">Explore</a>
     <a href="index.html">Home</a>
     <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">◐</button>
-    <div id="userBadge" class="user-badge">X</div>
+    <div class="account-wrap"><button id="userBadge" class="user-badge" aria-label="Open account menu" aria-expanded="false">X</button><div id="accountMenu" class="account-menu hidden"><strong id="menuName">Studio account</strong><span id="menuEmail">Signed in</span><a href="admin.html">Admin / Members</a><a href="creators.html">Creator profiles</a><button id="logoutButton" type="button">Sign out</button></div></div>
   </div>
 </header>
 
