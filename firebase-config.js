@@ -1,8 +1,7 @@
 // LyTune Studio X Firebase web configuration.
-// This client configuration is safe to use in the browser.
 // Never place Firebase service-account private keys in this file.
 export const firebaseConfig = {
-  apiKey: "AIzaSyBOwVbkt0_7GCiSFlP8pfevts5613tYY7c",
+  apiKey: "AIzaSyBpzj6K72QlK6xM05p_A3kEp2KUPxHC_PE",
   authDomain: "lytune-studio-x.firebaseapp.com",
   projectId: "lytune-studio-x",
   storageBucket: "lytune-studio-x.firebasestorage.app",
