@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="LyTune Studio X Artist Dashboard">
+<title>Artist Dashboard | LyTune Studio X</title>
+<link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./artist-dashboard.css">
+<script src="./theme.js"></script>
+</head>
+<body>
+<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">L</span><span>LyTune <b>Studio X</b></span></a>
+  <nav class="desktop-nav"><a href="index.html">Home</a><a href="explore.html">Explore</a><a href="creators.html">Creators</a><a class="active" href="artist-dashboard.html">Dashboard</a></nav>
+  <div class="top-actions">
+    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">◐</button>
+    <div class="account-wrap">
+      <button id="userBadge" class="user-badge">X</button>
+      <div id="accountMenu" class="account-menu hidden">
+        <strong id="menuName">Studio account</strong><span id="menuEmail">Signed in</span>
+        <a href="studio.html">Studio Workspace</a><a href="creator-profile.html">My Creator Profile</a><a href="admin.html">Admin / Members</a>
+        <button id="logoutButton">Sign out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav">
+  <a class="active" href="#overview">⌂<span>Overview</span></a>
+  <a href="#music">♫<span>Music</span></a>
+  <a href="#analytics">⌁<span>Analytics</span></a>
+  <a href="#earnings">₦<span>Earnings</span></a>
+</div>
+
+<main class="dashboard">
+<section id="overview" class="hero">
+  <div>
+    <span class="eyebrow">ARTIST DASHBOARD</span>
+    <h1>Welcome back, <span id="artistName">Creator</span>.</h1>
+    <p>Everything you need to shape your releases, watch your audience grow, and keep your Studio X profile moving.</p>
+  </div>
+  <a class="gradient-btn" href="studio.html">＋ Create New Release</a>
+</section>
+
+<section class="stats-grid">
+  <article class="stat-card"><div class="stat-icon cyan">♫</div><div><span>Total Releases</span><strong id="releaseStat">0</strong><small>in your catalog</small></div></article>
+  <article class="stat-card"><div class="stat-icon blue">▶</div><div><span>Total Plays</span><strong>12.8K</strong><small class="up">↑ 18.4% this month</small></div></article>
+  <article class="stat-card"><div class="stat-icon purple">♧</div><div><span>Followers</span><strong id="followerStat">0</strong><small class="up">profile audience</small></div></article>
+  <article class="stat-card"><div class="stat-icon pink">₦</div><div><span>Available Balance</span><strong>₦0</strong><small>payments connect later</small></div></article>
+</section>
+
+<section class="dashboard-grid">
+  <div class="main-column">
+    <section id="music" class="card">
+      <div class="section-head"><div><span class="eyebrow">YOUR MUSIC</span><h2>Latest releases</h2></div><a href="studio.html">Manage catalog →</a></div>
+      <div id="releaseList" class="release-list"></div>
+    </section>
+
+    <section id="analytics" class="card">
+      <div class="section-head"><div><span class="eyebrow">ANALYTICS</span><h2>Audience activity</h2></div><span class="range">Last 30 days ▾</span></div>
+      <div class="chart-wrap"><div class="chart-y"><span>4K</span><span>3K</span><span>2K</span><span>1K</span><span>0</span></div><div class="chart"><div class="gridline g1"></div><div class="gridline g2"></div><div class="gridline g3"></div><div class="gridline g4"></div><svg viewBox="0 0 700 230" preserveAspectRatio="none" aria-label="Audience activity chart"><defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#19d7ff" stop-opacity=".3"/><stop offset="1" stop-color="#19d7ff" stop-opacity="0"/></linearGradient></defs><path class="area" d="M0,190 C45,175 70,182 105,145 S165,165 205,126 S270,142 310,96 S375,120 420,82 S485,112 525,68 S590,98 630,53 S675,65 700,35 L700,230 L0,230 Z"/><path class="line" d="M0,190 C45,175 70,182 105,145 S165,165 205,126 S270,142 310,96 S375,120 420,82 S485,112 525,68 S590,98 630,53 S675,65 700,35"/></svg><div class="chart-x"><span>Sep 4</span><span>Sep 11</span><span>Sep 18</span><span>Sep 25</span><span>Oct 2</span></div></div></div>
+      <div class="analytics-row"><div><span>Streams</span><b>12,842</b></div><div><span>Profile visits</span><b>1,904</b></div><div><span>Engagement</span><b>7.8%</b></div></div>
+    </section>
+
+    <section id="earnings" class="card earnings-card">
+      <div class="section-head"><div><span class="eyebrow">EARNINGS</span><h2>Revenue overview</h2></div><span class="pill">FRONTEND PREVIEW</span></div>
+      <div class="earnings-body"><div><span class="muted">Total earnings</span><strong>₦0.00</strong><p>Connect payments and release monetization when the backend is ready.</p></div><div class="earning-bars"><i style="height:32%"></i><i style="height:48%"></i><i style="height:39%"></i><i style="height:64%"></i><i style="height:52%"></i><i style="height:78%"></i><i style="height:60%"></i></div></div>
+    </section>
+  </div>
+
+  <aside class="side-column">
+    <section class="card profile-card">
+      <div class="profile-cover"></div><div class="profile-avatar" id="profileAvatar">X</div>
+      <div class="profile-content"><span class="eyebrow">YOUR CREATOR PROFILE</span><h2 id="profileName">Creator</h2><p id="profileRole">Artist · Producer</p><a class="outline-btn" href="creator-profile.html">View Profile</a><div class="mini-stats"><div><b id="sideFollowers">0</b><span>Followers</span></div><div><b>3</b><span>Beats</span></div><div><b>0</b><span>Following</span></div></div></div>
+    </section>
+
+    <section class="card checklist">
+      <div class="section-head"><div><span class="eyebrow">SETUP</span><h2>Complete your profile</h2></div><b id="setupPercent">60%</b></div>
+      <div class="progress"><span></span></div>
+      <label class="check done">✓ Add your creator name</label><label class="check done">✓ Choose your role</label><label class="check">○ Add a profile photo</label><label class="check">○ Connect social links</label><label class="check">○ Upload your first release</label>
+    </section>
+
+    <section class="card tools-card">
+      <span class="eyebrow">STUDIO TOOLS</span>
+      <a href="studio.html"><span>↑</span><div><b>Upload music</b><small>Add a beat to your catalog</small></div>→</a>
+      <a href="ai-search.html"><span>✦</span><div><b>AI Beat Search</b><small>Find sounds for your next idea</small></div>→</a>
+      <a href="creators.html"><span>◎</span><div><b>Creator Network</b><small>Discover artists & producers</small></div>→</a>
+    </section>
+  </aside>
+</section>
+</main>
+<script type="module" src="./artist-dashboard.js"></script>
+</body>
+</html>
