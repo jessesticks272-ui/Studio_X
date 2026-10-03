@@ -3,7 +3,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-aut
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBOvWbkt_0_7GCiSFlP8pfevts5613tYY7c",
+  apiKey: "AIzaSyBpzj6K72QlK6xM05p_A3kEp2KUPxHC_PE",
   authDomain: "lytune-studio-x.firebaseapp.com",
   projectId: "lytune-studio-x",
   storageBucket: "lytune-studio-x.firebasestorage.app",
