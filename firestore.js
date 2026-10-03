@@ -4,6 +4,10 @@ import {
   setDoc,
   addDoc,
   collection,
+  query,
+  where,
+  orderBy,
+  getDocs,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { db } from "./firebase.js";
@@ -50,4 +54,15 @@ export async function addBeat(uid, beat) {
     updatedAt: serverTimestamp()
   });
   return ref.id;
+}
+
+export async function getUserBeats(uid) {
+  if (!uid) return [];
+  const q = query(
+    collection(db, "beats"),
+    where("ownerId", "==", uid),
+    orderBy("createdAt", "desc")
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
 }
