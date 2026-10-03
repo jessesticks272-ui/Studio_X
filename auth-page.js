@@ -1,4 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -9,7 +8,8 @@ import {
   updateProfile,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { firebaseConfig } from "./firebase-config.js";
+import { auth } from "./firebase.js";
+import { saveUserProfile } from "./firestore.js";
 
 const $ = (id) => document.getElementById(id);
 const loginTab = $("loginTab");
@@ -25,22 +25,15 @@ const message = $("formMessage");
 const signupFields = document.querySelectorAll(".signup-only");
 let mode = "login";
 
-const configReady = !Object.values(firebaseConfig).some((value) =>
-  String(value).includes("PASTE_")
-);
+const configReady = Boolean(auth);
 
-let auth = null;
-let googleProvider = null;
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
-if (configReady) {
-  const app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  googleProvider = new GoogleAuthProvider();
-  googleProvider.setCustomParameters({ prompt: "select_account" });
-
-  onAuthStateChanged(auth, (user) => {
+if (auth) {
+  onAuthStateChanged(auth, async (user) => {
     if (!user) return;
-    const savedRole = localStorage.getItem("lytune-pending-role") || "artist";
+    const savedRole = localStorage.getItem("lytune-pending-role") || localStorage.getItem("lytune-role") || "artist";
     const profile = {
       uid: user.uid,
       name: user.displayName || user.email?.split("@")[0] || "LyTune User",
@@ -49,7 +42,11 @@ if (configReady) {
       photoURL: user.photoURL || ""
     };
     localStorage.setItem("lytune-user", JSON.stringify(profile));
-    if (user.accessToken) localStorage.setItem("lytune-token", user.accessToken);
+    try {
+      await saveUserProfile(user, savedRole);
+    } catch (error) {
+      console.error("Could not sync user profile to Firestore:", error);
+    }
   });
 }
 
