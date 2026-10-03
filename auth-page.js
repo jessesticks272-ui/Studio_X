@@ -88,7 +88,7 @@ function setMode(next) {
   subtitle.textContent = signup
     ? "Join the creator marketplace and build your music world."
     : "Continue creating, discovering and connecting.";
-  submit.textContent = signup ? "Create account" : "Log in";
+  submit.querySelector(".btn-text").textContent = signup ? "CREATE MY ACCOUNT" : "ENTER THE STUDIO";
   forgot.style.display = signup ? "none" : "";
   signupFields.forEach((el) => el.classList.toggle("is-hidden", !signup));
   setMessage("");
@@ -105,7 +105,7 @@ function saveAndContinue(user, role) {
   localStorage.setItem("lytune-user", JSON.stringify(profile));
   localStorage.setItem("lytune-pending-role", role);
   localStorage.setItem("lytune-role", role);
-  window.location.href = "index.html";
+  window.location.href = role === "producer" ? "producer-dashboard.html" : "artist-dashboard.html";
 }
 
 loginTab.addEventListener("click", () => setMode("login"));
@@ -133,7 +133,7 @@ form.addEventListener("submit", async (event) => {
   }
 
   submit.disabled = true;
-  submit.textContent = mode === "signup" ? "Creating account..." : "Signing in...";
+  submit.classList.add("loading");
 
   try {
     let credential;
@@ -156,7 +156,8 @@ form.addEventListener("submit", async (event) => {
     setMessage(friendlyError(error));
   } finally {
     submit.disabled = false;
-    submit.textContent = mode === "signup" ? "Create account" : "Log in";
+    submit.classList.remove("loading");
+    submit.querySelector(".btn-text").textContent = mode === "signup" ? "CREATE MY ACCOUNT" : "ENTER THE STUDIO";
   }
 });
 
