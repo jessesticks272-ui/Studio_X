@@ -49,7 +49,7 @@ auth.onAuthStateChanged(async user=>{
  $("producerName").textContent=name;$("profileName").textContent=name;$("profileAvatar").textContent=initials(name);$("userBadge").textContent=initials(name);$("menuName").textContent=name;$("menuEmail").textContent=user.email||"";
  const beats=await getUserBeats(user.uid).catch(()=>[]);
  $("beatCount").textContent=beats.length;
- $("beatList").innerHTML=beats.length?beats.map(b=>`<div class="release-row"><div class="release-art">♫</div><div><b>${b.title||"Untitled Beat"}</b><small>${b.genre||"Beat"} · ${b.bpm?b.bpm+" BPM":"No BPM set"}</small></div><span>${b.price?"₦"+Number(b.price).toLocaleString("en-NG"):"Draft"}</span></div>`).join(""):'<div class="empty">No beats yet. Upload your first beat from the Studio.</div>';
+ $("beatList").innerHTML=beats.length?beats.map(b=>`<div class="release-row"><div class="release-art">${b.coverUrl?'<img src="'+b.coverUrl+'" alt="">':'♫'}</div><div><b>${b.title||"Untitled Beat"}</b><small>${b.genre||"Beat"} · ${b.bpm?b.bpm+" BPM":"No BPM set"} · ${b.status||"draft"}</small><small><a href="beat.html?id=${encodeURIComponent(b.id)}">View beat</a> · <a href="creator-profile.html?uid=${encodeURIComponent(b.ownerId||user.uid)}">View storefront</a></small></div><span>${b.price?((b.currency||"USD")==="USD"?"$":"₦")+Number(b.price).toLocaleString((b.currency||"USD")==="USD"?"en-US":"en-NG"):"Free"}</span></div>`).join(""):'<div class="empty">No beats yet. Upload your first beat from the Studio.</div>';
 });
 $("userBadge").addEventListener("click",()=>$("accountMenu").classList.toggle("hidden"));
 $("logoutButton").addEventListener("click",async()=>{await auth.signOut();localStorage.clear();location.href="index.html";});
