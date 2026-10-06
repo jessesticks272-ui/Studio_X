@@ -1,7 +1,7 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import { ref, uploadBytes, getDownloadURL } from "./firebase-storage.js";
-import { addBeat } from "./firestore.js";
+import { addBeat, getUserBeats } from "./firestore.js";
 
 const $ = (id) => document.getElementById(id);
 const panels = { upload:$("uploadPanel"), ai:$("aiPanel"), catalog:$("catalogPanel") };
@@ -53,8 +53,14 @@ $("saveBeat").addEventListener("click", async () => {
 
   const name=$("beatName").value.trim()||selectedFile.name;
   const genre=$("beatGenre").value;
-  const bpm=$("beatBpm").value||"—";
-  const key=$("beatKey").value||"—";
+  const bpm=$("beatBpm").value ? Number($("beatBpm").value) : null;
+  const key=$("beatKey").value.trim();
+  const mood=$("beatMood").value.trim();
+  const price=$("beatPrice").value ? Number($("beatPrice").value) : 0;
+  const licenseType=$("beatLicense").value || "lease";
+  const coverUrl=$("beatCoverUrl").value.trim();
+  const description=$("beatDescription").value.trim();
+  const tags=Array.from(document.querySelectorAll(".tag.active")).map(tag=>tag.textContent.trim());
   const status=$("uploadStatus");
   const button=$("saveBeat");
 
@@ -68,19 +74,21 @@ $("saveBeat").addEventListener("click", async () => {
     const downloadURL=await getDownloadURL(storageRef);
 
     const beatId=await addBeat(currentUser.uid,{
-      name, genre, bpm, key,
+      title:name,
+      producerName:currentUser.displayName || currentUser.email?.split("@")[0] || "LyTune Producer",
+      genre, bpm, key, mood, tags,
+      price, currency:"USD", licenseType,
+      description, coverUrl,
+      status:"published",
+      previewUrl:downloadURL,
+      audioUrl:downloadURL,
       fileName:selectedFile.name,
-      fileURL:downloadURL,
       storagePath:storageRef.fullPath,
       contentType:selectedFile.type || "audio/mpeg"
     });
 
-    const localBeats=JSON.parse(localStorage.getItem("lytune-studio-beats")||"[]");
-    localBeats.unshift({id:beatId,name,genre,bpm,key,file:selectedFile.name,fileURL:downloadURL,date:new Date().toLocaleDateString()});
-    localStorage.setItem("lytune-studio-beats",JSON.stringify(localBeats));
-
-    status.textContent="✓ Beat uploaded and saved to your Studio X catalog.";
-    renderCatalog();
+    status.textContent="✓ Beat uploaded, published and saved to your Studio X catalog.";
+    await renderCatalog();
   }catch(error){
     console.error("Beat upload failed:",error);
     status.textContent="Upload failed. Check Firebase Storage setup and try again.";
@@ -89,17 +97,25 @@ $("saveBeat").addEventListener("click", async () => {
   }
 });
 
-function renderCatalog(){
-  const beats=JSON.parse(localStorage.getItem("lytune-studio-beats")||"[]");
-  $("catalogCount").textContent=beats.length+" BEAT"+(beats.length===1?"":"S");
+async function renderCatalog(){
   const box=$("catalog");
-  if(!beats.length){box.className="catalog-empty";box.innerHTML="<div>♫</div><h3>Your catalog starts here</h3><p>Upload your first beat and it will appear here.</p>";return}
-  box.className="catalog-list";
-  box.innerHTML=beats.map(b=>'<div class="catalog-row"><div class="catalog-art">♫</div><div><b>'+escapeHtml(b.name)+'</b><small>'+escapeHtml(b.genre||"Music")+' • '+escapeHtml(b.bpm||"—")+' BPM • '+escapeHtml(b.key||"—")+'</small></div><span>'+escapeHtml(b.date||"")+'</span></div>').join("");
+  try{
+    const beats=currentUser ? await getUserBeats(currentUser.uid) : [];
+    $("catalogCount").textContent=beats.length+" BEAT"+(beats.length===1?"":"S");
+    if(!beats.length){
+      box.className="catalog-empty";
+      box.innerHTML="<div>♫</div><h3>Your catalog starts here</h3><p>Upload a beat and it will appear here from Firebase.</p>";
+      return;
+    }
+    box.className="catalog-list";
+    box.innerHTML=beats.map(b=>'<div class="catalog-row"><div class="catalog-art">♫</div><div><b>'+escapeHtml(b.title||"Untitled Beat")+'</b><small>'+escapeHtml(b.genre||"Music")+' • '+escapeHtml(b.bpm||"—")+' BPM • '+escapeHtml(b.key||"—")+'</small></div><span>'+escapeHtml(b.status||"draft")+'</span></div>').join("");
+  }catch(error){
+    console.error("Catalog load failed:",error);
+    box.className="catalog-empty";
+    box.innerHTML="<div>!</div><h3>Catalog unavailable</h3><p>We could not load your Firebase catalog right now.</p>";
+  }
 }
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-renderCatalog();
-
 $("aiGenerate").addEventListener("click",()=>{
   const prompt=$("aiPrompt").value.trim();
   const result=$("aiResult");
