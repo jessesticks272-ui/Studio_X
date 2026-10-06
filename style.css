@@ -2047,3 +2047,8 @@ input:focus-visible,
   .nav-logout-btn { padding: 9px 11px; font-size: .82rem; }
   .nav-user-btn { padding: 8px 10px; }
 }
+
+/* Auth-aware mobile navigation */
+.mobile-nav-links { display:flex; flex-direction:column; gap:8px; }
+.mobile-nav-links .mobile-auth-link { width:100%; box-sizing:border-box; text-align:left; border:1px solid var(--border-color); border-radius:12px; padding:12px 14px; color:var(--text-primary); background:transparent; font:inherit; cursor:pointer; text-decoration:none; }
+.mobile-nav-links .mobile-auth-link:hover { background:rgba(255,255,255,.06); }
