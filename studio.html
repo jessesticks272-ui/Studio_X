@@ -62,9 +62,14 @@
       <label>Genre<select id="beatGenre"><option>Afrobeat</option><option>Amapiano</option><option>Afro-fusion</option><option>Afro-drill</option><option>Trap</option><option>R&B</option></select></label>
       <label>BPM<input id="beatBpm" type="number" min="40" max="220" placeholder="108"></label>
       <label>Key<input id="beatKey" placeholder="F# minor"></label>
+      <label>Mood<input id="beatMood" placeholder="Warm, dark, energetic"></label>
+      <label>Price (USD)<input id="beatPrice" type="number" min="0" step="0.01" placeholder="29.99"></label>
+      <label>License<select id="beatLicense"><option value="lease">Lease</option><option value="premium">Premium Lease</option><option value="exclusive">Exclusive Rights</option></select></label>
+      <label>Cover image URL<input id="beatCoverUrl" type="url" placeholder="https://..."></label>
     </div>
-    <div class="tag-row"><button class="tag active">Instrumental</button><button class="tag">Drums</button><button class="tag">Melodic</button><button class="tag">Dark</button><button class="tag">Chill</button><button class="tag">Street</button></div>
-    <button id="saveBeat" class="wide-btn">Add to Studio X Catalog</button>
+    <label class="release-description">Description<textarea id="beatDescription" rows="4" placeholder="Describe the sound, instruments and intended use."></textarea></label>
+    <div class="tag-row"><button class="tag active" type="button">Instrumental</button><button class="tag" type="button">Drums</button><button class="tag" type="button">Melodic</button><button class="tag" type="button">Dark</button><button class="tag" type="button">Chill</button><button class="tag" type="button">Street</button></div>
+    <button id="saveBeat" class="wide-btn" type="button">Add to Studio X Catalog</button>
     <p id="uploadStatus" class="status"></p>
   </section>
 
@@ -81,7 +86,7 @@
 
   <section id="catalogPanel" class="panel hidden">
     <div class="panel-head"><div><span class="eyebrow">03 / CATALOG</span><h2>My Catalog</h2></div><span id="catalogCount" class="pill">0 BEATS</span></div>
-    <div id="catalog" class="catalog-empty"><div>♫</div><h3>Your catalog starts here</h3><p>Beats added in this browser will appear here. Firebase Storage can be connected for permanent uploads.</p></div>
+    <div id="catalog" class="catalog-empty"><div>♫</div><h3>Your catalog starts here</h3><p>Your catalog is stored in Firebase. Audio files require Firebase Storage to be enabled before they can be published.</p></div>
   </section>
 
   <section class="bottom-grid">
