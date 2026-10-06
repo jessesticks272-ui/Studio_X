@@ -9,7 +9,7 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 import { auth } from "./firebase.js";
-import { saveUserProfile } from "./firestore.js";
+import { saveUserProfile, getUserProfile } from "./firestore.js";
 
 const $ = (id) => document.getElementById(id);
 const loginTab = $("loginTab");
@@ -148,10 +148,14 @@ form.addEventListener("submit", async (event) => {
 
     const token = await credential.user.getIdToken();
     localStorage.setItem("lytune-token", token);
-    saveAndContinue(
-      credential.user,
-      mode === "signup" ? role : (localStorage.getItem("lytune-role") || "artist")
-    );
+
+    let finalRole = role;
+    if (mode === "login") {
+      const profile = await getUserProfile(credential.user.uid).catch(() => null);
+      finalRole = profile?.role || localStorage.getItem("lytune-role") || "artist";
+    }
+
+    saveAndContinue(credential.user, finalRole);
   } catch (error) {
     setMessage(friendlyError(error));
   } finally {
