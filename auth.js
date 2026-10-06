@@ -128,6 +128,7 @@
         safeRemove(USER_KEY);
         state.user = null;
         renderNav();
+        window.LytuneAuthRefreshMobileMenu?.();
       });
 
       if (themeToggle) {
@@ -172,7 +173,7 @@
   /* ---------- mobile hamburger menu ---------- */
 
   function buildMobileMenu() {
-    if (document.querySelector('.mobile-menu')) return; // already built
+    if (document.querySelector('.mobile-menu')) return;
 
     const topbar = document.querySelector('.topbar');
     const navLinks = document.querySelectorAll('.navbar-links > a');
@@ -197,17 +198,53 @@
     divider.className = 'mobile-menu-divider';
     content.appendChild(divider);
 
-    navLinks.forEach((link) => {
-      content.appendChild(link.cloneNode(true));
-    });
+    const linksWrap = document.createElement('div');
+    linksWrap.className = 'mobile-nav-links';
+    content.appendChild(linksWrap);
 
     menu.appendChild(content);
     topbar.insertAdjacentElement('afterend', menu);
 
-    // The topbar can wrap to two lines on very narrow phones (it has
-    // flex-wrap: wrap below 768px), so its real height varies. Pin the
-    // menu to the topbar's actual measured height rather than a fixed
-    // CSS value, and re-measure on resize/orientation change.
+    function renderMobileLinks() {
+      linksWrap.innerHTML = '';
+
+      navLinks.forEach((link) => {
+        const clone = link.cloneNode(true);
+        linksWrap.appendChild(clone);
+      });
+
+      if (state.user) {
+        const dashboard = document.createElement('a');
+        dashboard.href = state.user.role === 'producer'
+          ? 'producer-dashboard.html'
+          : 'artist-dashboard.html';
+        dashboard.textContent = 'Dashboard';
+        dashboard.className = 'mobile-auth-link';
+
+        const logout = document.createElement('button');
+        logout.type = 'button';
+        logout.textContent = 'Log out';
+        logout.className = 'mobile-auth-link mobile-logout';
+        logout.addEventListener('click', () => {
+          menu.classList.add('is-hidden');
+          window.LytuneAuth.logout().then(() => {
+            window.location.href = 'index.html';
+          });
+        });
+
+        linksWrap.appendChild(dashboard);
+        linksWrap.appendChild(logout);
+      } else {
+        const authLink = document.createElement('a');
+        authLink.href = 'auth.html';
+        authLink.textContent = 'Get Started';
+        authLink.className = 'mobile-auth-link';
+        linksWrap.appendChild(authLink);
+      }
+    }
+
+    renderMobileLinks();
+
     function positionMenu() {
       menu.style.top = topbar.getBoundingClientRect().bottom + 'px';
     }
@@ -215,7 +252,6 @@
     window.addEventListener('resize', positionMenu);
     window.addEventListener('orientationchange', positionMenu);
 
-    // Hamburger button
     const hamburger = document.createElement('button');
     hamburger.className = 'hamburger-btn';
     hamburger.setAttribute('aria-label', 'Open menu');
@@ -237,7 +273,10 @@
       });
       document.body.style.overflow = isOpen ? '' : 'hidden';
     });
+
+    window.LytuneAuthRefreshMobileMenu = renderMobileLinks;
   }
+
 
   /* ---------- graceful media fallback (missing video/image files) ---------- */
 
