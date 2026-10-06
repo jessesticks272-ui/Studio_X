@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Producer Dashboard | LyTune Studio X</title>
+<link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+<link rel="stylesheet" href="artist-dashboard.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">L</span><span>LyTune <b>Studio X</b></span></a>
+  <nav class="desktop-nav"><a href="index.html">Home</a><a href="explore.html">Explore</a><a href="creators.html">Creators</a><a class="active" href="producer-dashboard.html">Dashboard</a></nav>
+  <div class="top-actions"><button id="themeToggle" class="icon-btn" aria-label="Toggle theme">◐</button><div class="account-wrap">
+    <button id="userBadge" class="user-badge">X</button>
+    <div id="accountMenu" class="account-menu hidden"><strong id="menuName">Producer</strong><span id="menuEmail">Signed in</span><a href="studio.html">Studio Workspace</a><a href="creator-profile.html">My Creator Profile</a><a href="admin.html">Owner Admin</a><button id="logoutButton">Sign out</button></div>
+  </div></div>
+</header>
+<main class="dashboard">
+<section class="hero"><div><span class="eyebrow">PRODUCER DASHBOARD</span><h1>Welcome back, <span id="producerName">Producer</span>.</h1><p>Upload beats, manage your catalog, build your producer profile and connect with artists.</p></div><a class="gradient-btn" href="studio.html">＋ Upload New Beat</a></section>
+<section class="stats-grid">
+<article class="stat-card"><div class="stat-icon cyan">♫</div><div><span>Total Beats</span><strong id="beatCount">0</strong><small>in your catalog</small></div></article>
+<article class="stat-card"><div class="stat-icon blue">▶</div><div><span>Total Plays</span><strong>0</strong><small>real analytics coming next</small></div></article>
+<article class="stat-card"><div class="stat-icon purple">♧</div><div><span>Followers</span><strong>0</strong><small>profile audience</small></div></article>
+<article class="stat-card"><div class="stat-icon pink">₦</div><div><span>Balance</span><strong>₦0</strong><small>payments connect later</small></div></article>
+</section>
+<section class="dashboard-grid">
+<div class="main-column">
+<section class="card"><div class="section-head"><div><span class="eyebrow">YOUR CATALOG</span><h2>Latest beats</h2></div><a href="studio.html">Manage catalog →</a></div><div id="beatList" class="release-list"><div class="empty">Loading your beats...</div></div></section>
+<section class="card"><div class="section-head"><div><span class="eyebrow">DISCOVERY</span><h2>Find your next artist</h2></div></div><p style="color:var(--muted)">Browse artists and connect with creators looking for your sound.</p><a class="outline-btn" href="creators.html">Explore Creators</a></section>
+</div>
+<aside class="side-column">
+<section class="card profile-card"><div class="profile-cover"></div><div class="profile-avatar" id="profileAvatar">P</div><div class="profile-content"><span class="eyebrow">PRODUCER PROFILE</span><h2 id="profileName">Producer</h2><p>Producer · Beatmaker</p><a class="outline-btn" href="creator-profile.html">Edit Profile</a></div></section>
+<section class="card tools-card"><span class="eyebrow">STUDIO TOOLS</span><a href="studio.html"><span>↑</span><div><b>Upload beat</b><small>Add music to your catalog</small></div>→</a><a href="ai-search.html"><span>✦</span><div><b>AI Beat Search</b><small>Find matching sounds</small></div>→</a><a href="market.html"><span>₦</span><div><b>Marketplace</b><small>View your selling space</small></div>→</a></section>
+</aside>
+</section>
+</main>
+<script type="module">
+import { auth } from "./firebase.js";
+import { getUserProfile, getUserBeats } from "./firestore.js";
+const $=id=>document.getElementById(id);
+const initials=n=>(n||"P").trim().charAt(0).toUpperCase();
+auth.onAuthStateChanged(async user=>{
+ if(!user){location.href="auth.html";return;}
+ const profile=await getUserProfile(user.uid).catch(()=>null);
+ const name=profile?.name||user.displayName||user.email?.split("@")[0]||"Producer";
+ $("producerName").textContent=name;$("profileName").textContent=name;$("profileAvatar").textContent=initials(name);$("userBadge").textContent=initials(name);$("menuName").textContent=name;$("menuEmail").textContent=user.email||"";
+ const beats=await getUserBeats(user.uid).catch(()=>[]);
+ $("beatCount").textContent=beats.length;
+ $("beatList").innerHTML=beats.length?beats.map(b=>`<div class="release-row"><div class="release-art">♫</div><div><b>${b.title||"Untitled Beat"}</b><small>${b.genre||"Beat"} · ${b.bpm?b.bpm+" BPM":"No BPM set"}</small></div><span>${b.price?"₦"+Number(b.price).toLocaleString("en-NG"):"Draft"}</span></div>`).join(""):'<div class="empty">No beats yet. Upload your first beat from the Studio.</div>';
+});
+$("userBadge").addEventListener("click",()=>$("accountMenu").classList.toggle("hidden"));
+$("logoutButton").addEventListener("click",async()=>{await auth.signOut();localStorage.clear();location.href="index.html";});
+</script>
+</body></html>
