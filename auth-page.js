@@ -194,7 +194,10 @@ $("googleBtn").addEventListener("click", async () => {
     const result = await signInWithPopup(auth, googleProvider);
     const token = await result.user.getIdToken();
     localStorage.setItem("lytune-token", token);
-    saveAndContinue(result.user, role);
+
+    const existingProfile = await getUserProfile(result.user.uid).catch(() => null);
+    const finalRole = existingProfile?.role || role;
+    saveAndContinue(result.user, finalRole);
   } catch (error) {
     setMessage(friendlyError(error));
   }
