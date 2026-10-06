@@ -2918,3 +2918,20 @@ input:focus-visible,
     gap: 24px 16px;
   }
 }
+
+/* Real marketplace artwork states */
+.beat-card-image.has-cover{
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+.beat-card-image.no-cover{
+  background:rgba(255,255,255,.045);
+  display:grid;
+  place-items:center;
+}
+.beat-card-no-cover{
+  font-size:2.5rem;
+  color:var(--text-secondary);
+  opacity:.55;
+}
