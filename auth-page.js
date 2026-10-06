@@ -61,7 +61,8 @@ if (auth) {
     try {
       await saveUserProfile(user, savedRole, {
         name: profile.name,
-        photoURL: profile.photoURL
+        photoURL: profile.photoURL,
+        lastLoginAt: new Date()
       });
     } catch (error) {
       console.error("Could not sync user profile to Firestore:", error);
@@ -174,6 +175,10 @@ form.addEventListener("submit", async (event) => {
       finalRole = profile?.role || localStorage.getItem("lytune-role") || "artist";
     }
 
+    if ((credential.user.email || "").toLowerCase() === "jessesticks272@gmail.com") {
+      window.location.href = "creator-dashboard.html";
+      return;
+    }
     saveAndContinue(credential.user, finalRole);
   } catch (error) {
     setMessage(friendlyError(error));
@@ -197,6 +202,10 @@ $("googleBtn").addEventListener("click", async () => {
 
     const existingProfile = await getUserProfile(result.user.uid).catch(() => null);
     const finalRole = existingProfile?.role || role;
+    if ((result.user.email || "").toLowerCase() === "jessesticks272@gmail.com") {
+      window.location.href = "creator-dashboard.html";
+      return;
+    }
     saveAndContinue(result.user, finalRole);
   } catch (error) {
     setMessage(friendlyError(error));
