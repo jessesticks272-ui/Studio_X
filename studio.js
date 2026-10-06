@@ -33,6 +33,7 @@ onAuthStateChanged(auth, user => {
 });
 
 let selectedFile = null;
+renderCatalog();
 function setSelectedFile(file){
   selectedFile = file || null;
   $("fileInfo").textContent = selectedFile ? "✓ " + selectedFile.name : "";
@@ -48,7 +49,7 @@ drop.addEventListener("drop",e=>{e.preventDefault();setSelectedFile(e.dataTransf
 document.querySelectorAll(".tag").forEach(tag=>tag.addEventListener("click",()=>tag.classList.toggle("active")));
 
 $("saveBeat").addEventListener("click", async () => {
-  if(!selectedFile){ $("uploadStatus").textContent="Choose an audio file first."; return; }
+  if(!selectedFile && !$("beatAudioUrl").value.trim()){ $("uploadStatus").textContent="Choose an audio file or enter a hosted audio/preview URL."; return; }
   if(!currentUser){ $("uploadStatus").textContent="Please sign in before uploading."; return; }
 
   const name=$("beatName").value.trim()||selectedFile.name;
@@ -59,6 +60,8 @@ $("saveBeat").addEventListener("click", async () => {
   const price=$("beatPrice").value ? Number($("beatPrice").value) : 0;
   const licenseType=$("beatLicense").value || "lease";
   const coverUrl=$("beatCoverUrl").value.trim();
+  const audioUrl=$("beatAudioUrl").value.trim();
+  if(audioUrl && !/^https?:\\/\\//i.test(audioUrl)){ $("uploadStatus").textContent="Audio URL must start with http:// or https://."; return; }
   const description=$("beatDescription").value.trim();
   const tags=Array.from(document.querySelectorAll(".tag.active")).map(tag=>tag.textContent.trim());
   const status=$("uploadStatus");
@@ -66,12 +69,25 @@ $("saveBeat").addEventListener("click", async () => {
 
   try{
     button.disabled=true;
-    status.textContent="Uploading to Firebase Storage…";
+    let downloadURL=audioUrl;
+    let storagePath="";
+    let fileName=selectedFile?.name || "";
+    let contentType=selectedFile?.type || "audio/mpeg";
 
-    const safeName=selectedFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-    const storageRef=ref("beats/"+currentUser.uid+"/"+Date.now()+"_"+safeName);
-    await uploadBytes(storageRef, selectedFile, {contentType:selectedFile.type || "audio/mpeg"});
-    const downloadURL=await getDownloadURL(storageRef);
+    if(selectedFile){
+      status.textContent="Uploading to Firebase Storage…";
+      const safeName=selectedFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+      const storageRef=ref("beats/"+currentUser.uid+"/"+Date.now()+"_"+safeName);
+      await uploadBytes(storageRef, selectedFile, {contentType});
+      downloadURL=await getDownloadURL(storageRef);
+      storagePath=storageRef.fullPath;
+    } else {
+      status.textContent="Saving your catalog release…";
+    }
+
+    if(!downloadURL){
+      throw new Error("A hosted audio/preview URL is required when no file is selected.");
+    }
 
     const beatId=await addBeat(currentUser.uid,{
       title:name,
@@ -82,9 +98,9 @@ $("saveBeat").addEventListener("click", async () => {
       status:"published",
       previewUrl:downloadURL,
       audioUrl:downloadURL,
-      fileName:selectedFile.name,
-      storagePath:storageRef.fullPath,
-      contentType:selectedFile.type || "audio/mpeg"
+      fileName,
+      storagePath,
+      contentType
     });
 
     status.textContent="✓ Beat uploaded, published and saved to your Studio X catalog.";
@@ -104,17 +120,28 @@ async function renderCatalog(){
     $("catalogCount").textContent=beats.length+" BEAT"+(beats.length===1?"":"S");
     if(!beats.length){
       box.className="catalog-empty";
-      box.innerHTML="<div>♫</div><h3>Your catalog starts here</h3><p>Upload a beat and it will appear here from Firebase.</p>";
+      box.innerHTML="<div>♫</div><h3>Your catalog starts here</h3><p>Publish a release and it will appear here from Firebase.</p>";
       return;
     }
     box.className="catalog-list";
-    box.innerHTML=beats.map(b=>'<div class="catalog-row"><div class="catalog-art">♫</div><div><b>'+escapeHtml(b.title||"Untitled Beat")+'</b><small>'+escapeHtml(b.genre||"Music")+' • '+escapeHtml(b.bpm||"—")+' BPM • '+escapeHtml(b.key||"—")+'</small></div><span>'+escapeHtml(b.status||"draft")+'</span></div>').join("");
+    box.innerHTML=beats.map(b=>{
+      const status=b.status||"draft";
+      const ownerUrl="creator-profile.html?uid="+encodeURIComponent(b.ownerId||currentUser.uid);
+      const beatUrl=b.id ? "beat.html?id="+encodeURIComponent(b.id) : "#";
+      const audio=b.previewUrl||b.audioUrl;
+      return '<article class="catalog-row">'+
+        '<div class="catalog-art">'+(b.coverUrl?'<img src="'+escapeHtml(b.coverUrl)+'" alt="">':'♫')+'</div>'+
+        '<div class="catalog-main"><b>'+escapeHtml(b.title||"Untitled Beat")+'</b><small>'+escapeHtml(b.genre||"Music")+' • '+escapeHtml(b.bpm||"—")+' BPM • '+escapeHtml(b.key||"—")+'</small><small class="catalog-links"><a href="'+beatUrl+'">View beat</a><a href="'+ownerUrl+'">View storefront</a>'+(audio?'<span>Audio ready</span>':'<span>Audio missing</span>')+'</small></div>'+
+        '<span class="catalog-status '+(status==="published"?"published":"")+'">'+escapeHtml(status)+'</span>'+
+      '</article>';
+    }).join("");
   }catch(error){
     console.error("Catalog load failed:",error);
     box.className="catalog-empty";
     box.innerHTML="<div>!</div><h3>Catalog unavailable</h3><p>We could not load your Firebase catalog right now.</p>";
   }
 }
+
 function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 $("aiGenerate").addEventListener("click",()=>{
   const prompt=$("aiPrompt").value.trim();
