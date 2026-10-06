@@ -105,7 +105,7 @@ function saveAndContinue(user, role) {
   localStorage.setItem("lytune-user", JSON.stringify(profile));
   localStorage.setItem("lytune-pending-role", role);
   localStorage.setItem("lytune-role", role);
-  window.location.href = role === "producer" ? "producer-dashboard.html" : "artist-dashboard.html";
+  window.location.href = "artist-dashboard.html";
 }
 
 loginTab.addEventListener("click", () => setMode("login"));
