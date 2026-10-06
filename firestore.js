@@ -67,6 +67,22 @@ export async function getUserBeats(uid) {
   return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
 }
 
+export async function getCreatorProfile(uid) {
+  if (!uid) return null;
+  const snapshot = await getDoc(doc(db, "creatorProfiles", uid));
+  if (snapshot.exists()) return snapshot.data();
+  return getUserProfile(uid);
+}
+
+export async function getPublishedBeatsByOwner(uid) {
+  if (!uid) return [];
+  const snapshot = await getDocs(collection(db, "beats"));
+  return snapshot.docs
+    .map(item => ({ id: item.id, ...item.data() }))
+    .filter(beat => beat.ownerId === uid && beat.status === "published")
+    .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+}
+
 export async function getPublishedBeats() {
   const snapshot = await getDocs(collection(db, "beats"));
   return snapshot.docs
