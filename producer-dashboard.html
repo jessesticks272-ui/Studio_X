@@ -44,6 +44,7 @@ const initials=n=>(n||"P").trim().charAt(0).toUpperCase();
 auth.onAuthStateChanged(async user=>{
  if(!user){location.href="auth.html";return;}
  const profile=await getUserProfile(user.uid).catch(()=>null);
+ if(profile?.role==="artist"){location.href="artist-dashboard.html";return;}
  const name=profile?.name||user.displayName||user.email?.split("@")[0]||"Producer";
  $("producerName").textContent=name;$("profileName").textContent=name;$("profileAvatar").textContent=initials(name);$("userBadge").textContent=initials(name);$("menuName").textContent=name;$("menuEmail").textContent=user.email||"";
  const beats=await getUserBeats(user.uid).catch(()=>[]);
