@@ -27,6 +27,7 @@ onAuthStateChanged(auth, user => {
     $("userBadge").textContent = (user.displayName || user.email || "X").trim().charAt(0).toUpperCase();
     $("accountText").textContent = user.email || "Signed in";
     $("connection").textContent = "Firebase connected";
+    await renderCatalog();
   } else {
     $("connection").textContent = "Not signed in";
   }
