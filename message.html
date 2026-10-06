@@ -117,7 +117,7 @@
 
       <div class="chat-panel">
         <div class="messages-offline-note is-hidden" id="offlineNote">
-          The LyTune server isn't reachable right now, so messages can't be sent or loaded. This will work once it's running.
+          Messages are stored in Firebase for your signed-in account.
         </div>
         <div class="chat-header is-hidden" id="chatHeader">
           <div class="chat-header-avatar" id="chatHeaderAvatar">?</div>
@@ -127,7 +127,7 @@
         <div class="chat-compose is-hidden" id="chatCompose">
           <input type="text" id="messageInput" placeholder="Type a message..." aria-label="Message text">
           <button type="button" id="sendMessageBtn">Send</button>
-        </div>
+        </div><p id="messageStatus" class="message-status" aria-live="polite"></p>
       </div>
     </div>
   </section>
@@ -198,6 +198,6 @@
     </div>
   </footer>
 
-  <script src="./message.js"></script>
+  <script type="module" src="./message.js"></script>
 </body>
 </html>
