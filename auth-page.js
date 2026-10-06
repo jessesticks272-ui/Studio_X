@@ -2,6 +2,8 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -29,6 +31,28 @@ const configReady = Boolean(auth);
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
+
+async function handleGoogleUser(user) {
+  const token = await user.getIdToken();
+  localStorage.setItem("lytune-token", token);
+  const existingProfile = await getUserProfile(user.uid).catch(() => null);
+  const finalRole = existingProfile?.role || localStorage.getItem("lytune-pending-role") || "artist";
+
+  if ((user.email || "").toLowerCase() === "jessesticks272@gmail.com") {
+    window.location.href = "creator-dashboard.html";
+    return;
+  }
+  saveAndContinue(user, finalRole);
+}
+
+if (auth) {
+  getRedirectResult(auth).then(async result => {
+    if (result?.user) await handleGoogleUser(result.user);
+  }).catch(error => {
+    console.error("Google redirect sign-in failed:", error);
+    setMessage(friendlyError(error));
+  });
+}
 
 if (auth) {
   onAuthStateChanged(auth, async (user) => {
@@ -197,17 +221,20 @@ $("googleBtn").addEventListener("click", async () => {
 
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    const token = await result.user.getIdToken();
-    localStorage.setItem("lytune-token", token);
-
-    const existingProfile = await getUserProfile(result.user.uid).catch(() => null);
-    const finalRole = existingProfile?.role || role;
-    if ((result.user.email || "").toLowerCase() === "jessesticks272@gmail.com") {
-      window.location.href = "creator-dashboard.html";
-      return;
-    }
-    saveAndContinue(result.user, finalRole);
+    await handleGoogleUser(result.user);
   } catch (error) {
+    console.error("Google popup sign-in failed:", error);
+    if (error?.code === "auth/popup-blocked" || error?.code === "auth/popup-timeout" || error?.code === "auth/cancelled-popup-request") {
+      setMessage("Google popup was blocked or did not open. Redirecting to Google sign-in...", false);
+      try {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      } catch (redirectError) {
+        console.error("Google redirect sign-in failed:", redirectError);
+        setMessage(friendlyError(redirectError));
+        return;
+      }
+    }
     setMessage(friendlyError(error));
   }
 });
