@@ -88,31 +88,84 @@
     if (!actions) return;
 
     const themeToggle = document.getElementById('themeToggle');
-    const existingCta = actions.querySelector('.main-btn, .nav-user-btn');
-    if (existingCta) existingCta.remove();
+    actions.querySelectorAll('.main-btn, .nav-user-btn, .nav-logout-btn').forEach((el) => el.remove());
 
     let cta;
+
     if (state.user) {
+      const dashboard = state.user.role === 'producer'
+        ? 'producer-dashboard.html'
+        : 'artist-dashboard.html';
+
       cta = document.createElement('a');
-      cta.href = state.user.role === 'producer' ? 'producer-dashboard.html' : 'artist-dashboard.html';
+      cta.href = dashboard;
       cta.className = 'nav-user-btn';
       cta.setAttribute('aria-label', 'Go to dashboard');
       cta.innerHTML =
         '<span class="nav-avatar" style="background:var(--brand-gradient-diag);">' +
         initials(state.user.name) +
-        '</span>';
+        '</span><span>Dashboard</span>';
+
+      // Logged-in users should never see public auth CTAs.
+      document.querySelectorAll('a[href="auth.html"], a[href="login.html"]').forEach((link) => {
+        link.dataset.authHidden = 'true';
+        link.style.display = 'none';
+      });
+
+      const logout = document.createElement('button');
+      logout.type = 'button';
+      logout.className = 'nav-logout-btn';
+      logout.textContent = 'Log out';
+      logout.addEventListener('click', async () => {
+        try {
+          const { signOut } = await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js');
+          const { auth } = await import('./firebase.js');
+          await signOut(auth);
+        } catch (err) {
+          console.error('LyTune logout failed:', err);
+        }
+        safeRemove(TOKEN_KEY);
+        safeRemove(USER_KEY);
+        state.user = null;
+        renderNav();
+      });
+
+      if (themeToggle) {
+        actions.insertBefore(cta, themeToggle);
+        actions.insertBefore(logout, themeToggle);
+      } else {
+        actions.appendChild(cta);
+        actions.appendChild(logout);
+      }
     } else {
+      // Public landing page state.
+      document.querySelectorAll('a[href="auth.html"], a[href="login.html"]').forEach((link) => {
+        link.style.display = '';
+        delete link.dataset.authHidden;
+      });
+
       cta = document.createElement('a');
       cta.href = 'auth.html';
       cta.className = 'main-btn';
       cta.textContent = 'Get Started';
       cta.setAttribute('aria-label', 'Create an account or sign in');
+
+      if (themeToggle) actions.insertBefore(cta, themeToggle);
+      else actions.appendChild(cta);
     }
 
-    if (themeToggle) {
-      actions.insertBefore(cta, themeToggle);
-    } else {
-      actions.appendChild(cta);
+    // Change the main hero action after authentication.
+    const heroPrimary = document.querySelector('.hero-buttons .main-btn');
+    if (heroPrimary) {
+      if (state.user) {
+        heroPrimary.href = state.user.role === 'producer'
+          ? 'producer-dashboard.html'
+          : 'artist-dashboard.html';
+        heroPrimary.textContent = 'Go to Dashboard';
+      } else {
+        heroPrimary.href = 'auth.html';
+        heroPrimary.textContent = 'Start Selling';
+      }
     }
   }
 
@@ -229,7 +282,14 @@
     hasCheckedOnline: () => state.checked,
     whenReady: () => checkOnline(),
     getUser: () => state.user,
-    logout: () => {
+    logout: async () => {
+      try {
+        const { signOut } = await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js');
+        const { auth } = await import('./firebase.js');
+        await signOut(auth);
+      } catch (err) {
+        console.warn('Firebase logout skipped:', err);
+      }
       safeRemove(TOKEN_KEY);
       safeRemove(USER_KEY);
       state.user = null;
@@ -243,11 +303,53 @@
     },
   };
 
+  async function syncFirebaseAuth() {
+    try {
+      const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js');
+      const { auth } = await import('./firebase.js');
+      const { getUserProfile } = await import('./firestore.js');
+
+      onAuthStateChanged(auth, async (firebaseUser) => {
+        if (!firebaseUser) {
+          state.user = null;
+          safeRemove(TOKEN_KEY);
+          safeRemove(USER_KEY);
+          renderNav();
+          return;
+        }
+
+        let profile = null;
+        try {
+          profile = await getUserProfile(firebaseUser.uid);
+        } catch (err) {
+          console.warn('Could not load LyTune profile:', err);
+        }
+
+        state.user = {
+          uid: firebaseUser.uid,
+          name: profile?.name || firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'LyTune User',
+          email: firebaseUser.email || '',
+          role: profile?.role || safeGet('lytune-role') || 'artist',
+          photoURL: profile?.photoURL || firebaseUser.photoURL || ''
+        };
+
+        safeSet(TOKEN_KEY, 'firebase-authenticated');
+        safeSet(USER_KEY, JSON.stringify(state.user));
+        renderNav();
+      });
+    } catch (err) {
+      console.error('Firebase auth sync failed:', err);
+      // Keep the existing local session fallback if Firebase cannot initialize.
+      renderNav();
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     state.user = loadUser();
     renderNav();
     buildMobileMenu();
     wireMediaFallbacks();
+    syncFirebaseAuth();
     checkOnline(); // fire and forget — data.js listens for 'lytune:mode'
   });
 })();
