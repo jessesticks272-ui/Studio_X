@@ -23,7 +23,7 @@
         '<span class="art-label">'+genre+'</span></div>'+
       '<section><div class="eyebrow">'+genre+'</div>'+
       '<h1 class="title">'+esc(b.title||'Untitled Beat')+'</h1>'+
-      '<div class="producer">'+producer+'</div>'+
+      '<div class="producer"><a href="'+(b.ownerId?'creator-profile.html?uid='+encodeURIComponent(b.ownerId):'#')+'">'+producer+'</a></div>'+
       '<div class="meta">'+(b.bpm?'<span class="pill">'+esc(b.bpm)+' BPM</span>':'')+(b.key?'<span class="pill">'+esc(b.key)+'</span>':'')+(b.mood?'<span class="pill">'+esc(b.mood)+'</span>':'')+'</div>'+
       '<div class="panel"><h3>Preview</h3>'+
       '<audio id="audio" controls preload="metadata"'+(preview?' src="'+esc(preview)+'"':'')+'></audio>'+
