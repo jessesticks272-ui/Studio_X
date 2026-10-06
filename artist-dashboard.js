@@ -1,6 +1,6 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getUserBeats } from "./firestore.js";
+import { getUserBeats, getUserProfile } from "./firestore.js";
 
 const $=id=>document.getElementById(id);
 function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
@@ -45,7 +45,12 @@ function applyUser(user){
   $("sideFollowers").textContent=followers;
   loadReleases(user);
 }
-onAuthStateChanged(auth,applyUser);
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.href="auth.html";return;}
+  const profile=await getUserProfile(user.uid).catch(()=>null);
+  if(profile?.role==="producer"){location.href="producer-dashboard.html";return;}
+  applyUser(user);
+});
 
 $("userBadge").addEventListener("click",()=>{$("accountMenu").classList.toggle("hidden")});
 document.addEventListener("click",e=>{if(!e.target.closest(".account-wrap"))$("accountMenu").classList.add("hidden")});
