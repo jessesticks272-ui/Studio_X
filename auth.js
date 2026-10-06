@@ -333,12 +333,14 @@
       safeRemove(USER_KEY);
       state.user = null;
       renderNav();
+      window.LytuneAuthRefreshMobileMenu?.();
     },
     setSession: (token, user) => {
       safeSet(TOKEN_KEY, token);
       safeSet(USER_KEY, JSON.stringify(user));
       state.user = user;
       renderNav();
+      window.LytuneAuthRefreshMobileMenu?.();
     },
   };
 
@@ -375,6 +377,7 @@
         safeSet(TOKEN_KEY, 'firebase-authenticated');
         safeSet(USER_KEY, JSON.stringify(state.user));
         renderNav();
+        window.LytuneAuthRefreshMobileMenu?.();
       });
     } catch (err) {
       console.error('Firebase auth sync failed:', err);
