@@ -58,7 +58,7 @@ async function loadProfile(){
   const name=profile.name || profile.displayName || "LyTune Creator";
   $("creatorName").textContent=name;
   $("creatorRole").textContent=profile.role==="producer" ? "Producer" : profile.role==="artist" ? "Artist" : "Creator";
-  $("avatar").textContent=initials(name);
+  $("avatar").textContent=initials(name); if(profile.avatarUrl){$("avatar").classList.add("has-image");$("avatar").style.backgroundImage="url(\""+profile.avatarUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";} else {$("avatar").classList.remove("has-image");$("avatar").style.backgroundImage="";} if(profile.coverUrl){$("profile-hero")?.classList.add("has-cover");$("cover")?.classList.add("has-image");$("cover").style.backgroundImage="url(\""+profile.coverUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";}
   $("bio").textContent=profile.bio || "Creator on LyTune Studio X.";
   if(profile.location) $("location").textContent="📍 "+profile.location;
   $("instagram").href=profile.instagram || "#";
@@ -78,7 +78,7 @@ async function loadProfile(){
   const key="lytune_following_creator_"+uid;
   following=localStorage.getItem(key)==="1";
   $("followBtn").textContent=following ? "Following" : "Follow";
-  $("followers").textContent=profile.followers || "0";
+  $("followers").textContent=profile.followers || "0"; $("followingCount").textContent=profile.following || "0"; $("verified").hidden = profile.isVerified !== true;
 }
 
 $("followBtn").addEventListener("click",()=>{
