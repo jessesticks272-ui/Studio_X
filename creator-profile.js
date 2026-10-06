@@ -84,7 +84,7 @@ $("shareBtn").addEventListener("click",async()=>{
   catch{$("shareBtn").textContent="Copy page URL";}
 });
 
-$("editBtn").addEventListener("click",()=>location.href="producer-dashboard.html");
+$("editBtn").addEventListener("click",()=>location.href="creator-edit.html");
 
 onAuthStateChanged(auth,user=>{
   currentUser=user||null;
