@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="LyTune Studio X admin dashboard for members, subscriptions and payments.">
 <title>Admin | LyTune Studio X</title>
-<link rel="icon" type="image/svg+xml" href="assets/image/logo.svg">
+<link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./admin.css">
@@ -61,11 +61,11 @@
 <section id="payments" class="panel">
 <div class="panel-head"><div><span class="eyebrow">PAYMENTS</span><h2>Recent transactions</h2></div><span class="demo-badge">FRONTEND PREVIEW</span></div>
 <div class="payment-list" id="paymentList"></div>
-<div class="preview-note"><span>ⓘ</span><div><strong>Live data comes later</strong><p>This page currently uses sample records so we can finish the interface first. Firebase and your payment provider will replace these records when we connect the backend.</p></div></div>
+<div class="preview-note"><span>ⓘ</span><div><strong>Firebase member data</strong><p>New accounts are stored in Firebase. Payment status will become live when the payment backend is connected.</p></div></div>
 </section>
 </main>
 </div>
 </div>
-<script src="./admin.js"></script>
+<script type="module" src="./admin.js"></script>
 </body>
 </html>
