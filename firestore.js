@@ -8,7 +8,8 @@ import {
   where,
   orderBy,
   getDocs,
-  serverTimestamp
+  serverTimestamp,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
@@ -99,4 +100,29 @@ export async function getBeat(beatId) {
   if (!beatId) return null;
   const snapshot = await getDoc(doc(db, "beats", beatId));
   return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
+}
+
+
+export async function sendMessage(fromId, toId, text) {
+  if (!fromId || !toId || !text?.trim()) throw new Error("Message details are required.");
+  if (fromId === toId) throw new Error("You cannot message yourself.");
+  const ref = await addDoc(collection(db, "messages"), {
+    fromId, toId, participants: [fromId, toId], text: text.trim(), createdAt: serverTimestamp()
+  });
+  return ref.id;
+}
+
+export function subscribeToConversation(userA, userB, callback) {
+  const q = query(collection(db, "messages"), where("participants", "array-contains", userA), orderBy("createdAt", "asc"));
+  return onSnapshot(q, snapshot => {
+    const messages = snapshot.docs.map(item => ({ id:item.id, ...item.data() }))
+      .filter(m => (m.fromId === userA && m.toId === userB) || (m.fromId === userB && m.toId === userA));
+    callback(messages);
+  }, error => callback([], error));
+}
+
+export async function getUserConversationMessages(uid) {
+  const q = query(collection(db, "messages"), where("participants", "array-contains", uid), orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
 }
