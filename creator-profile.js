@@ -65,6 +65,14 @@ async function loadProfile(){
   $("tiktok").href=profile.tiktok || "#";
   $("youtube").href=profile.youtube || "#";
   $("editBtn").hidden = !currentUser || currentUser.uid !== uid;
+  const messageBtn=$("messageBtn");
+  if(messageBtn){
+    messageBtn.hidden = !!currentUser && currentUser.uid === uid;
+    messageBtn.onclick = () => {
+      if(!currentUser){ location.href="login.html?redirect="+encodeURIComponent(location.href); return; }
+      location.href="message.html?to="+encodeURIComponent(uid)+"&name="+encodeURIComponent(name);
+    };
+  }
   renderBeats(beats);
 
   const key="lytune_following_creator_"+uid;
