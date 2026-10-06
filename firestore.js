@@ -66,3 +66,21 @@ export async function getUserBeats(uid) {
   const snapshot = await getDocs(q);
   return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
 }
+
+export async function getPublishedBeats() {
+  const snapshot = await getDocs(collection(db, "beats"));
+  return snapshot.docs
+    .map(item => ({ id: item.id, ...item.data() }))
+    .filter(beat => beat.status === "published")
+    .sort((a, b) => {
+      const aTime = a.createdAt?.toMillis?.() || 0;
+      const bTime = b.createdAt?.toMillis?.() || 0;
+      return bTime - aTime;
+    });
+}
+
+export async function getBeat(beatId) {
+  if (!beatId) return null;
+  const snapshot = await getDoc(doc(db, "beats", beatId));
+  return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
+}
