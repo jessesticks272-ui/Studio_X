@@ -33,17 +33,36 @@ googleProvider.setCustomParameters({ prompt: "select_account" });
 if (auth) {
   onAuthStateChanged(auth, async (user) => {
     if (!user) return;
-    const savedRole = localStorage.getItem("lytune-pending-role") || localStorage.getItem("lytune-role") || "artist";
+
+    let existing = null;
+    try {
+      existing = await getUserProfile(user.uid);
+    } catch (error) {
+      console.warn("Could not load existing LyTune profile:", error);
+    }
+
+    const savedRole =
+      existing?.role ||
+      localStorage.getItem("lytune-pending-role") ||
+      localStorage.getItem("lytune-role") ||
+      "artist";
+
     const profile = {
       uid: user.uid,
-      name: user.displayName || user.email?.split("@")[0] || "LyTune User",
+      name: existing?.name || user.displayName || user.email?.split("@")[0] || "LyTune User",
       email: user.email || "",
       role: savedRole,
-      photoURL: user.photoURL || ""
+      photoURL: existing?.photoURL || user.photoURL || ""
     };
+
     localStorage.setItem("lytune-user", JSON.stringify(profile));
+    localStorage.setItem("lytune-role", savedRole);
+
     try {
-      await saveUserProfile(user, savedRole);
+      await saveUserProfile(user, savedRole, {
+        name: profile.name,
+        photoURL: profile.photoURL
+      });
     } catch (error) {
       console.error("Could not sync user profile to Firestore:", error);
     }
