@@ -52,7 +52,7 @@
     <div id="dropZone" class="drop-zone">
       <div class="upload-icon">↑</div>
       <h3>Drop your beat here</h3>
-      <p>or choose an audio file from your computer</p>
+      <p>Choose an audio file, or use a hosted audio/preview URL below if Storage is not enabled.</p>
       <label class="primary-btn" for="beatFile">Choose Audio</label>
       <input id="beatFile" type="file" accept="audio/*">
       <div id="fileInfo" class="file-info"></div>
@@ -66,6 +66,7 @@
       <label>Price (USD)<input id="beatPrice" type="number" min="0" step="0.01" placeholder="29.99"></label>
       <label>License<select id="beatLicense"><option value="lease">Lease</option><option value="premium">Premium Lease</option><option value="exclusive">Exclusive Rights</option></select></label>
       <label>Cover image URL<input id="beatCoverUrl" type="url" placeholder="https://..."></label>
+      <label>Audio/Preview URL<input id="beatAudioUrl" type="url" placeholder="https://...mp3"></label>
     </div>
     <label class="release-description">Description<textarea id="beatDescription" rows="4" placeholder="Describe the sound, instruments and intended use."></textarea></label>
     <div class="tag-row"><button class="tag active" type="button">Instrumental</button><button class="tag" type="button">Drums</button><button class="tag" type="button">Melodic</button><button class="tag" type="button">Dark</button><button class="tag" type="button">Chill</button><button class="tag" type="button">Street</button></div>
@@ -86,7 +87,7 @@
 
   <section id="catalogPanel" class="panel hidden">
     <div class="panel-head"><div><span class="eyebrow">03 / CATALOG</span><h2>My Catalog</h2></div><span id="catalogCount" class="pill">0 BEATS</span></div>
-    <div id="catalog" class="catalog-empty"><div>♫</div><h3>Your catalog starts here</h3><p>Your catalog is stored in Firebase. Audio files require Firebase Storage to be enabled before they can be published.</p></div>
+    <div id="catalog" class="catalog-empty"><div>♫</div><h3>Your catalog starts here</h3><p>Your catalog is stored in Firebase. Audio files can be uploaded when Firebase Storage is enabled, or published using a valid hosted audio/preview URL.</p></div>
   </section>
 
   <section class="bottom-grid">
