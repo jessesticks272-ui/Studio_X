@@ -94,7 +94,7 @@
     let cta;
     if (state.user) {
       cta = document.createElement('a');
-      cta.href = 'artist-dashboard.html';
+      cta.href = state.user.role === 'producer' ? 'producer-dashboard.html' : 'artist-dashboard.html';
       cta.className = 'nav-user-btn';
       cta.setAttribute('aria-label', 'Go to dashboard');
       cta.innerHTML =
