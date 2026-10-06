@@ -98,7 +98,7 @@
           '<div class="beat-card-actions">' +
             '<button class="beat-like-btn" type="button" aria-label="Like this beat">♡</button>' +
             '<button class="beat-like-btn add-to-cart-btn" type="button" aria-label="Add to cart" title="Add to cart">🛒</button>' +
-            '<a href="checkout.html?beat=' + encodeURIComponent(beat.id || '') + '" class="beat-buy-btn">Buy</a>' +
+            '<a href="beat.html?id=' + encodeURIComponent(beat.id || '') + '" class="beat-buy-btn">View</a>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -198,37 +198,59 @@
 
   /* ---------- data loading ---------- */
 
-  function loadBeats() {
-    const online = window.LytuneAuth && window.LytuneAuth.isOnline();
-    if (modeIndicator) modeIndicator.textContent = online ? '● Live from LyTune' : '● Offline preview';
+  async function loadBeats() {
+    if (modeIndicator) modeIndicator.textContent = '● Live from LyTune';
 
-    if (!online || !window.LytuneAuth) {
-      allBeats = [];
+    try {
+      const { getPublishedBeats } = await import("./firestore.js");
+      allBeats = await getPublishedBeats();
       applyFilters();
-      return;
+    } catch (error) {
+      console.error("Could not load published beats:", error);
+      allBeats = [];
+      if (modeIndicator) modeIndicator.textContent = '● Marketplace unavailable';
+      applyFilters();
     }
-
-    fetch(window.LytuneAuth.apiBase + '/beats')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        allBeats = data && Array.isArray(data.beats) ? data.beats : [];
-        applyFilters();
-      })
-      .catch(() => {
-        allBeats = [];
-        applyFilters();
-      });
   }
 
   /* ---------- mini-player (honest: no real audio exists yet) ---------- */
 
+  let activeAudio = null;
+
   function openPlayer(beat, producerLabel) {
     if (!miniPlayer) return;
+
+    if (activeAudio) {
+      activeAudio.pause();
+      activeAudio = null;
+    }
+
     if (playerTitle) playerTitle.textContent = beat.title || 'Untitled beat';
     if (playerSub) playerSub.textContent = producerLabel;
-    if (playerMsg) playerMsg.textContent = 'Preview unavailable — no audio uploaded yet';
+
+    if (!beat.previewUrl && !beat.audioUrl) {
+      if (playerMsg) playerMsg.textContent = 'No preview audio has been uploaded for this beat.';
+      miniPlayer.classList.remove('is-hidden');
+      document.body.classList.add('has-mini-player');
+      return;
+    }
+
+    const audio = new Audio(beat.previewUrl || beat.audioUrl);
+    audio.preload = "metadata";
+    activeAudio = audio;
+
+    if (playerMsg) playerMsg.textContent = 'Playing preview';
     miniPlayer.classList.remove('is-hidden');
     document.body.classList.add('has-mini-player');
+
+    audio.play().catch(() => {
+      if (playerMsg) playerMsg.textContent = 'Press play again to start the preview';
+    });
+
+    audio.addEventListener("ended", () => {
+      if (playerMsg) playerMsg.textContent = "Preview ended";
+      activeAudio = null;
+    });
   }
 
   function closePlayer() {
