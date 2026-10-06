@@ -1,53 +1,263 @@
-/* Creator directory interactions */
+/* Real Firebase creator directory */
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { db } from "./firebase.js";
+import { getPublishedBeats } from "./firestore.js";
+
 (function(){
   "use strict";
-  const creators=[
-    {name:"Kay_Drumz",role:"Afrobeat Producer",location:"Lagos, Nigeria",initial:"K",gradient:"linear-gradient(135deg,#19D7FF,#007BFF)",bio:"Warm percussion, melodic grooves and modern Afrobeat textures.",tags:["Afrobeat","Drums","Melodic"]},
-    {name:"Talemo_Beats",role:"Amapiano Producer",location:"Johannesburg, South Africa",initial:"T",gradient:"linear-gradient(135deg,#9B2EFF,#19D7FF)",bio:"Log drums, piano-led progressions and late-night Amapiano energy.",tags:["Amapiano","Log Drums","Piano"]},
-    {name:"Spanky_Drill",role:"Trap & Drill Producer",location:"Accra, Ghana",initial:"S",gradient:"linear-gradient(135deg,#007BFF,#9B2EFF)",bio:"Dark melodies, punchy drums and hard-hitting contemporary production.",tags:["Drill","Trap","808s"]},
-    {name:"PianoKeysSA",role:"Amapiano Producer",location:"Pretoria, South Africa",initial:"P",gradient:"linear-gradient(135deg,#007BFF,#19D7FF)",bio:"Soulful chords and rolling grooves designed for vocal artists.",tags:["Amapiano","Soul","Keys"]},
-    {name:"BeatMason",role:"Street Vibes Producer",location:"Accra, Ghana",initial:"B",gradient:"linear-gradient(135deg,#9B2EFF,#007BFF)",bio:"Raw street-pop rhythms with hooks made to cut through the mix.",tags:["Street Vibes","Afro","Percussion"]},
-    {name:"DJ Kaywise",role:"Afrobeat Producer",location:"Lagos, Nigeria",initial:"D",gradient:"linear-gradient(135deg,#19D7FF,#9B2EFF)",bio:"Sample profile layout showing how an established creator can appear.",tags:["Afrobeat","Club","Fusion"]}
-  ];
-  let genre="all",query="";
-  const following=new Set(JSON.parse(localStorage.getItem("lytune_following_creators")||"[]"));
-  function matches(c){
-    const text=[c.name,c.role,c.location,c.bio].concat(c.tags).join(" ").toLowerCase();
-    return (genre==="all"||text.indexOf(genre)>-1)&&text.indexOf(query)>-1;
+
+  let creators = [];
+  let genre = "all";
+  let queryText = "";
+  const following = new Set(JSON.parse(localStorage.getItem("lytune_following_creators") || "[]"));
+
+  function escapeHtml(value = "") {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
-  function card(c){
-    const f=following.has(c.name);
-    return '<article class="creator-card"><div class="creator-cover" style="background:'+c.gradient+'"><div class="creator-avatar-wrap"><div class="creator-avatar" style="background:'+c.gradient+'">'+c.initial+'</div></div></div><div class="creator-body"><div class="creator-head"><div class="creator-info"><h3>'+c.name+' <span class="verified-badge" title="Preview profile">✓</span></h3><div class="creator-role">'+c.role+'</div><div class="creator-location">📍 '+c.location+'</div></div><span class="creator-founding-badge">Preview</span></div><p class="creator-bio">'+c.bio+'</p><div class="creator-tags">'+c.tags.map(function(t){return '<span class="creator-tag">'+t+'</span>';}).join("")+'</div><div class="creator-actions"><button class="creator-follow-btn '+(f?"following":"")+'" data-follow="'+c.name+'" type="button">'+(f?"Following ✓":"Follow")+'</button><a class="creator-view-btn" href="explore.html?producer='+encodeURIComponent(c.name)+'">View Beats</a></div></div></article>';
+
+  function normalizeGenres(profile) {
+    const values = [];
+    if (Array.isArray(profile.genres)) values.push(...profile.genres);
+    if (profile.genre) values.push(profile.genre);
+    if (Array.isArray(profile.tags)) values.push(...profile.tags);
+    return [...new Set(values.filter(Boolean).map(value => String(value).trim()))];
   }
-  function render(){
-    const grid=document.getElementById("creatorsGrid");
-    const count=document.getElementById("resultsCount");
-    const mode=document.getElementById("modeIndicator");
-    if(!grid)return;
-    const list=creators.filter(matches);
-    if(count)count.textContent=list.length+(list.length===1?" creator":" creators");
-    if(mode)mode.textContent="Preview profiles • Live producer API coming next";
-    grid.innerHTML=list.length?list.map(card).join(""):'<div class="creator-empty-note"><div class="founder-icon">🔎</div><h2>No creators match your search</h2><p>Try another name or genre.</p></div>';
-    grid.querySelectorAll("[data-follow]").forEach(function(btn){
-      btn.addEventListener("click",function(){
-        const name=btn.getAttribute("data-follow");
-        if(following.has(name))following.delete(name);else following.add(name);
-        localStorage.setItem("lytune_following_creators",JSON.stringify(Array.from(following)));
+
+  function matches(creator) {
+    const searchable = [
+      creator.name,
+      creator.role,
+      creator.location,
+      creator.bio,
+      ...creator.genres,
+      ...creator.tags
+    ].join(" ").toLowerCase();
+
+    const genreMatch = genre === "all" || searchable.includes(genre);
+    return genreMatch && searchable.includes(queryText);
+  }
+
+  function card(creator) {
+    const uid = creator.uid;
+    const isFollowing = following.has(uid);
+    const initials = (creator.name || "C").trim().charAt(0).toUpperCase();
+    const avatar = creator.avatarUrl || creator.photoURL || "";
+    const cover = creator.coverUrl || "";
+    const beatCount = creator.beatCount || 0;
+
+    const coverStyle = cover
+      ? `background-image:url("${escapeHtml(cover)}");background-size:cover;background-position:center;`
+      : "";
+
+    const avatarMarkup = avatar
+      ? `<img class="creator-avatar-image" src="${escapeHtml(avatar)}" alt="${escapeHtml(creator.name)} profile photo">`
+      : escapeHtml(initials);
+
+    const tags = creator.tags.map(tag =>
+      `<span class="creator-tag">${escapeHtml(tag)}</span>`
+    ).join("");
+
+    return `
+      <article class="creator-card">
+        <div class="creator-cover" style="${coverStyle}">
+          <div class="creator-avatar-wrap">
+            <div class="creator-avatar">${avatarMarkup}</div>
+          </div>
+        </div>
+
+        <div class="creator-body">
+          <div class="creator-head">
+            <div class="creator-info">
+              <h3>${escapeHtml(creator.name || "LyTune Producer")}</h3>
+              <div class="creator-role">${escapeHtml(creator.role || "Producer")}</div>
+              ${creator.location ? `<div class="creator-location">📍 ${escapeHtml(creator.location)}</div>` : ""}
+            </div>
+            ${creator.isVerified ? '<span class="creator-founding-badge">Verified</span>' : ""}
+          </div>
+
+          <p class="creator-bio">${escapeHtml(creator.bio || "This producer has not added a bio yet.")}</p>
+
+          <div class="creator-tags">
+            ${tags || '<span class="creator-tag">Producer</span>'}
+          </div>
+
+          <div class="creator-stats">
+            <span class="creator-stat">
+              <strong class="creator-stat-value">${beatCount}</strong>
+              <span class="creator-stat-label">Published beats</span>
+            </span>
+          </div>
+
+          <div class="creator-actions">
+            <button
+              class="creator-follow-btn ${isFollowing ? "following" : ""}"
+              data-follow="${escapeHtml(uid)}"
+              type="button"
+            >${isFollowing ? "Following ✓" : "Follow"}</button>
+
+            <a class="creator-view-btn" href="creator-profile.html?uid=${encodeURIComponent(uid)}">
+              View Profile
+            </a>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function render() {
+    const grid = document.getElementById("creatorsGrid");
+    const count = document.getElementById("resultsCount");
+    const mode = document.getElementById("modeIndicator");
+    if (!grid) return;
+
+    const list = creators.filter(matches);
+
+    if (count) {
+      count.textContent = list.length + (list.length === 1 ? " creator" : " creators");
+    }
+
+    if (mode) {
+      mode.textContent = creators.length
+        ? "Live producer profiles from Firebase"
+        : "No producer profiles have been published yet";
+    }
+
+    if (!list.length) {
+      grid.innerHTML = `
+        <div class="creator-empty-note">
+          <div class="founder-icon">${creators.length ? "🔎" : "🎤"}</div>
+          <h2>${creators.length ? "No creators match your search" : "No creators yet — be the first"}</h2>
+          <p>${creators.length
+            ? "Try another name or genre."
+            : "Producer profiles will appear here as soon as creators publish their profile on LyTune Studio X."}</p>
+          ${creators.length ? "" : `
+            <div class="creators-empty-actions">
+              <a href="signup.html" class="main-btn">Apply as a Producer</a>
+            </div>`}
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(card).join("");
+
+    grid.querySelectorAll("[data-follow]").forEach(button => {
+      button.addEventListener("click", () => {
+        const uid = button.getAttribute("data-follow");
+        if (following.has(uid)) following.delete(uid);
+        else following.add(uid);
+
+        localStorage.setItem(
+          "lytune_following_creators",
+          JSON.stringify([...following])
+        );
         render();
       });
     });
   }
-  document.addEventListener("DOMContentLoaded",function(){
-    const input=document.getElementById("creatorSearchInput");
-    if(input)input.addEventListener("input",function(e){query=e.target.value.trim().toLowerCase();render();});
-    document.querySelectorAll("[data-genre]").forEach(function(btn){
-      btn.addEventListener("click",function(){
-        document.querySelectorAll("[data-genre]").forEach(function(b){b.classList.remove("active");});
-        btn.classList.add("active");
-        genre=btn.getAttribute("data-genre").toLowerCase();
+
+  async function loadCreators() {
+    const count = document.getElementById("resultsCount");
+    const mode = document.getElementById("modeIndicator");
+
+    if (count) count.textContent = "Loading creators…";
+    if (mode) mode.textContent = "Connecting to Firebase";
+
+    try {
+      const [profileSnapshot, usersSnapshot, publishedBeats] = await Promise.all([
+        getDocs(collection(db, "creatorProfiles")),
+        getDocs(collection(db, "users")),
+        getPublishedBeats()
+      ]);
+
+      const users = new Map();
+      usersSnapshot.docs.forEach(item => {
+        const data = item.data();
+        if (data.role === "producer") users.set(item.id, { uid: item.id, ...data });
+      });
+
+      const profiles = new Map();
+      profileSnapshot.docs.forEach(item => {
+        const data = item.data();
+        const uid = data.uid || item.id;
+        profiles.set(uid, { ...data, uid });
+      });
+
+      const beatCounts = {};
+      publishedBeats.forEach(beat => {
+        if (beat.ownerId) beatCounts[beat.ownerId] = (beatCounts[beat.ownerId] || 0) + 1;
+      });
+
+      const ids = new Set([...users.keys(), ...profiles.keys()]);
+
+      creators = [...ids]
+        .map(uid => {
+          const user = users.get(uid) || {};
+          const profile = profiles.get(uid) || {};
+
+          return {
+            uid,
+            name: profile.name || user.name || "LyTune Producer",
+            role: profile.role || user.role || "Producer",
+            location: profile.location || user.location || "",
+            bio: profile.bio || user.bio || "",
+            avatarUrl: profile.avatarUrl || profile.photoURL || user.photoURL || "",
+            photoURL: profile.photoURL || user.photoURL || "",
+            coverUrl: profile.coverUrl || "",
+            genres: normalizeGenres(profile),
+            tags: Array.isArray(profile.tags) ? profile.tags : [],
+            isVerified: profile.isVerified === true,
+            beatCount: beatCounts[uid] || 0
+          };
+        })
+        .filter(creator => creator.role === "producer");
+
+      creators.sort((a, b) => a.name.localeCompare(b.name));
+      render();
+    } catch (error) {
+      console.error("Failed to load creators:", error);
+      creators = [];
+
+      const grid = document.getElementById("creatorsGrid");
+      const count = document.getElementById("resultsCount");
+      const mode = document.getElementById("modeIndicator");
+
+      if (count) count.textContent = "Unable to load creators";
+      if (mode) mode.textContent = "Firebase connection error";
+      if (grid) {
+        grid.innerHTML = `
+          <div class="creator-empty-note">
+            <div class="founder-icon">⚠️</div>
+            <h2>Creators could not be loaded</h2>
+            <p>Please refresh the page and try again. No fake or placeholder profiles are shown.</p>
+          </div>`;
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("creatorSearchInput");
+
+    if (input) {
+      input.addEventListener("input", event => {
+        queryText = event.target.value.trim().toLowerCase();
+        render();
+      });
+    }
+
+    document.querySelectorAll("[data-genre]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-genre]").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        genre = button.getAttribute("data-genre").toLowerCase();
         render();
       });
     });
-    render();
+
+    loadCreators();
   });
 })();
