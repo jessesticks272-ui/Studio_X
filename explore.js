@@ -73,7 +73,7 @@
   function renderBeatCard(beat) {
     const genreLabel = GENRE_LABELS[(beat.genre || '').toLowerCase()] || beat.genre || 'Beat';
     const licenseLabel = LICENSE_LABELS[(beat.licenseType || '').toLowerCase()] || beat.licenseType || '';
-    const producerLabel = beat.producerId ? 'Producer #' + String(beat.producerId).slice(0, 6) : 'Producer';
+    const producerLabel = beat.producerName || 'Independent Producer';
 
     const metaPills = [];
     if (beat.bpm) metaPills.push('<span class="beat-meta-pill">' + escapeHtml(beat.bpm) + ' BPM</span>');
@@ -82,7 +82,8 @@
     const card = document.createElement('div');
     card.className = 'beat-card';
     card.innerHTML =
-      '<div class="beat-card-image" style="background:var(--brand-gradient-diag);">' +
+      '<div class="beat-card-image' + (beat.coverUrl ? ' has-cover' : ' no-cover') + '"' + (beat.coverUrl ? ' style="background-image:url(\'' + escapeHtml(beat.coverUrl) + '\');"' : '') + '>' +
+        (beat.coverUrl ? '' : '<span class="beat-card-no-cover">♫</span>') +
         '<span class="beat-card-genre">' + escapeHtml(genreLabel) + '</span>' +
         '<div class="beat-card-overlay">' +
           '<button class="beat-play-btn" type="button" aria-label="Preview ' + escapeHtml(beat.title) + '">▶</button>' +
@@ -94,7 +95,7 @@
         (metaPills.length ? '<div class="beat-card-meta-row">' + metaPills.join('') + '</div>' : '') +
         (licenseLabel ? '<div class="beat-card-tags"><span class="beat-tag">' + escapeHtml(licenseLabel) + '</span></div>' : '') +
         '<div class="beat-card-footer">' +
-          '<span class="beat-card-price">$' + Number(beat.price || 0).toFixed(2) + '</span>' +
+          '<span class="beat-card-price">' + escapeHtml(beat.currency || 'USD') + ' ' + Number(beat.price || 0).toFixed(2) + '</span>' +
           '<div class="beat-card-actions">' +
             '<button class="beat-like-btn" type="button" aria-label="Like this beat">♡</button>' +
             '<button class="beat-like-btn add-to-cart-btn" type="button" aria-label="Add to cart" title="Add to cart">🛒</button>' +
@@ -153,7 +154,7 @@
       if (f.priceMin != null && price < f.priceMin) return false;
       if (f.priceMax != null && price > f.priceMax) return false;
 
-      const haystack = ((b.title || '') + ' ' + genre + ' ' + license).toLowerCase();
+      const haystack = ((b.title || '') + ' ' + (b.producerName || '') + ' ' + genre + ' ' + license + ' ' + (b.mood || '')).toLowerCase();
       if (f.query && !haystack.includes(f.query)) return false;
 
       return true;
