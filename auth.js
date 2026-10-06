@@ -94,7 +94,7 @@
     let cta;
     if (state.user) {
       cta = document.createElement('a');
-      cta.href = state.user.role === 'producer' ? 'producer-dashboard.html' : 'artist-dashboard.html';
+      cta.href = 'artist-dashboard.html';
       cta.className = 'nav-user-btn';
       cta.setAttribute('aria-label', 'Go to dashboard');
       cta.innerHTML =
@@ -106,6 +106,7 @@
       cta.href = 'auth.html';
       cta.className = 'main-btn';
       cta.textContent = 'Get Started';
+      cta.setAttribute('aria-label', 'Create an account or sign in');
     }
 
     if (themeToggle) {
