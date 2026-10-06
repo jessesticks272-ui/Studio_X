@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edit Creator Profile | LyTune Studio X</title>
+<link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+<link rel="stylesheet" href="creator-edit.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="producer-dashboard.html"><span class="brand-mark">L</span><span>LyTune Studio X</span></a>
+  <a class="back-btn" href="producer-dashboard.html">← Dashboard</a>
+</header>
+<main class="page">
+  <section class="intro">
+    <span class="eyebrow">PRODUCER PROFILE</span>
+    <h1>Build your creator page.</h1>
+    <p>Your profile is what artists see when they discover your beats. Add only information you want publicly displayed.</p>
+  </section>
+  <form id="profileForm" class="card">
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div class="grid">
+      <label>Display name<input id="name" required maxlength="80" placeholder="Your producer name"></label>
+      <label>Location<input id="location" maxlength="100" placeholder="Lagos, Nigeria"></label>
+      <label>Role<input id="role" value="producer" maxlength="60" placeholder="Producer"></label>
+      <label>Profile photo URL<input id="avatarUrl" type="url" maxlength="500" placeholder="https://..."></label>
+      <label class="wide">Cover image URL<input id="coverUrl" type="url" maxlength="500" placeholder="https://..."></label>
+      <label class="wide">Bio<textarea id="bio" maxlength="500" rows="5" placeholder="Tell artists about your sound..."></textarea></label>
+      <label>Genres<input id="genres" maxlength="200" placeholder="Afrobeat, Amapiano"></label>
+      <label>Tags<input id="tags" maxlength="300" placeholder="Drums, Melodic, Piano"></label>
+      <label>Instagram URL<input id="instagram" type="url" maxlength="500" placeholder="https://instagram.com/..."></label>
+      <label>TikTok URL<input id="tiktok" type="url" maxlength="500" placeholder="https://tiktok.com/@..."></label>
+      <label>YouTube URL<input id="youtube" type="url" maxlength="500" placeholder="https://youtube.com/@..."></label>
+    </div>
+    <div class="actions">
+      <a class="ghost-btn" id="cancelBtn" href="producer-dashboard.html">Cancel</a>
+      <button class="main-btn" id="saveBtn" type="submit">Save Profile</button>
+    </div>
+  </form>
+</main>
+<script type="module" src="creator-edit.js"></script>
+</body>
+</html>
