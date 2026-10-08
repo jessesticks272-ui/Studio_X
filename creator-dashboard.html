@@ -34,7 +34,9 @@
 <section class="stats">
   <article class="stat-card featured"><div class="stat-icon">◉</div><div><span>MEMBERS</span><strong id="memberCount">0</strong><small>registered accounts</small></div></article>
   <article class="stat-card"><div class="stat-icon">♬</div><div><span>PRODUCERS</span><strong id="producerCount">0</strong><small>creator accounts</small></div></article>
+  <article class="stat-card"><div class="stat-icon">◌</div><div><span>LOGGED IN TODAY</span><strong id="todayCount">0</strong><small>latest login today</small></div></article>
   <article class="stat-card"><div class="stat-icon">✦</div><div><span>ARTISTS</span><strong id="artistCount">0</strong><small>artist accounts</small></div></article>
+  <article class="stat-card"><div class="stat-icon">✚</div><div><span>NEW TODAY</span><strong id="newTodayCount">0</strong><small>new accounts today</small></div></article>
   <article class="stat-card"><div class="stat-icon">♫</div><div><span>PUBLISHED BEATS</span><strong id="beatCount">0</strong><small>live in marketplace</small></div></article>
 </section>
 
@@ -49,6 +51,7 @@
       <button class="filter active" data-filter="all">All</button>
       <button class="filter" data-filter="producer">Producers</button>
       <button class="filter" data-filter="artist">Artists</button>
+      <select id="sortMode" class="sort-select" aria-label="Sort members"><option value="joined">Newest members</option><option value="login">Recent login</option></select>
     </div>
   </div>
   <div class="table-wrap">
