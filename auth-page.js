@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendEmailVerification,
   updateProfile,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -42,7 +43,7 @@ async function handleGoogleUser(user) {
     window.location.href = "creator-dashboard.html";
     return;
   }
-  saveAndContinue(user, finalRole);
+  await saveAndContinue(user, finalRole);
 }
 
 if (auth) {
@@ -138,7 +139,7 @@ function setMode(next) {
   setMessage("");
 }
 
-function saveAndContinue(user, role) {
+async function saveAndContinue(user, role) {
   const profile = {
     uid: user.uid,
     name: user.displayName || user.email?.split("@")[0] || "LyTune User",
@@ -146,9 +147,19 @@ function saveAndContinue(user, role) {
     role,
     photoURL: user.photoURL || ""
   };
+
   localStorage.setItem("lytune-user", JSON.stringify(profile));
   localStorage.setItem("lytune-pending-role", role);
   localStorage.setItem("lytune-role", role);
+
+  try {
+    await saveUserProfile(user, role, { lastLoginAt: new Date() });
+  } catch (error) {
+    // Keep sign-in available while Firestore is being configured.
+    // The auth-state listener retries profile sync on sign-in.
+    console.error("Could not save LyTune profile before redirect:", error);
+  }
+
   window.location.href = role === "producer" ? "producer-dashboard.html" : "artist-dashboard.html";
 }
 
@@ -203,7 +214,28 @@ form.addEventListener("submit", async (event) => {
       window.location.href = "creator-dashboard.html";
       return;
     }
-    saveAndContinue(credential.user, finalRole);
+
+    let profileSaved = true;
+    try {
+      await saveUserProfile(credential.user, finalRole, { lastLoginAt: new Date() });
+    } catch (profileError) {
+      profileSaved = false;
+      console.error("Could not save LyTune profile:", profileError);
+    }
+
+    if (mode === "signup") {
+      await sendEmailVerification(credential.user);
+      setMode("login");
+      setMessage(
+        profileSaved
+          ? `Account created. A verification link has been sent to ${credential.user.email}. Verify your email, then sign in.`
+          : `Account created and verification email sent to ${credential.user.email}. Firestore is not ready, so your profile will retry syncing when you sign in again.`,
+        false
+      );
+      return;
+    }
+
+    await saveAndContinue(credential.user, finalRole);
   } catch (error) {
     setMessage(friendlyError(error));
   } finally {
