@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Private LyTune Studio X creator control room.">
-<title>Creator Control Room | LyTune Studio X</title>
+<meta name="description" content="Private LyTune Studio X member dashboard.">
+<title>Members | LyTune Studio X</title>
 <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,55 +13,28 @@
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="mark">L</span><span>LyTune <b>Studio X</b></span></a>
-  <nav><a href="index.html">Site</a><a href="creators.html">Creators</a><a href="studio.html">Studio</a></nav>
   <button id="logoutBtn" class="logout">Sign out</button>
 </header>
-
 <main>
-<section class="hero">
-  <div class="hero-copy">
-    <span class="eyebrow">PRIVATE CREATOR CONTROL ROOM</span>
-    <h1 id="creatorName">Loading creator…</h1>
-    <p id="creatorEmail">Checking your real Firebase account.</p>
-    <div class="hero-badges"><span>● Live Firebase data</span><span id="onlineStatus">● Secured owner area</span></div>
-  </div>
-  <div class="hero-actions">
-    <a class="profile-btn" id="profileBtn" href="#">View public profile</a>
-    <a class="studio-btn" href="studio.html">Open Studio</a>
-  </div>
-</section>
-
-<section class="stats">
-  <article class="stat-card featured"><div class="stat-icon">◉</div><div><span>MEMBERS</span><strong id="memberCount">0</strong><small>registered accounts</small></div></article>
-  <article class="stat-card"><div class="stat-icon">♬</div><div><span>PRODUCERS</span><strong id="producerCount">0</strong><small>creator accounts</small></div></article>
-  <article class="stat-card"><div class="stat-icon">◌</div><div><span>LOGGED IN TODAY</span><strong id="todayCount">0</strong><small>latest login today</small></div></article>
-  <article class="stat-card"><div class="stat-icon">✦</div><div><span>ARTISTS</span><strong id="artistCount">0</strong><small>artist accounts</small></div></article>
-  <article class="stat-card"><div class="stat-icon">✚</div><div><span>NEW TODAY</span><strong id="newTodayCount">0</strong><small>new accounts today</small></div></article>
-  <article class="stat-card"><div class="stat-icon">♫</div><div><span>PUBLISHED BEATS</span><strong id="beatCount">0</strong><small>live in marketplace</small></div></article>
-</section>
-
-<section class="panel">
-  <div class="panel-head">
-    <div><span class="eyebrow">AUDIENCE</span><h2>People on LyTune</h2><p>Real accounts that have signed up. “Last seen” comes from their latest recorded login.</p></div>
-    <button id="exportBtn" class="outline">Export CSV</button>
-  </div>
-  <div class="toolbar">
-    <label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search name or email…" aria-label="Search members"></label>
-    <div class="filters">
-      <button class="filter active" data-filter="all">All</button>
-      <button class="filter" data-filter="producer">Producers</button>
-      <button class="filter" data-filter="artist">Artists</button>
-      <select id="sortMode" class="sort-select" aria-label="Sort members"><option value="joined">Newest members</option><option value="login">Recent login</option></select>
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">PRIVATE OWNER DASHBOARD</span>
+      <h1>Members who logged in</h1>
+      <p id="creatorEmail">Checking your account…</p>
     </div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Member</th><th>Role</th><th>Joined</th><th>Last login</th><th>Status</th></tr></thead>
-      <tbody id="memberTable"></tbody>
-    </table>
-  </div>
-  <div id="state" class="state">Loading Firebase members…</div>
-</section>
+  </section>
+  <section class="panel">
+    <div class="panel-head">
+      <div><span class="eyebrow">MEMBER LIST</span><h2>LyTune Studio X members</h2></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Member</th><th>Email</th><th>Role</th><th>Joined</th><th>Last Login</th></tr></thead>
+        <tbody id="memberTable"></tbody>
+      </table>
+    </div>
+    <div id="state" class="state">Loading members…</div>
+  </section>
 </main>
 <script type="module" src="./creator-dashboard.js"></script>
 </body>
