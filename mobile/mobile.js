@@ -105,7 +105,7 @@
     const results = $("#aiResults");
     if (!query || !results) { prompt?.focus(); return; }
     results.innerHTML = '<p class="catalog-message">Searching your live beat catalog with LyTune AI…</p>';
-    const submit = $("#aiSearchForm button[type="submit"]");
+    const submit = $('#aiSearchForm button[type="submit"]');
     if (submit) submit.disabled = true;
     try {
       const catalog = mobileCatalog.length ? mobileCatalog : await loadCatalog();
