@@ -181,11 +181,6 @@ input,select,textarea,button{max-width:100%;min-width:0}
   }
   .range-inputs { flex-wrap: wrap; }
   table { display: block; max-width: 100%; overflow-x: auto; }
-  .mobile-nav {
-    position: sticky;
-    bottom: 0;
-    z-index: 30;
-  }
 }
 
 @media (max-width: 360px) {
