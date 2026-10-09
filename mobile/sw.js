@@ -1,4 +1,4 @@
-const CACHE_NAME = "lytune-mobile-v1";
+const CACHE_NAME = "lytune-mobile-v2";
 const APP_SHELL = [
   "/mobile/",
   "/mobile/index.html",
