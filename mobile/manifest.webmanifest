@@ -1,0 +1,21 @@
+{
+  "id": "/mobile/",
+  "name": "LyTune Studio X",
+  "short_name": "LyTune",
+  "description": "Discover beats, connect with creators and build your sound.",
+  "start_url": "/mobile/",
+  "scope": "/mobile/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090b12",
+  "theme_color": "#090b12",
+  "categories": ["music", "entertainment", "social"],
+  "icons": [
+    {
+      "src": "/mobile/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
