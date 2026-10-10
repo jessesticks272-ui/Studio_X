@@ -166,6 +166,11 @@ async function saveAndContinue(user, role) {
 loginTab.addEventListener("click", () => setMode("login"));
 signupTab.addEventListener("click", () => setMode("signup"));
 
+// Allow links such as signup.html and auth.html?mode=signup to open registration directly.
+if (new URLSearchParams(window.location.search).get("mode") === "signup") {
+  setMode("signup");
+}
+
 toggle.addEventListener("click", () => {
   const shown = password.type === "text";
   password.type = shown ? "password" : "text";
