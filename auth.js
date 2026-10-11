@@ -165,11 +165,13 @@
 
     document.querySelectorAll('.audience-split, [data-guest-only]').forEach((section) => {
       section.hidden = signedIn;
+      section.style.display = signedIn ? 'none' : '';
       section.setAttribute('aria-hidden', String(signedIn));
     });
 
     document.querySelectorAll('[data-member-only]').forEach((section) => {
       section.hidden = !signedIn;
+      section.style.display = signedIn ? '' : 'none';
       section.setAttribute('aria-hidden', String(!signedIn));
     });
 
