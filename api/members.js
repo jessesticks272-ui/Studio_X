@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { ExternalAccountClient } from "google-auth-library";
+import { getVercelOidcToken } from "@vercel/oidc";
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 
@@ -20,7 +21,7 @@ function json(data, status = 200) {
   });
 }
 
-function createFederatedCredential(oidcToken) {
+function createFederatedCredential() {
   const projectId = process.env.GCP_PROJECT_ID;
   const projectNumber = process.env.GCP_PROJECT_NUMBER;
   const serviceAccountEmail = process.env.GCP_SERVICE_ACCOUNT_EMAIL;
@@ -46,7 +47,7 @@ function createFederatedCredential(oidcToken) {
     token_url: "https://sts.googleapis.com/v1/token",
     service_account_impersonation_url: `https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${serviceAccountEmail}:generateAccessToken`,
     subject_token_supplier: {
-      getSubjectToken: async () => oidcToken
+      getSubjectToken: getVercelOidcToken
     }
   });
 
@@ -84,12 +85,7 @@ export async function GET(request) {
     const match = authorization.match(/^Bearer\s+(.+)$/i);
     if (!match) return json({ error: "Sign in is required." }, 401);
 
-    const oidcToken = request.headers.get("x-vercel-oidc-token");
-    if (!oidcToken) {
-      return json({ error: "Vercel OIDC token is unavailable for this request." }, 500);
-    }
-
-    const credential = createFederatedCredential(oidcToken);
+    const credential = createFederatedCredential();
     app = initializeApp({
       credential,
       projectId: process.env.GCP_PROJECT_ID
