@@ -21,7 +21,7 @@ $("themeToggle")?.addEventListener("click", () => {
 });
 
 let currentUser = null;
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   currentUser = user || null;
   if(user){
     $("userBadge").textContent = (user.displayName || user.email || "X").trim().charAt(0).toUpperCase();
@@ -53,7 +53,7 @@ $("saveBeat").addEventListener("click", async () => {
   if(!selectedFile && !$("beatAudioUrl").value.trim()){ $("uploadStatus").textContent="Choose an audio file or enter a hosted audio/preview URL."; return; }
   if(!currentUser){ $("uploadStatus").textContent="Please sign in before uploading."; return; }
 
-  const name=$("beatName").value.trim()||selectedFile.name;
+  const name=$("beatName").value.trim()||(selectedFile ? selectedFile.name.replace(/\.[^.]+$/,"") : "Untitled Beat");
   const genre=$("beatGenre").value;
   const bpm=$("beatBpm").value ? Number($("beatBpm").value) : null;
   const key=$("beatKey").value.trim();
@@ -62,7 +62,7 @@ $("saveBeat").addEventListener("click", async () => {
   const licenseType=$("beatLicense").value || "lease";
   const coverUrl=$("beatCoverUrl").value.trim();
   const audioUrl=$("beatAudioUrl").value.trim();
-  if(audioUrl && !/^https?:\\/\\//i.test(audioUrl)){ $("uploadStatus").textContent="Audio URL must start with http:// or https://."; return; }
+  if(audioUrl && !/^https?:\/\//i.test(audioUrl)){ $("uploadStatus").textContent="Audio URL must start with http:// or https://."; return; }
   const description=$("beatDescription").value.trim();
   const tags=Array.from(document.querySelectorAll(".tag.active")).map(tag=>tag.textContent.trim());
   const status=$("uploadStatus");
