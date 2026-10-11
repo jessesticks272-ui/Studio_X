@@ -107,7 +107,7 @@
         '</span><span>Dashboard</span>';
 
       // Logged-in users should never see public auth CTAs.
-      document.querySelectorAll('a[href="auth.html"], a[href="login.html"]').forEach((link) => {
+      document.querySelectorAll('a[href="auth.html"], a[href="login.html"], a[href="signup.html"]').forEach((link) => {
         link.dataset.authHidden = 'true';
         link.style.display = 'none';
       });
@@ -140,7 +140,7 @@
       }
     } else {
       // Public landing page state.
-      document.querySelectorAll('a[href="auth.html"], a[href="login.html"]').forEach((link) => {
+      document.querySelectorAll('a[href="auth.html"], a[href="login.html"], a[href="signup.html"]').forEach((link) => {
         link.style.display = '';
         delete link.dataset.authHidden;
       });
@@ -155,19 +155,51 @@
       else actions.appendChild(cta);
     }
 
-    // Change the main hero action after authentication.
+    // Adapt the landing page and marketplace to the real auth state.
+    const signedIn = Boolean(state.user);
+    const dashboard = state.user?.role === 'producer'
+      ? 'producer-dashboard.html'
+      : state.user?.role === 'admin'
+        ? 'admin.html'
+        : 'artist-dashboard.html';
+
+    document.querySelectorAll('.audience-split, [data-guest-only]').forEach((section) => {
+      section.hidden = signedIn;
+      section.setAttribute('aria-hidden', String(signedIn));
+    });
+
+    document.querySelectorAll('[data-member-only]').forEach((section) => {
+      section.hidden = !signedIn;
+      section.setAttribute('aria-hidden', String(!signedIn));
+    });
+
     const heroPrimary = document.querySelector('.hero-buttons .main-btn');
     if (heroPrimary) {
-      if (state.user) {
-        heroPrimary.href = state.user.role === 'producer'
-          ? 'producer-dashboard.html'
-          : 'artist-dashboard.html';
-        heroPrimary.textContent = 'Go to Dashboard';
-      } else {
-        heroPrimary.href = 'auth.html';
-        heroPrimary.textContent = 'Start Selling';
-      }
+      heroPrimary.href = signedIn ? 'explore.html' : 'auth.html';
+      heroPrimary.textContent = signedIn ? 'Explore Beats' : 'Start Selling';
     }
+
+    const heroSecondary = document.querySelector('.hero-buttons .ghost-btn');
+    if (heroSecondary) {
+      heroSecondary.href = signedIn ? dashboard : 'explore.html';
+      heroSecondary.textContent = signedIn ? 'My Studio' : 'Browse Beats';
+    }
+
+    const heroCopy = document.querySelector('.hero-content > p');
+    if (heroCopy && signedIn) {
+      heroCopy.textContent = 'Welcome back, ' + (state.user.name || 'music creator') + '. Discover beats, connect with producers, and build your next release.';
+    }
+
+    // Auth links should not appear anywhere on the page for signed-in users.
+    document.querySelectorAll('a[href="auth.html"], a[href="login.html"], a[href="signup.html"]').forEach((link) => {
+      if (signedIn) {
+        link.dataset.authHidden = 'true';
+        link.style.display = 'none';
+      } else if (link.dataset.authHidden === 'true') {
+        link.style.display = '';
+        delete link.dataset.authHidden;
+      }
+    });
   }
 
   /* ---------- mobile hamburger menu ---------- */
