@@ -336,6 +336,9 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    const initialQuery = new URLSearchParams(window.location.search).get('q');
+    if (searchInput && initialQuery) searchInput.value = initialQuery.trim();
+
     wireControls();
     if (resultsCount) resultsCount.textContent = 'Loading beats…';
 
