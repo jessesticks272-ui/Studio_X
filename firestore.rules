@@ -37,15 +37,18 @@ service cloud.firestore {
         && request.auth.uid == userId;
     }
 
-    // Beats can be read by the app. A producer can manage only their own beats.
+    // Published beats are public. Drafts stay private to their producer
+    // and the site owner; query code must filter by status/owner accordingly.
     match /beats/{beatId} {
-      allow read: if true;
+      allow read: if resource.data.status == "published"
+        || (signedIn() && resource.data.ownerId == request.auth.uid)
+        || isOwner();
 
       allow create: if signedIn()
         && request.resource.data.ownerId == request.auth.uid;
 
       allow update, delete: if signedIn()
-        && resource.data.ownerId == request.auth.uid;
+        && (resource.data.ownerId == request.auth.uid || isOwner());
     }
 
     // Messages: only authenticated participants can read or create
