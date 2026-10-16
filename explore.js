@@ -42,7 +42,9 @@
   };
   const SEARCH_STOP_WORDS = new Set(['a', 'an', 'the', 'for', 'by', 'with', 'type', 'beat', 'beats', 'instrumental', 'music', 'track']);
 
-  let allBeats = [];   // raw beats fetched from the API (empty if offline/no data)
+  let allBeats = [];   // published releases loaded from Firestore
+  let catalogError = false;
+  let stopPublishedBeatUpdates = null;
   let cartCount = 0;
 
   const grid = document.getElementById('beatGrid');
@@ -187,8 +189,18 @@
     if (!grid) return;
 
     if (allBeats.length === 0) {
-      grid.innerHTML = emptyStateHtml;
-      if (resultsCount) resultsCount.textContent = 'No beats yet';
+      if (catalogError) {
+        grid.innerHTML =
+          '<div class="explore-empty explore-empty--filtered">' +
+            '<div class="founder-icon">⚠</div>' +
+            '<h2>Marketplace temporarily unavailable</h2>' +
+            '<p>We could not load published beats from Firebase. Check your connection and refresh the page.</p>' +
+          '</div>';
+        if (resultsCount) resultsCount.textContent = 'Could not load beats';
+      } else {
+        grid.innerHTML = emptyStateHtml;
+        if (resultsCount) resultsCount.textContent = 'No published beats yet';
+      }
       return;
     }
 
@@ -255,14 +267,31 @@
   /* ---------- data loading ---------- */
 
   async function loadBeats() {
-    if (modeIndicator) modeIndicator.textContent = '● Live from LyTune';
+    if (modeIndicator) modeIndicator.textContent = '● Connecting to Firebase…';
 
     try {
-      const { getPublishedBeats } = await import("./firestore.js");
-      allBeats = await getPublishedBeats();
-      applyFilters();
+      const { subscribeToPublishedBeats } = await import("./firestore.js");
+
+      // Keep Explore in sync when a producer publishes a new release.
+      // Unsubscribe before reconnecting so we never create duplicate listeners.
+      if (stopPublishedBeatUpdates) stopPublishedBeatUpdates();
+      stopPublishedBeatUpdates = subscribeToPublishedBeats((beats, error) => {
+        if (error) {
+          console.error("Could not subscribe to published beats:", error);
+          catalogError = allBeats.length === 0;
+          if (modeIndicator) modeIndicator.textContent = '● Marketplace unavailable';
+          applyFilters();
+          return;
+        }
+
+        catalogError = false;
+        allBeats = Array.isArray(beats) ? beats : [];
+        if (modeIndicator) modeIndicator.textContent = '● Live from Firebase';
+        applyFilters();
+      });
     } catch (error) {
-      console.error("Could not load published beats:", error);
+      console.error("Could not connect to published beats:", error);
+      catalogError = true;
       allBeats = [];
       if (modeIndicator) modeIndicator.textContent = '● Marketplace unavailable';
       applyFilters();
