@@ -85,15 +85,46 @@ export async function getPublishedBeatsByOwner(uid) {
 }
 
 export async function getPublishedBeats() {
-  const snapshot = await getDocs(collection(db, "beats"));
+  // Only request public releases from Firestore, never draft/unpublished rows.
+  // Sort client-side to avoid requiring a composite index for status + createdAt.
+  const publishedQuery = query(
+    collection(db, "beats"),
+    where("status", "==", "published")
+  );
+  const snapshot = await getDocs(publishedQuery);
   return snapshot.docs
     .map(item => ({ id: item.id, ...item.data() }))
-    .filter(beat => beat.status === "published")
     .sort((a, b) => {
       const aTime = a.createdAt?.toMillis?.() || 0;
       const bTime = b.createdAt?.toMillis?.() || 0;
       return bTime - aTime;
     });
+}
+
+export function subscribeToPublishedBeats(callback) {
+  if (typeof callback !== "function") {
+    throw new Error("A callback is required to subscribe to published beats.");
+  }
+
+  const publishedQuery = query(
+    collection(db, "beats"),
+    where("status", "==", "published")
+  );
+
+  return onSnapshot(
+    publishedQuery,
+    snapshot => {
+      const beats = snapshot.docs
+        .map(item => ({ id: item.id, ...item.data() }))
+        .sort((a, b) => {
+          const aTime = a.createdAt?.toMillis?.() || 0;
+          const bTime = b.createdAt?.toMillis?.() || 0;
+          return bTime - aTime;
+        });
+      callback(beats, null);
+    },
+    error => callback([], error)
+  );
 }
 
 export async function getBeat(beatId) {
