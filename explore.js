@@ -26,6 +26,22 @@
   };
   const LICENSE_LABELS = { lease: 'Lease', premium: 'Premium Lease', exclusive: 'Exclusive Rights' };
 
+  // Common ways people describe the same sound. Search stays catalog-based:
+  // aliases help match genre vocabulary, but never invent results that aren't published.
+  const SEARCH_ALIASES = {
+    afrobeat: ['afrobeats', 'afro beat', 'afro beats', 'afropop', 'afro pop', 'afro'],
+    amapiano: ['piano', 'log drum', 'logdrum', 'south african house'],
+    trap: ['trap music', '808', 'hip hop', 'hiphop', 'rap'],
+    drill: ['drill music', 'uk drill', 'afro drill'],
+    street: ['street vibes', 'street pop', 'street music'],
+    hiphop: ['hip hop', 'hip-hop', 'rap', 'boom bap'],
+    rnb: ['r&b', 'rnb', 'rhythm and blues', 'soul'],
+    gospel: ['worship', 'praise', 'christian'],
+    dancehall: ['reggae', 'bashment'],
+    lofi: ['lo-fi', 'lo fi', 'chillhop'],
+  };
+  const SEARCH_STOP_WORDS = new Set(['a', 'an', 'the', 'for', 'by', 'with', 'type', 'beat', 'beats', 'instrumental', 'music', 'track']);
+
   let allBeats = [];   // raw beats fetched from the API (empty if offline/no data)
   let cartCount = 0;
 
@@ -106,11 +122,51 @@
 
     card.querySelector('.beat-play-btn').addEventListener('click', () => openPlayer(beat, producerLabel));
     card.querySelector('.add-to-cart-btn').addEventListener('click', () => addToCart(beat));
+    card.querySelector('.beat-like-btn:not(.add-to-cart-btn)').addEventListener('click', () => toggleFavorite(beat));
 
     return card;
   }
 
   /* ---------- filtering ---------- */
+
+  function normalizeSearchText(value) {
+    return String(value == null ? '' : value)
+      .normalize('NFD')
+      .replace(/[\\u0300-\\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9&+]+/g, ' ')
+      .trim()
+      .replace(/\\s+/g, ' ');
+  }
+
+  function searchTokenMatches(token, haystack) {
+    if (haystack.includes(token)) return true;
+    for (const [genre, aliases] of Object.entries(SEARCH_ALIASES)) {
+      const candidates = [genre, ...aliases].map(normalizeSearchText);
+      if (candidates.includes(token) && candidates.some((candidate) => haystack.includes(candidate))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function beatMatchesQuery(beat, query) {
+    const normalizedQuery = normalizeSearchText(query);
+    if (!normalizedQuery) return true;
+
+    const searchableFields = [
+      beat.title, beat.producerName, beat.genre, beat.licenseType,
+      beat.mood, beat.key, beat.tags, beat.description, beat.artistName,
+      beat.subgenre, beat.vibe, beat.instruments,
+    ];
+    const haystack = normalizeSearchText(searchableFields
+      .filter((value) => value != null)
+      .map((value) => Array.isArray(value) ? value.join(' ') : value)
+      .join(' '));
+    const tokens = normalizedQuery.split(' ').filter((token) => !SEARCH_STOP_WORDS.has(token));
+    if (!tokens.length) return haystack.includes(normalizedQuery);
+    return tokens.every((token) => searchTokenMatches(token, haystack));
+  }
 
   function currentFilters() {
     return {
@@ -123,7 +179,7 @@
       priceMin: priceMin && priceMin.value ? Number(priceMin.value) : null,
       priceMax: priceMax && priceMax.value ? Number(priceMax.value) : null,
       sort: sortSelect ? sortSelect.value : 'trending',
-      query: searchInput ? searchInput.value.trim().toLowerCase() : '',
+      query: searchInput ? searchInput.value.trim() : '',
     };
   }
 
@@ -154,8 +210,7 @@
       if (f.priceMin != null && price < f.priceMin) return false;
       if (f.priceMax != null && price > f.priceMax) return false;
 
-      const haystack = ((b.title || '') + ' ' + (b.producerName || '') + ' ' + genre + ' ' + license + ' ' + (b.mood || '')).toLowerCase();
-      if (f.query && !haystack.includes(f.query)) return false;
+      if (f.query && !beatMatchesQuery(b, f.query)) return false;
 
       return true;
     });
@@ -260,9 +315,43 @@
     document.body.classList.remove('has-mini-player');
   }
 
+  /* ---------- account-protected actions ---------- */
+
+  function requireAccount(actionLabel) {
+    const user = window.LytuneAuth && window.LytuneAuth.getUser();
+    if (user) return true;
+
+    const action = actionLabel || 'continue';
+    const shouldSignUp = window.confirm('Create a free LyTune account or sign in to ' + action + '. You can keep searching and previewing beats without an account. Continue to sign up?');
+    if (shouldSignUp) window.location.href = 'auth.html';
+    return false;
+  }
+
+  function toggleFavorite(beat) {
+    if (!requireAccount('save favourite beats')) return;
+    try {
+      const favorites = JSON.parse(localStorage.getItem('lytune-favorites') || '[]');
+      const id = String(beat && beat.id || '');
+      if (!id) return;
+      const exists = favorites.includes(id);
+      const next = exists ? favorites.filter((favoriteId) => favoriteId !== id) : favorites.concat(id);
+      localStorage.setItem('lytune-favorites', JSON.stringify(next));
+      const card = Array.from(grid.querySelectorAll('.beat-card')).find((item) => item.querySelector('.beat-card-title')?.textContent === (beat.title || ''));
+      const button = card && card.querySelector('.beat-like-btn:not(.add-to-cart-btn)');
+      if (button) {
+        button.textContent = exists ? '♡' : '♥';
+        button.setAttribute('aria-pressed', String(!exists));
+        button.setAttribute('aria-label', exists ? 'Save this beat to favourites' : 'Remove beat from favourites');
+      }
+    } catch (error) {
+      console.warn('Could not save favourite locally:', error);
+    }
+  }
+
   /* ---------- cart (demo counter — no real cart/checkout backend yet) ---------- */
 
   function addToCart(beat) {
+    if (!requireAccount('add beats to your cart')) return;
     cartCount += 1;
     try {
       const items = JSON.parse(localStorage.getItem("lytune-cart") || "[]");
@@ -327,7 +416,9 @@
     }
 
     if (cartBtn) cartBtn.addEventListener('click', () => {
-      if (localStorage.getItem("lytune-cart")) location.href = "checkout.html";
+      if (localStorage.getItem("lytune-cart")) {
+        if (requireAccount('check out')) location.href = "checkout.html";
+      }
       cartBtn.style.transform = 'scale(0.92)';
       setTimeout(() => { cartBtn.style.transform = 'scale(1)'; }, 120);
     });
