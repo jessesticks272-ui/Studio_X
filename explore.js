@@ -122,7 +122,7 @@
 
     card.querySelector('.beat-play-btn').addEventListener('click', () => openPlayer(beat, producerLabel));
     card.querySelector('.add-to-cart-btn').addEventListener('click', () => addToCart(beat));
-    card.querySelector('.beat-like-btn:not(.add-to-cart-btn)').addEventListener('click', () => toggleFavorite(beat));
+    card.querySelector('.beat-like-btn:not(.add-to-cart-btn)').addEventListener('click', (event) => toggleFavorite(beat, event.currentTarget));
 
     return card;
   }
@@ -132,11 +132,11 @@
   function normalizeSearchText(value) {
     return String(value == null ? '' : value)
       .normalize('NFD')
-      .replace(/[\\u0300-\\u036f]/g, '')
+      .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase()
       .replace(/[^a-z0-9&+]+/g, ' ')
       .trim()
-      .replace(/\\s+/g, ' ');
+      .replace(/\s+/g, ' ');
   }
 
   function searchTokenMatches(token, haystack) {
@@ -327,7 +327,7 @@
     return false;
   }
 
-  function toggleFavorite(beat) {
+  function toggleFavorite(beat, button) {
     if (!requireAccount('save favourite beats')) return;
     try {
       const favorites = JSON.parse(localStorage.getItem('lytune-favorites') || '[]');
@@ -336,8 +336,6 @@
       const exists = favorites.includes(id);
       const next = exists ? favorites.filter((favoriteId) => favoriteId !== id) : favorites.concat(id);
       localStorage.setItem('lytune-favorites', JSON.stringify(next));
-      const card = Array.from(grid.querySelectorAll('.beat-card')).find((item) => item.querySelector('.beat-card-title')?.textContent === (beat.title || ''));
-      const button = card && card.querySelector('.beat-like-btn:not(.add-to-cart-btn)');
       if (button) {
         button.textContent = exists ? '♡' : '♥';
         button.setAttribute('aria-pressed', String(!exists));
