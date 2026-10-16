@@ -31,6 +31,7 @@
   <script src="./theme.js"></script>
   <script src="./auth.js"></script>
   <script src="./data.js"></script>
+  <script src="./header-search.js"></script>
   <link rel="stylesheet" href="./responsive-mobile.css">
 </head>
 <body>
@@ -102,12 +103,13 @@
     type="text"
     placeholder="Search Afrobeats, Amapiano, Trap..."
     aria-label="Search beats"
+    autocomplete="off"
   >
-  <button class="search-btn" type="button">
+  <button class="search-btn" type="button" aria-label="Search beats">
     Search
   </button>
 </div>
-<a href="index.html">Home</a>
+<a href="index.html" aria-current="page">Home</a>
   <a href="explore.html">Explore</a>
   <a href="creators.html">Creators</a>
   <a href="trending.html">Trending</a>
