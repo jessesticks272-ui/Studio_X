@@ -77,10 +77,14 @@ export async function getCreatorProfile(uid) {
 
 export async function getPublishedBeatsByOwner(uid) {
   if (!uid) return [];
-  const snapshot = await getDocs(collection(db, "beats"));
+  const ownerPublishedQuery = query(
+    collection(db, "beats"),
+    where("ownerId", "==", uid),
+    where("status", "==", "published")
+  );
+  const snapshot = await getDocs(ownerPublishedQuery);
   return snapshot.docs
     .map(item => ({ id: item.id, ...item.data() }))
-    .filter(beat => beat.ownerId === uid && beat.status === "published")
     .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
 }
 
