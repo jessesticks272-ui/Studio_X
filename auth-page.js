@@ -160,7 +160,12 @@ async function saveAndContinue(user, role) {
     console.error("Could not save LyTune profile before redirect:", error);
   }
 
-  window.location.href = role === "producer" ? "producer-dashboard.html" : "artist-dashboard.html";
+  // Respect safe same-site return destinations (e.g. feedback.html) after sign-in.
+  const requestedNext = new URLSearchParams(window.location.search).get("next") || "";
+  const safeNext = /^[a-zA-Z0-9_-]+\.html(?:\?[a-zA-Z0-9_=&%-]*)?$/.test(requestedNext)
+    ? requestedNext
+    : "";
+  window.location.href = safeNext || (role === "producer" ? "producer-dashboard.html" : "artist-dashboard.html");
 }
 
 loginTab.addEventListener("click", () => setMode("login"));
