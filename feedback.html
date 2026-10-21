@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Help shape LyTune Studio X. Send producer and artist feedback directly to the team.">
+  <title>Give Feedback | LyTune Studio X</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./responsive-mobile.css">
+  <style>
+    :root{color-scheme:dark;--bg:#080d18;--panel:#111a2b;--line:#26334a;--muted:#9aa9c0;--text:#f5f8ff;--accent:#22d3ee}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#132846 0,transparent 45%),var(--bg);color:var(--text);font-family:"Space Grotesk",sans-serif;min-height:100vh}
+    a{color:#7de9ff}header{max-width:1040px;margin:auto;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{color:var(--text);font-weight:800;text-decoration:none;font-size:1.1rem}.navlinks{display:flex;gap:16px;flex-wrap:wrap;font-size:.9rem}
+    main{max-width:760px;margin:32px auto 70px;padding:0 20px}.eyebrow{color:var(--accent);font-size:.75rem;font-weight:800;letter-spacing:.14em}h1{font-size:clamp(2.1rem,6vw,3.6rem);line-height:1.03;letter-spacing:-.05em;margin:14px 0}p{color:var(--muted);line-height:1.65}.panel{background:rgba(17,26,43,.92);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,5vw,34px);margin-top:26px;box-shadow:0 24px 80px #0003}
+    label{display:block;font-size:.9rem;font-weight:600;margin:18px 0 8px}input,select,textarea{width:100%;padding:13px 14px;border:1px solid #33445f;border-radius:11px;background:#0b1322;color:var(--text);font:inherit}textarea{min-height:150px;resize:vertical}input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:2px}.hint{font-size:.82rem;color:var(--muted);margin-top:7px}.btn{border:0;border-radius:11px;padding:14px 18px;font:inherit;font-weight:800;cursor:pointer;background:linear-gradient(100deg,#22d3ee,#60a5fa);color:#07111d}.btn:disabled{opacity:.55;cursor:wait}.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:22px}.message{min-height:24px;font-size:.92rem}.message.error{color:#fca5a5}.message.ok{color:#86efac}.notice{border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:.88rem;color:var(--muted)}footer{text-align:center;color:var(--muted);padding:0 20px 30px;font-size:.82rem}
+    @media(max-width:560px){header{align-items:flex-start;flex-direction:column}main{margin-top:20px}.navlinks{gap:12px}.panel{border-radius:16px}}
+  </style>
+</head>
+<body>
+  <header><a class="brand" href="index.html">♫ LyTune Studio X</a><nav class="navlinks" aria-label="Main navigation"><a href="explore.html">Explore beats</a><a href="studio.html">Producer studio</a><a href="message.html">Messages</a></nav></header>
+  <main>
+    <span class="eyebrow">FOUNDING CREATOR FEEDBACK</span>
+    <h1>Help shape what we build next.</h1>
+    <p>Tell us what worked, what got confusing, or what would make LyTune more useful for your music journey. Specific examples help us fix the right things first.</p>
+    <section class="panel">
+      <div id="authNotice" class="notice" hidden>Sign in to submit feedback so the team can connect it to your account. Your feedback will only be visible to the LyTune team and you.</div>
+      <form id="feedbackForm">
+        <label for="role">I'm using LyTune as</label>
+        <select id="role" name="role" required><option value="producer">Producer</option><option value="artist">Artist</option><option value="both">Both producer and artist</option><option value="listener">Listener / buyer</option></select>
+        <label for="area">What is your feedback about?</label>
+        <select id="area" name="area" required>
+          <option value="signup">Signing up / account</option><option value="upload">Uploading or publishing beats</option><option value="explore">Finding and previewing beats</option><option value="profile">Profile / creator page</option><option value="messages">Messages / collaboration</option><option value="mobile">Using LyTune on my phone</option><option value="payments">Prices, licensing, or checkout</option><option value="other">Something else</option>
+        </select>
+        <label for="rating">How was your experience?</label>
+        <select id="rating" name="rating" required><option value="5">5 · Smooth</option><option value="4">4 · Mostly good</option><option value="3" selected>3 · Okay, needs work</option><option value="2">2 · Frustrating</option><option value="1">1 · Couldn't complete my task</option></select>
+        <label for="details">What happened, and what should we improve?</label>
+        <textarea id="details" name="details" minlength="10" maxlength="3000" required placeholder="Example: I signed up as a producer, uploaded a beat, and expected it to appear in Explore. What happened instead was…"></textarea>
+        <div class="hint">10 to 3,000 characters. Please don't include passwords, payment details, or private unreleased audio.</div>
+        <label for="priority">How important is this to you?</label>
+        <select id="priority" name="priority" required><option value="low">Nice to have</option><option value="normal" selected>Would improve my experience</option><option value="high">Blocks me from using LyTune</option></select>
+        <div class="actions"><button id="submitFeedback" class="btn" type="submit">Send feedback</button><a href="index.html">Back to LyTune</a></div>
+        <p id="formMessage" class="message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+  <footer>Thank you for helping us build a better home for music creators.</footer>
+  <script type="module" src="./feedback.js"></script>
+</body>
+</html>
