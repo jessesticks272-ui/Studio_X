@@ -3,3 +3,25 @@
 .sort-select option{background:#0d1322;color:#fff}
 .today-badge{display:inline-block;margin-left:7px;padding:3px 6px;border-radius:999px;background:rgba(53,214,170,.12);color:#72e7c8;font-size:.52rem;font-weight:800;letter-spacing:.08em}
 @media(max-width:760px){.sort-select{width:100%}}
+
+/* Member directory additions */
+.members-main{max-width:1280px;margin:0 auto;padding:0 20px}
+.members-main .hero{margin-left:0;margin-right:0;align-items:center}
+.member-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding:18px 0}
+.member-stat{border:1px solid var(--border);background:var(--panel);border-radius:17px;padding:19px}
+.member-stat span{display:block;color:var(--muted);font-size:.62rem;letter-spacing:.12em;font-weight:700}
+.member-stat strong{display:block;font-size:2rem;margin:7px 0 2px}
+.member-stat small{color:var(--muted);font-size:.68rem}
+.members-main .panel-head p{margin-top:8px}
+.members-main .toolbar{align-items:center}
+.members-main .filters{flex-wrap:wrap}
+.members-main .filter{white-space:nowrap}
+.members-main table{min-width:1080px}
+.member-uid{display:block;color:#6f7f9a;font-size:.58rem;margin-top:5px;max-width:170px;overflow-wrap:anywhere}
+.pill{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:.62rem;font-weight:700;white-space:nowrap}
+.pill-good{background:rgba(53,214,170,.12);color:#82e8cf}
+.pill-warn{background:rgba(255,184,77,.12);color:#ffd08a}
+.table-foot{color:var(--muted);font-size:.7rem;margin:13px 0 0}
+.privacy-note{border-top:1px solid var(--border);padding-top:15px;color:var(--muted);font-size:.68rem;line-height:1.6;margin:18px 0 0}
+#refreshBtn:disabled{opacity:.6;cursor:wait}
+@media(max-width:760px){.members-main{padding:0 12px}.members-main .hero{margin-top:14px}.member-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.member-stat{padding:14px}.member-stat strong{font-size:1.6rem}.members-main .panel{margin:0 0 36px;padding:15px}.members-main .panel-head{align-items:flex-start}.members-main .toolbar{gap:12px}.members-main .filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.members-main .filter{padding:9px 6px}}
