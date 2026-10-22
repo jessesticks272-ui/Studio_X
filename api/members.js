@@ -3,6 +3,7 @@ import { ExternalAccountClient } from "google-auth-library";
 import { getVercelOidcToken } from "@vercel/oidc";
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
 
 const OWNER_EMAIL = "jessesticks272@gmail.com";
 const FIREBASE_SCOPES = [
@@ -27,7 +28,6 @@ function createFederatedCredential() {
   const serviceAccountEmail = process.env.GCP_SERVICE_ACCOUNT_EMAIL;
   const poolId = process.env.GCP_WORKLOAD_IDENTITY_POOL_ID;
   const providerId = process.env.GCP_WORKLOAD_IDENTITY_POOL_PROVIDER_ID;
-
   const missing = [
     ["GCP_PROJECT_ID", projectId],
     ["GCP_PROJECT_NUMBER", projectNumber],
@@ -35,10 +35,7 @@ function createFederatedCredential() {
     ["GCP_WORKLOAD_IDENTITY_POOL_ID", poolId],
     ["GCP_WORKLOAD_IDENTITY_POOL_PROVIDER_ID", providerId]
   ].filter(([, value]) => !value).map(([name]) => name);
-
-  if (missing.length) {
-    throw new Error(`Missing required environment variables: ${missing.join(", ")}`);
-  }
+  if (missing.length) throw new Error(`Missing required environment variables: ${missing.join(", ")}`);
 
   const authClient = ExternalAccountClient.fromJSON({
     type: "external_account",
@@ -46,26 +43,15 @@ function createFederatedCredential() {
     subject_token_type: "urn:ietf:params:oauth:token-type:jwt",
     token_url: "https://sts.googleapis.com/v1/token",
     service_account_impersonation_url: `https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${serviceAccountEmail}:generateAccessToken`,
-    subject_token_supplier: {
-      getSubjectToken: getVercelOidcToken
-    }
+    subject_token_supplier: { getSubjectToken: getVercelOidcToken }
   });
-
-  if (!authClient) {
-    throw new Error("Could not initialize Google Workload Identity Federation.");
-  }
-
+  if (!authClient) throw new Error("Could not initialize Google Workload Identity Federation.");
   authClient.scopes = FIREBASE_SCOPES;
 
-  // Firebase Admin expects { access_token, expires_in }, while the Google
-  // external account client exposes the token as { token, res }.
   return {
     async getAccessToken() {
       const result = await authClient.getAccessToken();
-      if (!result?.token) {
-        throw new Error("Google did not return an access token.");
-      }
-
+      if (!result?.token) throw new Error("Google did not return an access token.");
       const expiryDate = authClient.credentials?.expiry_date;
       return {
         access_token: result.token,
@@ -79,64 +65,55 @@ function createFederatedCredential() {
 
 export async function GET(request) {
   let app;
-
   try {
     const authorization = request.headers.get("authorization") || "";
-    const match = authorization.match(/^Bearer\s+(.+)$/i);
+    const match = authorization.match(/^Bearer\\s+(.+)$/i);
     if (!match) return json({ error: "Sign in is required." }, 401);
 
     const credential = createFederatedCredential();
-    app = initializeApp({
-      credential,
-      projectId: process.env.GCP_PROJECT_ID
-    }, `members-${randomUUID()}`);
-
+    app = initializeApp({ credential, projectId: process.env.GCP_PROJECT_ID }, `members-${randomUUID()}`);
     const adminAuth = getAuth(app);
     const decoded = await adminAuth.verifyIdToken(match[1]);
     if ((decoded.email || "").toLowerCase() !== OWNER_EMAIL) {
       return json({ error: "Only the LyTune owner can view members." }, 403);
     }
 
+    const adminDb = getFirestore(app);
     const users = [];
     let pageToken;
     do {
       const page = await adminAuth.listUsers(1000, pageToken);
-      users.push(...page.users.map(user => ({
-        uid: user.uid,
-        name: user.displayName || (user.email ? user.email.split("@")[0] : "LyTune User"),
-        email: user.email || "",
-        role: user.customClaims?.role || "Member",
-        provider: (user.providerData || []).map(item => item.providerId).join(", ") || "Unknown",
-        createdAt: user.metadata.creationTime || null,
-        lastLoginAt: user.metadata.lastSignInTime || null,
-        emailVerified: Boolean(user.emailVerified),
-        disabled: Boolean(user.disabled)
-      })));
+      const profiles = page.users.length
+        ? await adminDb.getAll(...page.users.map(user => adminDb.collection("users").doc(user.uid)))
+        : [];
+      const profilesByUid = new Map(profiles.map(snapshot => [snapshot.id, snapshot.exists ? snapshot.data() : {}]));
+
+      users.push(...page.users.map(user => {
+        const profile = profilesByUid.get(user.uid) || {};
+        return {
+          uid: user.uid,
+          name: profile.name || user.displayName || (user.email ? user.email.split("@")[0] : "LyTune User"),
+          email: user.email || profile.email || "",
+          role: profile.role || user.customClaims?.role || "Not set",
+          provider: (user.providerData || []).map(item => item.providerId).join(", ") || "Unknown",
+          createdAt: user.metadata.creationTime || null,
+          lastLoginAt: user.metadata.lastSignInTime || null,
+          emailVerified: Boolean(user.emailVerified),
+          disabled: Boolean(user.disabled)
+        };
+      }));
       pageToken = page.pageToken;
     } while (pageToken);
 
-    users.sort((a, b) => {
-      const aDate = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-      const bDate = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-      return bDate - aDate;
-    });
-
+    users.sort((a, b) => (b.createdAt ? new Date(b.createdAt).getTime() : 0) - (a.createdAt ? new Date(a.createdAt).getTime() : 0));
     return json({ members: users, count: users.length });
   } catch (error) {
     console.error("GET /api/members:", error);
-    if (
-      error?.code === "auth/argument-error" ||
-      error?.code === "auth/id-token-expired" ||
-      error?.code === "auth/invalid-id-token"
-    ) {
+    if (["auth/argument-error", "auth/id-token-expired", "auth/invalid-id-token"].includes(error?.code)) {
       return json({ error: "Your sign-in session expired. Please sign in again." }, 401);
     }
     return json({ error: "Could not load member accounts. Check the server configuration." }, 500);
   } finally {
-    if (app) {
-      await app.delete().catch(error => {
-        console.error("Could not dispose members Firebase app:", error);
-      });
-    }
+    if (app) await app.delete().catch(error => console.error("Could not dispose members Firebase app:", error));
   }
 }
