@@ -67,7 +67,7 @@ export async function GET(request) {
   let app;
   try {
     const authorization = request.headers.get("authorization") || "";
-    const match = authorization.match(/^Bearer\\s+(.+)$/i);
+    const match = authorization.match(/^Bearer\s+(.+)$/i);
     if (!match) return json({ error: "Sign in is required." }, 401);
 
     const credential = createFederatedCredential();
