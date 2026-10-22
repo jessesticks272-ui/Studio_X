@@ -3,38 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Private LyTune Studio X member dashboard.">
+<meta name="description" content="Private LyTune Studio X account administration.">
 <title>Members | LyTune Studio X</title>
 <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./creator-dashboard.css">
-  <link rel="stylesheet" href="./responsive-mobile.css">
+<link rel="stylesheet" href="./responsive-mobile.css">
 </head>
 <body>
 <header class="topbar">
   <a class="brand" href="index.html"><span class="mark">L</span><span>LyTune <b>Studio X</b></span></a>
-  <button id="logoutBtn" class="logout">Sign out</button>
+  <button id="logoutBtn" class="logout" type="button">Sign out</button>
 </header>
-<main>
+<main class="members-main">
   <section class="hero">
     <div class="hero-copy">
       <span class="eyebrow">PRIVATE OWNER DASHBOARD</span>
-      <h1>Members who logged in</h1>
-      <p id="creatorEmail">Checking your account…</p>
+      <h1>Member control room</h1>
+      <p id="creatorEmail">Verifying owner account…</p>
+      <div class="hero-badges"><span>🔐 Owner access only</span><span>Live account data from Firebase Authentication</span></div>
     </div>
+    <button id="refreshBtn" class="outline" type="button">↻ Refresh list</button>
   </section>
+
+  <section class="member-stats" aria-label="Member statistics">
+    <article class="member-stat"><span>ALL ACCOUNTS</span><strong id="totalCount">—</strong><small>Registered Firebase accounts</small></article>
+    <article class="member-stat"><span>PRODUCERS</span><strong id="producerCount">—</strong><small>Producer role recorded in profile</small></article>
+    <article class="member-stat"><span>ARTISTS</span><strong id="artistCount">—</strong><small>Artist role recorded in profile</small></article>
+    <article class="member-stat"><span>EMAIL VERIFIED</span><strong id="verifiedCount">—</strong><small>Firebase verification status</small></article>
+  </section>
+
   <section class="panel">
     <div class="panel-head">
-      <div><span class="eyebrow">MEMBER LIST</span><h2>LyTune Studio X members</h2></div>
+      <div><span class="eyebrow">MEMBER DIRECTORY</span><h2>Registered accounts</h2><p>Search by name or email, or filter by account type.</p></div>
     </div>
+    <div class="toolbar">
+      <label class="searchbox"><span aria-hidden="true">⌕</span><input id="memberSearch" type="search" placeholder="Search name or email…" autocomplete="off" aria-label="Search members"></label>
+      <div class="filters" role="group" aria-label="Filter by account type">
+        <button class="filter active" type="button" data-role="all" aria-pressed="true">Everyone</button>
+        <button class="filter" type="button" data-role="producer" aria-pressed="false">Producers</button>
+        <button class="filter" type="button" data-role="artist" aria-pressed="false">Artists</button>
+        <button class="filter" type="button" data-role="other" aria-pressed="false">Other</button>
+      </div>
+    </div>
+    <div id="state" class="state" role="status" aria-live="polite">Loading registered accounts…</div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Member</th><th>Email</th><th>Role</th><th>Joined</th><th>Last Login</th></tr></thead>
+        <thead><tr><th>Member</th><th>Email</th><th>Account type</th><th>Sign-in method</th><th>Joined</th><th>Last login</th><th>Verification</th><th>Status</th></tr></thead>
         <tbody id="memberTable"></tbody>
       </table>
     </div>
-    <div id="state" class="state">Loading members…</div>
+    <p class="table-foot" id="resultCount"></p>
+    <p class="privacy-note">This private page displays account information for platform administration. It does not display passwords or private messages.</p>
   </section>
 </main>
 <script type="module" src="./creator-dashboard.js"></script>
