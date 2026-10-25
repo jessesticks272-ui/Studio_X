@@ -2,6 +2,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  deleteDoc,
   addDoc,
   collection,
   query,
@@ -160,4 +161,35 @@ export async function getUserConversationMessages(uid) {
   const q = query(collection(db, "messages"), where("participants", "array-contains", uid), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
   return snapshot.docs.map(item => ({ id:item.id, ...item.data() }));
+}
+
+
+export async function isFollowingCreator(followerUid, creatorUid) {
+  if (!followerUid || !creatorUid || followerUid === creatorUid) return false;
+  const snapshot = await getDoc(doc(db, "creatorFollows", followerUid + "_" + creatorUid));
+  return snapshot.exists();
+}
+
+export async function followCreator(followerUid, creatorUid) {
+  if (!followerUid || !creatorUid) throw new Error("Follower and creator accounts are required.");
+  if (followerUid === creatorUid) throw new Error("You cannot follow your own creator profile.");
+  await setDoc(doc(db, "creatorFollows", followerUid + "_" + creatorUid), {
+    followerUid,
+    creatorUid,
+    createdAt: serverTimestamp()
+  });
+}
+
+export async function unfollowCreator(followerUid, creatorUid) {
+  if (!followerUid || !creatorUid) throw new Error("Follower and creator accounts are required.");
+  await deleteDoc(doc(db, "creatorFollows", followerUid + "_" + creatorUid));
+}
+
+export async function getCreatorFollowerCount(creatorUid) {
+  if (!creatorUid) return 0;
+  const snapshot = await getDocs(query(
+    collection(db, "creatorFollows"),
+    where("creatorUid", "==", creatorUid)
+  ));
+  return snapshot.size;
 }
