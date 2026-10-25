@@ -959,3 +959,6 @@ input:focus-visible,
 @media (max-width: 600px) {
   .creators-faq { padding-left: 20px; padding-right: 20px; }
 }
+
+/* Shared accent divider used by trending page callouts. */
+.accent-bar{width:58px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-3))}
