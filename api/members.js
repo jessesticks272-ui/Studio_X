@@ -3,7 +3,6 @@ import { ExternalAccountClient } from "google-auth-library";
 import { getVercelOidcToken } from "@vercel/oidc";
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
-import { getFirestore } from "firebase-admin/firestore";
 
 const OWNER_EMAIL = "jessesticks272@gmail.com";
 const FIREBASE_SCOPES = [
@@ -63,6 +62,55 @@ function createFederatedCredential() {
   };
 }
 
+
+function decodeFirestoreValue(value) {
+  if (!value || typeof value !== "object") return null;
+  if ("stringValue" in value) return value.stringValue;
+  if ("integerValue" in value) return Number(value.integerValue);
+  if ("doubleValue" in value) return Number(value.doubleValue);
+  if ("booleanValue" in value) return value.booleanValue;
+  if ("timestampValue" in value) return value.timestampValue;
+  if ("nullValue" in value) return null;
+  if ("arrayValue" in value) return (value.arrayValue.values || []).map(decodeFirestoreValue);
+  if ("mapValue" in value) return decodeFirestoreFields(value.mapValue.fields || {});
+  if ("referenceValue" in value) return value.referenceValue;
+  return null;
+}
+
+function decodeFirestoreFields(fields = {}) {
+  return Object.fromEntries(
+    Object.entries(fields).map(([key, value]) => [key, decodeFirestoreValue(value)])
+  );
+}
+
+async function loadUserProfiles(projectId, credential, users) {
+  const token = await credential.getAccessToken();
+  const profiles = new Map();
+  const chunkSize = 20;
+
+  for (let start = 0; start < users.length; start += chunkSize) {
+    const chunk = users.slice(start, start + chunkSize);
+    const results = await Promise.all(chunk.map(async user => {
+      const url = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/databases/(default)/documents/users/${encodeURIComponent(user.uid)}`;
+      const response = await fetch(url, {
+        headers: { authorization: `Bearer ${token.access_token}` }
+      });
+
+      if (response.status === 404) return [user.uid, {}];
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(`Firestore REST read failed (${response.status}): ${detail.slice(0, 400)}`);
+      }
+
+      const document = await response.json();
+      return [user.uid, decodeFirestoreFields(document.fields || {})];
+    }));
+    for (const [uid, profile] of results) profiles.set(uid, profile);
+  }
+
+  return profiles;
+}
+
 export async function GET(request) {
   let app;
   try {
@@ -71,22 +119,19 @@ export async function GET(request) {
     if (!match) return json({ error: "Sign in is required." }, 401);
 
     const credential = createFederatedCredential();
-    app = initializeApp({ credential, projectId: process.env.GCP_PROJECT_ID }, `members-${randomUUID()}`);
+    const projectId = process.env.GCP_PROJECT_ID;
+    app = initializeApp({ credential, projectId }, `members-${randomUUID()}`);
     const adminAuth = getAuth(app);
     const decoded = await adminAuth.verifyIdToken(match[1]);
     if ((decoded.email || "").toLowerCase() !== OWNER_EMAIL) {
       return json({ error: "Only the LyTune owner can view members." }, 403);
     }
 
-    const adminDb = getFirestore(app);
     const users = [];
     let pageToken;
     do {
       const page = await adminAuth.listUsers(1000, pageToken);
-      const profiles = page.users.length
-        ? await adminDb.getAll(...page.users.map(user => adminDb.collection("users").doc(user.uid)))
-        : [];
-      const profilesByUid = new Map(profiles.map(snapshot => [snapshot.id, snapshot.exists ? snapshot.data() : {}]));
+      const profilesByUid = await loadUserProfiles(projectId, credential, page.users);
 
       users.push(...page.users.map(user => {
         const profile = profilesByUid.get(user.uid) || {};
