@@ -5,3 +5,5 @@
 .cover.has-image{background-size:cover;background-position:center}.cover.has-image:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(5,7,13,.5))}.avatar.has-image{background-size:cover;background-position:center;font-size:0}.verified[hidden]{display:none}.empty-beats{border:1px dashed var(--line);border-radius:16px;padding:42px 20px;text-align:center;color:var(--muted)}.empty-beats h3{color:var(--text);margin:0 0 7px}.empty-beats p{margin:0;font-size:.8rem}.beat-open{font-size:.72rem;color:var(--cyan);white-space:nowrap}.beat-card .bar{margin-top:4px}
 /* Keep unavailable social links out of the layout. */
 .links a[hidden] { display: none !important; }
+
+.verified-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
