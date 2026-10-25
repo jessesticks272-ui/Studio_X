@@ -78,7 +78,7 @@ async function loadProfile(){
   const key="lytune_following_creator_"+uid;
   following=localStorage.getItem(key)==="1";
   $("followBtn").textContent=following ? "Following" : "Follow";
-  $("followers").textContent=profile.followers || "0"; $("followingCount").textContent=profile.following || "0"; $("verified").hidden = profile.isVerified !== true;
+  $("followers").textContent=profile.followers || "0"; const followingCount = $("followingCount"); if(followingCount) followingCount.textContent=profile.following || "0"; $("verified").hidden = profile.isVerified !== true;
 }
 
 $("followBtn").addEventListener("click",()=>{
