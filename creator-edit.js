@@ -1,6 +1,6 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getCreatorProfile, saveCreatorProfile, saveUserProfile } from "./firestore.js";
+import { getCreatorProfile, getUserProfile, saveCreatorProfile, saveUserProfile } from "./firestore.js";
 
 const $ = id => document.getElementById(id);
 
@@ -32,6 +32,13 @@ onAuthStateChanged(auth, async user => {
   if(!user){ location.href="auth.html"; return; }
 
   try{
+    const accountProfile = await getUserProfile(user.uid);
+    if(accountProfile?.role !== "producer"){
+      $("profileForm").hidden = true;
+      setStatus("Creator profile editing is available to producer accounts only. Sign in with a producer account to continue.", "error");
+      return;
+    }
+
     const userProfile=await getCreatorProfile(user.uid);
     fill(userProfile || {}, user);
 
