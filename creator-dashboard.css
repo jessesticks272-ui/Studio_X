@@ -25,3 +25,7 @@
 .privacy-note{border-top:1px solid var(--border);padding-top:15px;color:var(--muted);font-size:.68rem;line-height:1.6;margin:18px 0 0}
 #refreshBtn:disabled{opacity:.6;cursor:wait}
 @media(max-width:760px){.members-main{padding:0 12px}.members-main .hero{margin-top:14px}.member-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.member-stat{padding:14px}.member-stat strong{font-size:1.6rem}.members-main .panel{margin:0 0 36px;padding:15px}.members-main .panel-head{align-items:flex-start}.members-main .toolbar{gap:12px}.members-main .filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.members-main .filter{padding:9px 6px}}
+
+/* Keep the dashboard hero copy flexible on narrow screens. */
+.hero-copy{min-width:0;flex:1}
+@media(max-width:760px){.members-main .hero{align-items:flex-start;flex-direction:column}.members-main .hero-copy{width:100%}.members-main .hero #refreshBtn{align-self:flex-start}}
