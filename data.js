@@ -32,8 +32,11 @@ window.DATA_API = (function () {
     // pattern as the video/image fallback in auth.js. Offline (or no
     // avatarUrl at all): skip straight to the initials badge, no network
     // request attempted.
-    const avatarHtml = p.avatarUrl && window.LytuneAuth && window.LytuneAuth.isOnline()
-      ? '<img src="' + p.avatarUrl + '" alt="' + p.name + '" style="width:100%;height:200px;object-fit:cover;" ' +
+    const avatarUrl = p.avatarUrl && window.LytuneCloudinary
+      ? window.LytuneCloudinary.deliveryUrl(p.avatarUrl, { width: 600, crop: "fill" })
+      : p.avatarUrl;
+    const avatarHtml = avatarUrl && window.LytuneAuth && window.LytuneAuth.isOnline()
+      ? '<img src="' + avatarUrl + '" alt="' + p.name + '" style="width:100%;height:200px;object-fit:cover;" ' +
         'onerror="this.outerHTML=\'<div style=&quot;height:200px;display:flex;align-items:center;justify-content:center;' +
         'font-size:2.4rem;font-weight:800;color:#fff;background:' + p.gradient + ';&quot;>' + p.initial + '</div>\';">'
       : '<div style="height:200px;display:flex;align-items:center;justify-content:center;' +
