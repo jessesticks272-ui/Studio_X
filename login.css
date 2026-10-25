@@ -1,0 +1,43 @@
+:root {
+  color-scheme: dark;
+  --page-bg: #070b15;
+  --panel-bg: rgba(17, 25, 43, .92);
+  --text: #f4f7ff;
+  --muted: #aab7cc;
+  --accent: #19d7ff;
+}
+* { box-sizing: border-box; }
+html { min-height: 100%; background: var(--page-bg); }
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--text);
+  background: radial-gradient(circle at 15% 10%, rgba(0,123,255,.2), transparent 35%), var(--page-bg);
+  font: 16px/1.6 "Space Grotesk", system-ui, sans-serif;
+}
+.redirect-card {
+  width: min(100%, 520px);
+  padding: clamp(24px, 5vw, 40px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 22px;
+  background: var(--panel-bg);
+  box-shadow: 0 24px 80px rgba(0,0,0,.3);
+  text-align: center;
+}
+.redirect-card h1 { margin: 0 0 12px; font-size: clamp(1.5rem, 5vw, 2rem); line-height: 1.2; }
+.redirect-card p { color: var(--muted); }
+.redirect-card a {
+  display: inline-flex;
+  justify-content: center;
+  margin-top: 12px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #19d7ff, #007bff);
+  color: #06101c;
+  font-weight: 700;
+  text-decoration: none;
+}
+.redirect-card a:focus-visible { outline: 3px solid white; outline-offset: 4px; }
