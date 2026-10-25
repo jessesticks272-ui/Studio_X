@@ -808,3 +808,22 @@ input:focus-visible,
   .creators-faq { padding-left: 20px; padding-right: 20px; }
   .market-hero { padding: 32px 20px 24px; }
 }
+
+/* Market page sections added to the producer storefront */
+.market-category-card{position:relative}
+.market-status-badge{position:absolute;top:15px;right:15px;display:inline-flex;align-items:center;padding:6px 10px;border:1px solid var(--border-color);border-radius:999px;font-size:.62rem;font-weight:800;letter-spacing:.04em;line-height:1.2}
+.market-status-badge.live{background:rgba(53,214,170,.12);color:#82e8cf;border-color:rgba(53,214,170,.25)}
+.market-status-badge.soon{background:rgba(255,184,77,.1);color:#ffd08a;border-color:rgba(255,184,77,.22)}
+.market-seller-benefits{width:min(1180px,calc(100% - 48px));margin:0 auto;padding:16px 0 76px;text-align:center}
+.market-seller-benefits h2{margin:0 0 28px;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.15}
+.market-benefits-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;text-align:left}
+.market-benefit-card{min-width:0;padding:24px;border:1px solid var(--border-color);border-radius:var(--radius);background:var(--bg-card)}
+.market-benefit-card h3{margin:14px 0 8px;font-size:1.05rem}
+.market-benefit-card p{margin:0;color:var(--text-secondary);font-size:.86rem;line-height:1.65}
+.genre-spotlight-icon{width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(25,215,255,.2);border-radius:13px;background:rgba(25,215,255,.08);font-size:1.25rem}
+.market-cta{width:min(1000px,calc(100% - 48px));margin:0 auto 76px;padding:clamp(28px,5vw,52px);border:1px solid var(--border-color);border-radius:var(--radius);background:radial-gradient(circle at 50% 0,rgba(25,215,255,.1),transparent 55%),var(--bg-card);text-align:center}
+.market-cta h2{margin:0 0 12px;font-size:clamp(1.5rem,3vw,2.15rem)}
+.market-cta p{max-width:620px;margin:0 auto 22px;color:var(--text-secondary);line-height:1.65}
+.accent-bar{width:58px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-3))}
+@media(max-width:800px){.market-benefits-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.market-seller-benefits,.market-cta{width:calc(100% - 28px)}.market-benefits-grid{grid-template-columns:1fr}.market-benefit-card{padding:20px}.market-status-badge{top:12px;right:12px}}
