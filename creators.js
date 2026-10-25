@@ -185,45 +185,30 @@ import { getPublishedBeats, followCreator, unfollowCreator } from "./firestore.j
     if (mode) mode.textContent = "Connecting to Firebase";
 
     try {
-      const [profileSnapshot, usersSnapshot, publishedBeats] = await Promise.all([
+      const [profileSnapshot, publishedBeats] = await Promise.all([
         getDocs(collection(db, "creatorProfiles")),
-        getDocs(collection(db, "users")),
         getPublishedBeats()
       ]);
-
-      const users = new Map();
-      usersSnapshot.docs.forEach(item => {
-        const data = item.data();
-        if (data.role === "producer") users.set(item.id, { uid: item.id, ...data });
-      });
-
-      const profiles = new Map();
-      profileSnapshot.docs.forEach(item => {
-        const data = item.data();
-        const uid = data.uid || item.id;
-        profiles.set(uid, { ...data, uid });
-      });
 
       const beatCounts = {};
       publishedBeats.forEach(beat => {
         if (beat.ownerId) beatCounts[beat.ownerId] = (beatCounts[beat.ownerId] || 0) + 1;
       });
 
-      const ids = new Set([...users.keys(), ...profiles.keys()]);
-
-      creators = [...ids]
-        .map(uid => {
-          const user = users.get(uid) || {};
-          const profile = profiles.get(uid) || {};
-
+      // The directory reads only public creatorProfiles. The private users
+      // collection intentionally remains unreadable to ordinary visitors.
+      creators = profileSnapshot.docs
+        .map(item => {
+          const profile = item.data();
+          const uid = profile.uid || item.id;
           return {
             uid,
-            name: profile.name || user.name || "LyTune Producer",
-            role: profile.role || user.role || "Producer",
-            location: profile.location || user.location || "",
-            bio: profile.bio || user.bio || "",
-            avatarUrl: profile.avatarUrl || profile.photoURL || user.photoURL || "",
-            photoURL: profile.photoURL || user.photoURL || "",
+            name: profile.name || "LyTune Producer",
+            role: profile.role || "Producer",
+            location: profile.location || "",
+            bio: profile.bio || "",
+            avatarUrl: profile.avatarUrl || profile.photoURL || "",
+            photoURL: profile.photoURL || "",
             coverUrl: profile.coverUrl || "",
             genres: normalizeGenres(profile),
             tags: Array.isArray(profile.tags) ? profile.tags : [],
