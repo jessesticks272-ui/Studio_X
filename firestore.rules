@@ -32,9 +32,10 @@ service cloud.firestore {
     // Creator profile: the owner manages the profile; public profile pages
     // need to be able to read creator profiles.
     match /creatorProfiles/{userId} {
-      allow read: if signedIn() || true;
+      allow read: if true;
       allow create, update, delete: if signedIn()
-        && request.auth.uid == userId;
+        && request.auth.uid == userId
+        && get(/databases/$(database)/documents/users/$(userId)).data.role == "producer";
     }
 
     // Published beats are public. Drafts stay private to their producer
