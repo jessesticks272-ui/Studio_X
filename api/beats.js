@@ -1,4 +1,4 @@
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -7,11 +7,13 @@ function json(data, status = 200) {
   });
 }
 
+let databaseClient;
+
 function getDb() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
   if (!connectionString) {
-    const error = new Error("DATABASE_URL is not configured in Vercel.");
+    const error = new Error("DATABASE_URL or POSTGRES_URL is not configured in Vercel.");
     error.code = "MISSING_DATABASE_URL";
     throw error;
   }
@@ -20,24 +22,27 @@ function getDb() {
   try {
     parsed = new URL(connectionString);
   } catch {
-    const error = new Error("DATABASE_URL is not a valid database connection string.");
+    const error = new Error("The configured database connection string is invalid.");
     error.code = "INVALID_DATABASE_URL";
     throw error;
   }
 
   if (!["postgres:", "postgresql:"].includes(parsed.protocol)) {
-    const error = new Error("DATABASE_URL must be a PostgreSQL connection string from Neon, not a web/API URL.");
+    const error = new Error("The database connection must use the PostgreSQL protocol.");
     error.code = "INVALID_DATABASE_URL";
     throw error;
   }
 
-  if (!parsed.hostname.endsWith(".neon.tech")) {
-    const error = new Error("DATABASE_URL host is not a Neon PostgreSQL endpoint.");
-    error.code = "INVALID_DATABASE_HOST";
-    throw error;
+  if (!databaseClient) {
+    databaseClient = postgres(connectionString, {
+      max: 1,
+      idle_timeout: 20,
+      connect_timeout: 10,
+      prepare: false
+    });
   }
 
-  return neon(connectionString);
+  return databaseClient;
 }
 
 function mapBeat(row) {
