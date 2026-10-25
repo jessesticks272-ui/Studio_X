@@ -111,19 +111,22 @@ export async function GET(request) {
       return json({
         error: "Beat database configuration is incorrect.",
         code: error.code,
-        hint: "In Vercel, set DATABASE_URL to the PostgreSQL connection string copied from Neon Console → your project → Connect. Do not use a Neon API URL."
+        hint: "In Vercel, confirm DATABASE_URL or POSTGRES_URL contains the PostgreSQL connection string for your configured Prisma Postgres database."
       }, 503);
     }
 
-    if (error?.code === "NeonDbError" || /resource-not-found|HTTP status 404/i.test(String(error?.message || ""))) {
+    if (/relation ["']?beats["']? does not exist|undefined_table/i.test(String(error?.message || ""))) {
       return json({
-        error: "The configured Neon database endpoint was not found.",
-        code: "NEON_ENDPOINT_NOT_FOUND",
-        hint: "Check DATABASE_URL in Vercel and replace it with the connection string for the active Neon project and branch."
+        error: "The database connection works, but the beats table is missing.",
+        code: "BEATS_TABLE_MISSING",
+        hint: "Create the beats table in the configured PostgreSQL database using the schema expected by api/beats.js."
       }, 503);
     }
 
-    return json({ error: "Could not load beats.", code: "BEATS_DATABASE_REQUEST_FAILED" }, 500);
+    return json({
+      error: "Could not load beats from the configured PostgreSQL database.",
+      code: "BEATS_DATABASE_REQUEST_FAILED"
+    }, 500);
   }
 }
 
