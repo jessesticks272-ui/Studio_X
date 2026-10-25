@@ -44,7 +44,7 @@ export async function GET(request) {
     const genre = (url.searchParams.get("genre") || "").trim().toLowerCase();
 
     if (id) {
-      const rows = await sql` + "`SELECT * FROM beats WHERE is_published = TRUE AND id = ${id} LIMIT 1`" + `;
+      const rows = await sql`SELECT * FROM beats WHERE is_published = TRUE AND id = ${id} LIMIT 1`;
       if (!rows.length) return json({ error: "Beat not found." }, 404);
       return json({ beat: mapBeat(rows[0]) });
     }
