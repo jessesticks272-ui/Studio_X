@@ -801,3 +801,6 @@ input:focus-visible,
   .messages-hero { padding: 32px 20px 20px; }
   .messages-gate { margin-left: 20px; margin-right: 20px; }
 }
+
+/* Accessible status feedback below the message composer. */
+.message-status{min-height:1.25em;margin:8px 16px 0;color:var(--text-secondary);font-size:.76rem;line-height:1.45;overflow-wrap:anywhere}
