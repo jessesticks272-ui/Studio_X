@@ -8,9 +8,36 @@ function json(data, status = 200) {
 }
 
 function getDb() {
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("DATABASE_URL is not configured.");
-  return neon(url);
+  const connectionString = process.env.DATABASE_URL;
+
+  if (!connectionString) {
+    const error = new Error("DATABASE_URL is not configured in Vercel.");
+    error.code = "MISSING_DATABASE_URL";
+    throw error;
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(connectionString);
+  } catch {
+    const error = new Error("DATABASE_URL is not a valid database connection string.");
+    error.code = "INVALID_DATABASE_URL";
+    throw error;
+  }
+
+  if (!["postgres:", "postgresql:"].includes(parsed.protocol)) {
+    const error = new Error("DATABASE_URL must be a PostgreSQL connection string from Neon, not a web/API URL.");
+    error.code = "INVALID_DATABASE_URL";
+    throw error;
+  }
+
+  if (!parsed.hostname.endsWith(".neon.tech")) {
+    const error = new Error("DATABASE_URL host is not a Neon PostgreSQL endpoint.");
+    error.code = "INVALID_DATABASE_HOST";
+    throw error;
+  }
+
+  return neon(connectionString);
 }
 
 function mapBeat(row) {
@@ -74,7 +101,24 @@ export async function GET(request) {
     return json({ beats: rows.map(mapBeat), count: rows.length });
   } catch (error) {
     console.error("GET /api/beats:", error);
-    return json({ error: "Could not load beats." }, 500);
+
+    if (["MISSING_DATABASE_URL", "INVALID_DATABASE_URL", "INVALID_DATABASE_HOST"].includes(error?.code)) {
+      return json({
+        error: "Beat database configuration is incorrect.",
+        code: error.code,
+        hint: "In Vercel, set DATABASE_URL to the PostgreSQL connection string copied from Neon Console → your project → Connect. Do not use a Neon API URL."
+      }, 503);
+    }
+
+    if (error?.code === "NeonDbError" || /resource-not-found|HTTP status 404/i.test(String(error?.message || ""))) {
+      return json({
+        error: "The configured Neon database endpoint was not found.",
+        code: "NEON_ENDPOINT_NOT_FOUND",
+        hint: "Check DATABASE_URL in Vercel and replace it with the connection string for the active Neon project and branch."
+      }, 503);
+    }
+
+    return json({ error: "Could not load beats.", code: "BEATS_DATABASE_REQUEST_FAILED" }, 500);
   }
 }
 
