@@ -1,7 +1,8 @@
 /* Real Firebase creator directory */
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-import { db } from "./firebase.js";
-import { getPublishedBeats } from "./firestore.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { db, auth } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getPublishedBeats, followCreator, unfollowCreator } from "./firestore.js";
 
 (function(){
   "use strict";
@@ -9,7 +10,8 @@ import { getPublishedBeats } from "./firestore.js";
   let creators = [];
   let genre = "all";
   let queryText = "";
-  const following = new Set(JSON.parse(localStorage.getItem("lytune_following_creators") || "[]"));
+  const following = new Set();
+  let currentUser = null;
 
   function escapeHtml(value = "") {
     return String(value)
@@ -45,6 +47,7 @@ import { getPublishedBeats } from "./firestore.js";
   function card(creator) {
     const uid = creator.uid;
     const isFollowing = following.has(uid);
+    const isOwnProfile = Boolean(currentUser && currentUser.uid === uid);
     const initials = (creator.name || "C").trim().charAt(0).toUpperCase();
     const avatar = creator.avatarUrl || creator.photoURL || "";
     const cover = creator.coverUrl || "";
@@ -98,7 +101,8 @@ import { getPublishedBeats } from "./firestore.js";
               class="creator-follow-btn ${isFollowing ? "following" : ""}"
               data-follow="${escapeHtml(uid)}"
               type="button"
-            >${isFollowing ? "Following ✓" : "Follow"}</button>
+              ${isOwnProfile ? "disabled" : ""}
+            >${isOwnProfile ? "Your profile" : isFollowing ? "Following ✓" : currentUser ? "Follow" : "Sign in to follow"}</button>
 
             <a class="creator-view-btn" href="creator-profile.html?uid=${encodeURIComponent(uid)}">
               View Profile
@@ -146,16 +150,29 @@ import { getPublishedBeats } from "./firestore.js";
     grid.innerHTML = list.map(card).join("");
 
     grid.querySelectorAll("[data-follow]").forEach(button => {
-      button.addEventListener("click", () => {
-        const uid = button.getAttribute("data-follow");
-        if (following.has(uid)) following.delete(uid);
-        else following.add(uid);
+      button.addEventListener("click", async () => {
+        const creatorUid = button.getAttribute("data-follow");
+        if (!currentUser) {
+          location.href = "auth.html?mode=login&redirect=" + encodeURIComponent(location.href);
+          return;
+        }
+        if (currentUser.uid === creatorUid) return;
 
-        localStorage.setItem(
-          "lytune_following_creators",
-          JSON.stringify([...following])
-        );
-        render();
+        button.disabled = true;
+        try {
+          if (following.has(creatorUid)) {
+            await unfollowCreator(currentUser.uid, creatorUid);
+            following.delete(creatorUid);
+          } else {
+            await followCreator(currentUser.uid, creatorUid);
+            following.add(creatorUid);
+          }
+          render();
+        } catch (error) {
+          console.error("Could not update creator follow:", error);
+          button.textContent = "Try again";
+          button.disabled = false;
+        }
       });
     });
   }
@@ -217,6 +234,18 @@ import { getPublishedBeats } from "./firestore.js";
         .filter(creator => creator.role === "producer");
 
       creators.sort((a, b) => a.name.localeCompare(b.name));
+
+      following.clear();
+      if (currentUser) {
+        const followSnapshot = await getDocs(query(
+          collection(db, "creatorFollows"),
+          where("followerUid", "==", currentUser.uid)
+        ));
+        followSnapshot.docs.forEach(item => {
+          const followedUid = item.data().creatorUid;
+          if (followedUid) following.add(followedUid);
+        });
+      }
       render();
     } catch (error) {
       console.error("Failed to load creators:", error);
@@ -258,6 +287,9 @@ import { getPublishedBeats } from "./firestore.js";
       });
     });
 
-    loadCreators();
+    onAuthStateChanged(auth, user => {
+      currentUser = user || null;
+      loadCreators();
+    });
   });
 })();
