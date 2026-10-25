@@ -153,7 +153,8 @@ import { getPublishedBeats, followCreator, unfollowCreator } from "./firestore.j
       button.addEventListener("click", async () => {
         const creatorUid = button.getAttribute("data-follow");
         if (!currentUser) {
-          location.href = "auth.html?mode=login&redirect=" + encodeURIComponent(location.href);
+          const returnPage = location.pathname.split("/").pop() + location.search;
+          location.href = "auth.html?mode=login&next=" + encodeURIComponent(returnPage);
           return;
         }
         if (currentUser.uid === creatorUid) return;
