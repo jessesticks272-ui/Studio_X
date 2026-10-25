@@ -157,6 +157,23 @@ export async function GET(request) {
     if (["auth/argument-error", "auth/id-token-expired", "auth/invalid-id-token"].includes(error?.code)) {
       return json({ error: "Your sign-in session expired. Please sign in again." }, 401);
     }
+
+    if (/invalid_grant|Invalid OIDC issuer URI/i.test(String(error?.message || ""))) {
+      return json({
+        error: "Google Workload Identity Federation rejected the Vercel identity token.",
+        code: "GCP_WIF_ISSUER_MISMATCH",
+        hint: "In Google Cloud Console, open IAM & Admin → Workload Identity Federation, select the provider named by GCP_WORKLOAD_IDENTITY_POOL_PROVIDER_ID, and verify its OIDC issuer URI and allowed audience match the Vercel OIDC provider configuration for this project/team. Then redeploy on Vercel."
+      }, 503);
+    }
+
+    if (/Firestore REST read failed \(403\)/i.test(String(error?.message || ""))) {
+      return json({
+        error: "Google credentials were accepted, but the service account lacks Firestore access.",
+        code: "FIRESTORE_PERMISSION_DENIED",
+        hint: "Grant the configured service account the required Firestore read permissions in the Firebase/Google Cloud project."
+      }, 503);
+    }
+
     return json({ error: "Could not load member accounts. Check the server configuration." }, 500);
   } finally {
     if (app) await app.delete().catch(error => console.error("Could not dispose members Firebase app:", error));
