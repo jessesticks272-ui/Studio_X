@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "dependencies": {
     "@vercel/blob": "2.8.0",
-    "@neondatabase/serverless": "1.0.0",
     "firebase-admin": "^13.0.0",
     "google-auth-library": "^10.3.0",
-    "@vercel/oidc": "^3.8.7"
+    "@vercel/oidc": "^3.8.7",
+    "postgres": "^3.4.7"
   },
   "scripts": {},
   "type": "module"
