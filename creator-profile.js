@@ -61,9 +61,14 @@ async function loadProfile(){
   $("avatar").textContent=initials(name); if(profile.avatarUrl){$("avatar").classList.add("has-image");$("avatar").style.backgroundImage="url(\""+profile.avatarUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";} else {$("avatar").classList.remove("has-image");$("avatar").style.backgroundImage="";} if(profile.coverUrl){$("profile-hero")?.classList.add("has-cover");$("cover")?.classList.add("has-image");$("cover").style.backgroundImage="url(\""+profile.coverUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";}
   $("bio").textContent=profile.bio || "Creator on LyTune Studio X.";
   if(profile.location) $("location").textContent="📍 "+profile.location;
-  $("instagram").href=profile.instagram || "#";
-  $("tiktok").href=profile.tiktok || "#";
-  $("youtube").href=profile.youtube || "#";
+  for (const [id, url] of [["instagram", profile.instagram], ["tiktok", profile.tiktok], ["youtube", profile.youtube]]) {
+    const link = $(id);
+    if (!link) continue;
+    const safeUrl = typeof url === "string" && /^https?:\/\//i.test(url.trim()) ? url.trim() : "";
+    link.hidden = !safeUrl;
+    if (safeUrl) link.href = safeUrl;
+    else link.removeAttribute("href");
+  }
   $("editBtn").hidden = !currentUser || currentUser.uid !== uid;
   const messageBtn=$("messageBtn");
   if(messageBtn){
