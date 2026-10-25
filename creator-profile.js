@@ -1,6 +1,6 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getCreatorProfile, getPublishedBeatsByOwner } from "./firestore.js";
+import { getCreatorProfile, getPublishedBeatsByOwner, isFollowingCreator, followCreator, unfollowCreator, getCreatorFollowerCount } from "./firestore.js";
 
 const $ = id => document.getElementById(id);
 const uid = new URLSearchParams(location.search).get("uid");
@@ -75,16 +75,53 @@ async function loadProfile(){
   }
   renderBeats(beats);
 
-  const key="lytune_following_creator_"+uid;
-  following=localStorage.getItem(key)==="1";
-  $("followBtn").textContent=following ? "Following" : "Follow";
-  $("followers").textContent=profile.followers || "0"; const followingCount = $("followingCount"); if(followingCount) followingCount.textContent=profile.following || "0"; $("verified").hidden = profile.isVerified !== true;
+  try {
+    following = currentUser && currentUser.uid !== uid
+      ? await isFollowingCreator(currentUser.uid, uid)
+      : false;
+  } catch (error) {
+    console.warn("Could not load creator follow state:", error);
+    following = false;
+  }
+  const followBtn = $("followBtn");
+  followBtn.textContent = currentUser && currentUser.uid === uid
+    ? "Your profile"
+    : following ? "Following" : currentUser ? "Follow" : "Sign in to follow";
+  followBtn.disabled = Boolean(currentUser && currentUser.uid === uid);
+
+  try {
+    $("followers").textContent = String(await getCreatorFollowerCount(uid));
+  } catch (error) {
+    console.warn("Could not load creator follower count:", error);
+    $("followers").textContent = String(profile.followers || "0");
+  }
+  const followingCount = $("followingCount");
+  if(followingCount) followingCount.textContent=profile.following || "0";
+  $("verified").hidden = profile.isVerified !== true;
 }
 
-$("followBtn").addEventListener("click",()=>{
-  following=!following;
-  localStorage.setItem("lytune_following_creator_"+uid, following ? "1":"0");
-  $("followBtn").textContent=following ? "Following" : "Follow";
+$("followBtn").addEventListener("click", async () => {
+  if (!uid) return;
+  if (!currentUser) {
+    location.href = "auth.html?mode=login&redirect=" + encodeURIComponent(location.href);
+    return;
+  }
+  if (currentUser.uid === uid) return;
+
+  const button = $("followBtn");
+  button.disabled = true;
+  try {
+    if (following) await unfollowCreator(currentUser.uid, uid);
+    else await followCreator(currentUser.uid, uid);
+    following = !following;
+    button.textContent = following ? "Following" : "Follow";
+    $("followers").textContent = String(await getCreatorFollowerCount(uid));
+  } catch (error) {
+    console.error("Could not update creator follow:", error);
+    button.textContent = "Try again";
+  } finally {
+    button.disabled = false;
+  }
 });
 
 $("shareBtn").addEventListener("click",async()=>{
