@@ -1,11 +1,10 @@
-const CACHE_NAME = "lytune-mobile-v2";
+const CACHE_NAME = "lytune-mobile-v3";
 const APP_SHELL = [
   "/mobile/",
   "/mobile/index.html",
   "/mobile/mobile.css",
   "/mobile/mobile.js",
-  "/mobile/manifest.webmanifest",
-  "/mobile/icon.svg"
+  "/mobile/manifest.webmanifest"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
