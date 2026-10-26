@@ -75,6 +75,13 @@
         background:rgba(244,247,255,.9);
         border-color:rgba(10,20,60,.12);
       }
+      :root[data-theme="light"] .hero h1 {
+        background:linear-gradient(90deg,#0b1030,#007bff,#7b2de2);
+        -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+      }
+      :root[data-theme="light"] .showcase-overlay { background:rgba(244,247,255,.58); }
+      :root[data-theme="light"] .showcase-content h2,
+      :root[data-theme="light"] .showcase-content p { color:#0b1030; }
       :root[data-theme="light"] .main-btn,
       :root[data-theme="light"] .search-btn,
       :root[data-theme="light"] .submit-btn,
