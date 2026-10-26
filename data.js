@@ -22,7 +22,7 @@ window.DATA_API = (function () {
     { name: 'Spanky_Drill', role: 'Trap Producer · Accra', initial: 'S', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#9B2EFF)' },
     { name: 'DJ Kaywise', role: 'Afrobeat Producer · Lagos', initial: 'D', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#9B2EFF)' },
     { name: 'PianoKeysSA', role: 'Amapiano Producer · Pretoria', initial: 'P', avatarUrl: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#19D7FF)' },
-    { name: 'BeatMason', role: 'Street Vibes Producer · Accra', initial: 'B', avatarUrl: 'https://images.unsplash.com/photo-1501198639297-2f2d1a8f8d6a?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#007BFF)' },
+    { name: 'BeatMason', role: 'Street Vibes Producer · Accra', initial: 'B', avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#007BFF)' },
   ];
 
   function renderProducerCard(p) {
