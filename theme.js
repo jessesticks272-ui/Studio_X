@@ -143,6 +143,9 @@
     (document.head || root).appendChild(style);
   }
 
+  // Install overrides while still in the head so custom pages do not flash dark
+  // before their saved light theme becomes visible.
+  installThemeCompatibilityStyles();
   const stored = safeRead();
   applyTheme(stored === "light" || stored === "dark" ? stored : (systemPrefersLight() ? "light" : "dark"));
   if (document.readyState === "loading") {
