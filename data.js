@@ -17,17 +17,25 @@ window.DATA_API = (function () {
   const DEMO_PRODUCERS = [
     // Illustrative stock portraits for the pre-launch demo. Replace these with
     // creator-approved avatar URLs once real producer profiles are available.
-    { name: 'Kay_Drumz', role: 'Afrobeat Producer · Lagos', initial: 'K', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#007BFF)' },
-    { name: 'Talemo_Beats', role: 'Amapiano Producer · SA', initial: 'T', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#19D7FF)' },
-    { name: 'Spanky_Drill', role: 'Trap Producer · Accra', initial: 'S', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#9B2EFF)' },
-    { name: 'DJ Kaywise', role: 'Afrobeat Producer · Lagos', initial: 'D', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#9B2EFF)' },
-    { name: 'PianoKeysSA', role: 'Amapiano Producer · Pretoria', initial: 'P', avatarUrl: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#19D7FF)' },
-    { name: 'BeatMason', role: 'Street Vibes Producer · Accra', initial: 'B', avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#007BFF)' },
+    { name: 'Kay_Drumz', role: 'Afrobeat Producer · Lagos', initial: 'K', slug: 'kay-drumz', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#007BFF)' },
+    { name: 'Talemo_Beats', role: 'Amapiano Producer · SA', initial: 'T', slug: 'talemo-beats', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#19D7FF)' },
+    { name: 'Spanky_Drill', role: 'Trap Producer · Accra', initial: 'S', slug: 'spanky-drill', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#9B2EFF)' },
+    { name: 'DJ Kaywise', role: 'Afrobeat Producer · Lagos', initial: 'D', slug: 'dj-kaywise', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#9B2EFF)' },
+    { name: 'PianoKeysSA', role: 'Amapiano Producer · Pretoria', initial: 'P', slug: 'piano-keys-sa', avatarUrl: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#19D7FF)' },
+    { name: 'Naya Sounds', role: 'Afro-fusion Producer · Abuja', initial: 'N', slug: 'naya-sounds', avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#9B2EFF)' },
+    { name: 'Lex On The Beat', role: 'Hip-hop Producer · Ibadan', initial: 'L', slug: 'lex-on-the-beat', avatarUrl: 'https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#19D7FF)' },
+    { name: 'Mira Melody', role: 'R&B Producer · Port Harcourt', initial: 'M', slug: 'mira-melody', avatarUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#19D7FF)' },
+    { name: 'Drum Lab', role: 'Percussion Producer · Kumasi', initial: 'D', slug: 'drum-lab', avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#007BFF)' },
+    { name: 'Violet Frequency', role: 'Electronic Afrobeat Producer · Nairobi', initial: 'V', slug: 'violet-frequency', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#007BFF)' },
+    { name: 'Northside Keys', role: 'Melodic Trap Producer · Enugu', initial: 'N', slug: 'northside-keys', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#9B2EFF)' },
+    { name: 'BeatMason', role: 'Street Vibes Producer · Accra', initial: 'B', slug: 'beatmason', avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#007BFF)' },
   ];
 
   function renderProducerCard(p) {
     const card = document.createElement('div');
     card.className = 'producer-link';
+    card.href = 'producer-story.html?producer=' + encodeURIComponent(p.slug || p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''));
+    card.setAttribute('aria-label', 'Read the sample producer story for ' + p.name);
 
     // Show the illustrative/demo portrait even when the API is offline.
     // If a photo fails, replace it with the matching initials badge.
