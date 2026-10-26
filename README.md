@@ -148,3 +148,13 @@ stylesheet.
   like `GET /api/producers`) that returns `{ id, name, avatarUrl,
   genre }` per producer — `data.js` is already structured to swap the
   demo list for a real fetch the moment that route exists.
+
+
+## Remote image delivery and theme support
+
+- All non-logo image references should use HTTPS remote media, not repository image files.
+- `cloudinary-media.js` optimizes supported remote images through Cloudinary's image-fetch delivery API and processes images added dynamically by producer cards and profile pages.
+- Set the **public Cloudinary cloud name** in `cloudinary-config.js` (`window.LYTUNE_CLOUDINARY_CLOUD_NAME`). Until it is set, the site keeps using its existing HTTPS image URLs so pages do not break.
+- Never put a Cloudinary API secret, private key, or upload credential in browser JavaScript. Uploads require a server-side signed flow and server environment variables.
+- `theme.js` stores the light/dark preference across pages, applies shared contrast fixes, and provides a theme toggle on pages that do not already have one.
+- The LyTune logo is intentionally exempt from image proxying so the brand mark stays unchanged.
