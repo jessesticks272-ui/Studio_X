@@ -32,7 +32,7 @@ window.DATA_API = (function () {
   ];
 
   function renderProducerCard(p) {
-    const card = document.createElement('div');
+    const card = document.createElement('a');
     card.className = 'producer-link';
     card.href = 'producer-story.html?producer=' + encodeURIComponent(p.slug || p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''));
     card.setAttribute('aria-label', 'Read the sample producer story for ' + p.name);
