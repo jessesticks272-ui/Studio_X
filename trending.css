@@ -145,8 +145,8 @@ body::after{
   position:fixed;
   inset:0;
   opacity:.03;
-  background-image:
-  url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+  background-image: radial-gradient(rgba(255,255,255,.35) .5px, transparent .5px);
+  background-size:4px 4px;
 
   pointer-events:none;
 }
