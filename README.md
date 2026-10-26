@@ -82,11 +82,10 @@ stylesheet.
   buttons and decorative SVGs, added `<label for>` on the calculator
   sliders, added a real `<footer>` (styled in CSS, never in the HTML),
   and hero CTA buttons that were missing.
-- **Placeholder assets** (`assets/images/logo.svg`, `logo.png`,
-  `slide1.jpg`, `slide2.jpg`, `pheelz.jpg`) generated so the page
-  looks intentional out of the box rather than showing broken-image
-  icons. Swap these for real photography whenever it's ready — no
-  code changes needed, just replace the files.
+- **Media cleanup:** the valid LyTune logo is retained at
+  `assets/images/logo.svg`. Other local image and video files were
+  removed from the active project; visual media now uses remote HTTPS
+  URLs and the shared Cloudinary delivery helper.
 
 ## Round 2 — pre-launch honesty pass + mockup/pricing/social fixes
 
@@ -105,14 +104,9 @@ stylesheet.
   for their "why us" section.
 - **Earnings calculator moved up** — now appears right after the
   founding-producer invite, before the AI-search/phone-mockup section.
-- **AI-search visual** — replaced the abstract floating cards with a
-  generated circular soundwave graphic (`assets/images/ai-search-visual.png`).
-  Note: I didn't pull a random photo from the web for this — hotlinking
-  or embedding an internet stock photo into a downloadable site risks
-  using an image you don't have a license to use commercially. If you
-  want real photography here, license one from a stock site (or your
-  own photoshoot) and drop it in as `ai-search-visual.png` — no code
-  changes needed.
+- **Remote media delivery:** homepage and producer-story photos are
+  hosted remotely. Cloudinary fetch optimization activates after the
+  public Cloudinary cloud name is configured in `cloudinary-config.js`.
 - **Realistic phone mockup** — the three overlapping abstract phone
   screens are now one true-to-proportion device frame (dynamic island,
   side buttons, home indicator) with a screen that **actually
@@ -134,11 +128,9 @@ stylesheet.
 - **Footer social icons** — replaced the "IG / X / TT" text with
   actual icon glyphs (Instagram, X, TikTok).
 
-- **Video files** (`assets/videos/*.mp4`) aren't included — the
-  showcase, beat-battle, and cook-with-me sections gracefully show a
-  gradient fallback panel with the video's caption text instead.
-  Drop real `.mp4` files into `assets/videos/` with the filenames
-  already referenced in `index.html` and they'll play automatically.
+- **Video placeholders:** the homepage now uses remote image cards
+  instead of empty local video players. This avoids broken or blank
+  media blocks until real video content is available.
 - **Other pages** (`login.html`, `signup.html`, `explore.html`,
   `creators.html`, `trending.html`, `market.html`, `message.html`,
   `ai-search.html`, `ai-demo.html`) are linked from the nav/footer but
@@ -158,3 +150,13 @@ stylesheet.
 - Never put a Cloudinary API secret, private key, or upload credential in browser JavaScript. Uploads require a server-side signed flow and server environment variables.
 - `theme.js` stores the light/dark preference across pages, applies shared contrast fixes, and provides a theme toggle on pages that do not already have one.
 - The LyTune logo is intentionally exempt from image proxying so the brand mark stays unchanged.
+
+
+## Current media and theme status
+
+The only local image asset retained for the website is the original SVG logo at
+`assets/images/logo.svg`. The incorrect duplicate PNG and unused local photos/video
+were removed. `theme.js` is loaded across the website to keep light/dark mode
+consistent. Cloudinary delivery code is ready, but the image proxy cannot activate
+until the public cloud name is set in `cloudinary-config.js`. API secrets must stay
+server-side and must never be committed to this repository.
