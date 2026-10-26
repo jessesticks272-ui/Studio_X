@@ -19,7 +19,11 @@
   function updateToggleIcon(theme) {
     const moon = document.getElementById("themeIconMoon");
     const sun = document.getElementById("themeIconSun");
-    if (!moon || !sun) return;
+    if (!moon || !sun) {
+      const fallback = document.getElementById("lytuneThemeFallbackToggle");
+      if (fallback) fallback.textContent = theme === "light" ? "☾" : "☀";
+      return;
+    }
     moon.style.display = theme === "light" ? "none" : "";
     sun.style.display = theme === "light" ? "" : "none";
   }
@@ -113,6 +117,15 @@
       :root[data-theme="light"] .noise { opacity:.008; }
       :root[data-theme="light"] ::selection { background:rgba(0,123,255,.22); }
       :root[data-theme="light"] :focus-visible { outline-color:#006fe8; }
+      .lytune-theme-fallback-toggle {
+        position:fixed; right:18px; bottom:18px; z-index:9999; width:46px; height:46px;
+        border:1px solid rgba(25,215,255,.45); border-radius:50%;
+        background:linear-gradient(135deg,#19d7ff,#007bff 55%,#9b2eff);
+        color:#fff; font:700 20px/1 sans-serif; cursor:pointer;
+        box-shadow:0 8px 24px rgba(0,0,0,.22); display:grid; place-items:center;
+      }
+      .lytune-theme-fallback-toggle:focus-visible { outline:3px solid #19d7ff; outline-offset:3px; }
+      @media(max-width:600px) { .lytune-theme-fallback-toggle { right:12px; bottom:12px; } }
       @media (prefers-reduced-motion: reduce) {
         :root[data-theme="light"] *, :root[data-theme="light"] *::before, :root[data-theme="light"] *::after {
           scroll-behavior:auto !important; animation-duration:.01ms !important;
@@ -133,8 +146,17 @@
 
   function initialize() {
     installThemeCompatibilityStyles();
+    if (!document.getElementById("themeToggle") && document.body) {
+      const fallback = document.createElement("button");
+      fallback.id = "lytuneThemeFallbackToggle";
+      fallback.type = "button";
+      fallback.className = "lytune-theme-fallback-toggle";
+      fallback.setAttribute("aria-label", "Switch color theme");
+      fallback.setAttribute("title", "Switch color theme");
+      document.body.appendChild(fallback);
+    }
     updateToggleIcon(currentTheme());
-    document.querySelectorAll("#themeToggle").forEach((toggle) => {
+    document.querySelectorAll("#themeToggle, #lytuneThemeFallbackToggle").forEach((toggle) => {
       if (toggle.dataset.themeBound === "true") return;
       toggle.dataset.themeBound = "true";
       toggle.setAttribute("aria-label", "Switch to " + (currentTheme() === "light" ? "dark" : "light") + " theme");
@@ -143,7 +165,7 @@
         const next = currentTheme() === "light" ? "dark" : "light";
         applyTheme(next);
         safeWrite(next);
-        document.querySelectorAll("#themeToggle").forEach((button) => {
+        document.querySelectorAll("#themeToggle, #lytuneThemeFallbackToggle").forEach((button) => {
           button.setAttribute("aria-label", "Switch to " + (next === "light" ? "dark" : "light") + " theme");
           button.setAttribute("title", "Switch to " + (next === "light" ? "dark" : "light") + " theme");
         });
