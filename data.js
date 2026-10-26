@@ -15,28 +15,27 @@
 */
 window.DATA_API = (function () {
   const DEMO_PRODUCERS = [
-    { name: 'Kay_Drumz', role: 'Afrobeat Producer · Lagos', initial: 'K', gradient: 'linear-gradient(135deg,#19D7FF,#007BFF)' },
-    { name: 'Talemo_Beats', role: 'Amapiano Producer · SA', initial: 'T', gradient: 'linear-gradient(135deg,#9B2EFF,#19D7FF)' },
-    { name: 'Spanky_Drill', role: 'Trap Producer · Accra', initial: 'S', gradient: 'linear-gradient(135deg,#007BFF,#9B2EFF)' },
-    { name: 'DJ Kaywise', role: 'Afrobeat Producer · Lagos', initial: 'D', gradient: 'linear-gradient(135deg,#19D7FF,#9B2EFF)' },
-    { name: 'PianoKeysSA', role: 'Amapiano Producer · Pretoria', initial: 'P', gradient: 'linear-gradient(135deg,#007BFF,#19D7FF)' },
-    { name: 'BeatMason', role: 'Street Vibes Producer · Accra', initial: 'B', gradient: 'linear-gradient(135deg,#9B2EFF,#007BFF)' },
+    // Illustrative stock portraits for the pre-launch demo. Replace these with
+    // creator-approved avatar URLs once real producer profiles are available.
+    { name: 'Kay_Drumz', role: 'Afrobeat Producer · Lagos', initial: 'K', avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#007BFF)' },
+    { name: 'Talemo_Beats', role: 'Amapiano Producer · SA', initial: 'T', avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#19D7FF)' },
+    { name: 'Spanky_Drill', role: 'Trap Producer · Accra', initial: 'S', avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#9B2EFF)' },
+    { name: 'DJ Kaywise', role: 'Afrobeat Producer · Lagos', initial: 'D', avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#19D7FF,#9B2EFF)' },
+    { name: 'PianoKeysSA', role: 'Amapiano Producer · Pretoria', initial: 'P', avatarUrl: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#007BFF,#19D7FF)' },
+    { name: 'BeatMason', role: 'Street Vibes Producer · Accra', initial: 'B', avatarUrl: 'https://images.unsplash.com/photo-1501198639297-2f2d1a8f8d6a?auto=format&fit=crop&w=600&q=80', gradient: 'linear-gradient(135deg,#9B2EFF,#007BFF)' },
   ];
 
   function renderProducerCard(p) {
     const card = document.createElement('div');
     card.className = 'producer-link';
 
-    // Online + real avatarUrl: try the photo first, but fall back to the
-    // initials badge if it 404s or the connection drops mid-load — same
-    // pattern as the video/image fallback in auth.js. Offline (or no
-    // avatarUrl at all): skip straight to the initials badge, no network
-    // request attempted.
+    // Show the illustrative/demo portrait even when the API is offline.
+    // If a photo fails, replace it with the matching initials badge.
     const avatarUrl = p.avatarUrl && window.LytuneCloudinary
       ? window.LytuneCloudinary.deliveryUrl(p.avatarUrl, { width: 600, crop: "fill" })
       : p.avatarUrl;
-    const avatarHtml = avatarUrl && window.LytuneAuth && window.LytuneAuth.isOnline()
-      ? '<img src="' + avatarUrl + '" alt="' + p.name + '" style="width:100%;height:200px;object-fit:cover;" ' +
+    const avatarHtml = avatarUrl
+      ? '<img src="' + avatarUrl + '" alt="Illustrative portrait for demo profile ' + p.name + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" style="width:100%;height:200px;object-fit:cover;" ' +
         'onerror="this.outerHTML=\'<div style=&quot;height:200px;display:flex;align-items:center;justify-content:center;' +
         'font-size:2.4rem;font-weight:800;color:#fff;background:' + p.gradient + ';&quot;>' + p.initial + '</div>\';">'
       : '<div style="height:200px;display:flex;align-items:center;justify-content:center;' +
