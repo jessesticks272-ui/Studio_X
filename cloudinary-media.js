@@ -16,8 +16,8 @@
   }
 
   function isLogo(value) {
-    return /(?:^|[\\/])logo(?:[.-]|$)/i.test(String(value || "")) ||
-      /(?:^|[\\/])assets?\\/(?:image|images)\\/logo/i.test(String(value || ""));
+    return /(?:^|[\/])logo(?:[.-]|$)/i.test(String(value || "")) ||
+      /(?:^|[\/])assets?\/(?:image|images)\/logo/i.test(String(value || ""));
   }
 
   function deliveryUrl(value, options = {}) {
@@ -33,7 +33,7 @@
     const kind = options.kind === "video" ? "video" : "image";
     const cloudName = getCloudName();
 
-    if (/^res\\.cloudinary\\.com$/i.test(url.hostname)) {
+    if (/^res\.cloudinary\.com$/i.test(url.hostname)) {
       const parts = url.pathname.split("/");
       const uploadIndex = parts.indexOf("upload");
       if (uploadIndex < 0) return value;
@@ -53,8 +53,8 @@
 
     // Cloudinary fetch API proxies and optimizes remote photos once the public cloud
     // name is configured. Do not route arbitrary local assets or SVGs through fetch.
-    if (cloudName && kind === "image" && /^https:\/\/(?:images\\.unsplash\\.com|images\\.pexels\\.com|res\\.cloudinary\\.com)\\//i.test(url.toString()) &&
-        !/\\.svg(?:$|[?#])/i.test(url.pathname)) {
+    if (cloudName && kind === "image" && /^https:\/\/(?:images\.unsplash\.com|images\.pexels\.com|res\.cloudinary\.com)\//i.test(url.toString()) &&
+        !/\.svg(?:$|[?#])/i.test(url.pathname)) {
       const transforms = `f_auto,q_auto,w_${safeWidth}${options.crop === "fill" ? ",c_fill" : ""}`;
       return `https://res.cloudinary.com/${cloudName}/image/fetch/${transforms}/${encodeURIComponent(url.toString())}`;
     }
