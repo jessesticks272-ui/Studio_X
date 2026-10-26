@@ -53,7 +53,7 @@
 
     // Cloudinary fetch API proxies and optimizes remote photos once the public cloud
     // name is configured. Do not route arbitrary local assets or SVGs through fetch.
-    if (cloudName && kind === "image" && /^https:\/\/(?:images\.unsplash\.com|images\.pexels\.com|res\.cloudinary\.com)\//i.test(url.toString()) &&
+    if (cloudName && kind === "image" && /^https:\/\/(?:images\.unsplash\.com|images\.pexels\.com|firebasestorage\.googleapis\.com|storage\.googleapis\.com)\//i.test(url.toString()) &&
         !/\.svg(?:$|[?#])/i.test(url.pathname)) {
       const transforms = `f_auto,q_auto,w_${safeWidth}${options.crop === "fill" ? ",c_fill" : ""}`;
       return `https://res.cloudinary.com/${cloudName}/image/fetch/${transforms}/${encodeURIComponent(url.toString())}`;
