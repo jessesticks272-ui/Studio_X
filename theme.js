@@ -59,8 +59,74 @@
         --ps-muted:#59627a; --ps-line:rgba(10,20,60,.13);
       }
       :root[data-theme="light"] body {
-        background-color:#f4f7ff;
-        color:var(--text-primary,#0b1030);
+        background:#f4f7ff !important;
+        background-image:
+          radial-gradient(circle at top left,rgba(25,215,255,.09),transparent 36%),
+          radial-gradient(circle at bottom right,rgba(155,46,255,.07),transparent 36%) !important;
+        background-attachment:fixed !important;
+        animation:none !important;
+        color:var(--text-primary,#0b1030) !important;
+      }
+      /* Normalize common legacy dark surfaces across every page in light mode. */
+      :root[data-theme="light"] .panel,
+      :root[data-theme="light"] .card,
+      :root[data-theme="light"] .feature-card,
+      :root[data-theme="light"] .stat-card,
+      :root[data-theme="light"] .dashboard-card,
+      :root[data-theme="light"] .form-card,
+      :root[data-theme="light"] .creator-card,
+      :root[data-theme="light"] .beat-card,
+      :root[data-theme="light"] .market-card,
+      :root[data-theme="light"] .profile-card,
+      :root[data-theme="light"] .content-card,
+      :root[data-theme="light"] .drop-zone,
+      :root[data-theme="light"] .catalog-row,
+      :root[data-theme="light"] .release-row,
+      :root[data-theme="light"] .message-panel,
+      :root[data-theme="light"] .message-list,
+      :root[data-theme="light"] .faq-item,
+      :root[data-theme="light"] .audience-card,
+      :root[data-theme="light"] .genre-spotlight-card,
+      :root[data-theme="light"] .profile-preview-card,
+      :root[data-theme="light"] .success-card,
+      :root[data-theme="light"] .calc-controls,
+      :root[data-theme="light"] .calc-result {
+        background-color:rgba(255,255,255,.92);
+        color:#0b1030;
+        border-color:rgba(10,20,60,.13);
+        box-shadow:0 8px 28px rgba(20,35,80,.08);
+      }
+      :root[data-theme="light"] h1,
+      :root[data-theme="light"] h2,
+      :root[data-theme="light"] h3,
+      :root[data-theme="light"] h4,
+      :root[data-theme="light"] label,
+      :root[data-theme="light"] legend {
+        color:#0b1030;
+      }
+      :root[data-theme="light"] p,
+      :root[data-theme="light"] li,
+      :root[data-theme="light"] .muted,
+      :root[data-theme="light"] .description,
+      :root[data-theme="light"] .subtitle {
+        color:#3c4258;
+      }
+      :root[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+      :root[data-theme="light"] textarea,
+      :root[data-theme="light"] select {
+        background-color:#fff;
+        color:#0b1030;
+        border-color:#cbd3e5;
+      }
+      :root[data-theme="light"] input::placeholder,
+      :root[data-theme="light"] textarea::placeholder {
+        color:#737b91;
+        opacity:1;
+      }
+      :root[data-theme="light"] .topbar,
+      :root[data-theme="light"] .footer,
+      :root[data-theme="light"] .site-footer {
+        color:#0b1030;
       }
       :root[data-theme="light"] body::before {
         background:
