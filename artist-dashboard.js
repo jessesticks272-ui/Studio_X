@@ -55,4 +55,3 @@ onAuthStateChanged(auth,async user=>{
 $("userBadge").addEventListener("click",()=>{$("accountMenu").classList.toggle("hidden")});
 document.addEventListener("click",e=>{if(!e.target.closest(".account-wrap"))$("accountMenu").classList.add("hidden")});
 $("logoutButton").addEventListener("click",async()=>{try{await signOut(auth)}finally{localStorage.removeItem("lytune-user");localStorage.removeItem("lytune-token");location.href="index.html"}});
-$("themeToggle")?.addEventListener("click",()=>{const light=document.documentElement.dataset.theme==="light";document.documentElement.dataset.theme=light?"dark":"light";try{localStorage.setItem("lytune-theme",light?"dark":"light")}catch{}});
