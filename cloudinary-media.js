@@ -71,7 +71,19 @@
       crop: img.dataset.mediaCrop || "fill"
     });
     img.setAttribute(processedAttribute, "true");
-    if (transformed && transformed !== original) img.setAttribute("src", transformed);
+    if (transformed && transformed !== original) {
+      // If Cloudinary delivery is unavailable for a source URL, retry the
+      // original HTTPS URL once so a media optimization issue never blanks a card.
+      img.dataset.lytuneOriginalSrc = original;
+      img.addEventListener("error", function restoreOriginalSource() {
+        const fallback = img.dataset.lytuneOriginalSrc;
+        if (!fallback || img.dataset.lytuneFallbackTried === "true") return;
+        img.dataset.lytuneFallbackTried = "true";
+        img.removeAttribute(processedAttribute);
+        img.src = fallback;
+      }, { once: true });
+      img.setAttribute("src", transformed);
+    }
   }
 
   function processMedia(root = document) {
