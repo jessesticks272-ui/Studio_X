@@ -13,12 +13,7 @@ quicks.forEach(btn => btn.addEventListener("click", () => {
   Object.entries(panels).forEach(([key,p]) => p.classList.toggle("hidden", key !== name));
   panels[name].scrollIntoView({behavior:"smooth",block:"start"});
 }));
-
-$("themeToggle")?.addEventListener("click", () => {
-  const current = document.documentElement.dataset.theme === "light";
-  document.documentElement.dataset.theme = current ? "dark" : "light";
-  try { localStorage.setItem("lytune-theme", current ? "dark" : "light"); } catch {}
-});
+ 
 
 let currentUser = null;
 onAuthStateChanged(auth, async user => {
