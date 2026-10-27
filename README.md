@@ -146,7 +146,7 @@ stylesheet.
 
 - All non-logo image references should use HTTPS remote media, not repository image files.
 - `cloudinary-media.js` optimizes supported remote images through Cloudinary's image-fetch delivery API and processes images added dynamically by producer cards and profile pages.
-- Set the **public Cloudinary cloud name** in `cloudinary-config.js` (`window.LYTUNE_CLOUDINARY_CLOUD_NAME`). Until it is set, the site keeps using its existing HTTPS image URLs so pages do not break.
+- Set `CLOUDINARY_CLOUD_NAME` in the Vercel project environment variables. The new `/api/media-config` endpoint returns only this public cloud name, and `cloudinary-config.js` loads it automatically. Until it is set, the site keeps using its existing HTTPS image URLs so pages do not break.
 - Never put a Cloudinary API secret, private key, or upload credential in browser JavaScript. Uploads require a server-side signed flow and server environment variables.
 - `theme.js` stores the light/dark preference across pages, applies shared contrast fixes, and provides a theme toggle on pages that do not already have one.
 - The LyTune logo is intentionally exempt from image proxying so the brand mark stays unchanged.
@@ -157,6 +157,6 @@ stylesheet.
 The only local image asset retained for the website is the original SVG logo at
 `assets/images/logo.svg`. The incorrect duplicate PNG and unused local photos/video
 were removed. `theme.js` is loaded across the website to keep light/dark mode
-consistent. Cloudinary delivery code is ready, but the image proxy cannot activate
-until the public cloud name is set in `cloudinary-config.js`. API secrets must stay
+consistent. Cloudinary delivery code and the `/api/media-config` endpoint are ready, but the image proxy cannot activate
+until `CLOUDINARY_CLOUD_NAME` is configured in Vercel. The browser never receives the Cloudinary API secret. API secrets must stay
 server-side and must never be committed to this repository.
