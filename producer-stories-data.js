@@ -166,7 +166,7 @@ window.LYTUNE_PRODUCER_STORIES = [
     "tagline": "Melody first, drums with weight.",
     "intro": "Northside Keys is a fictional sample profile created for LyTune Studio X.",
     "start": "This sample story starts with piano loops, guitar textures, and learning how to build a melody that stays memorable after the beat ends.",
-    "selling": "The imagined first sales come from presenting beats professionally, responding to artists, and making usage terms easy to understand.",
+    "selling": "This example focuses on presenting beats clearly, responding to artist questions, and explaining usage terms before any purchase."
     "milestone": "Learning to arrange a full beat around one strong melodic idea.",
     "advice": "A simple melody played well can be more powerful than ten competing ideas."
   }
