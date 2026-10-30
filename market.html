@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="./responsive-mobile.css">
   <script src="./cloudinary-config.js"></script>
   <script src="./cloudinary-media.js"></script>
+  <script src="./market.js" defer></script>
 </head>
 <body>
   <div class="noise"></div>
@@ -59,8 +60,8 @@
           <circle cx="11" cy="11" r="7"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <input type="text" placeholder="Search Afrobeats, Amapiano, Trap..." aria-label="Search beats">
-        <button class="search-btn" type="button">Search</button>
+        <input id="marketSearchInput" type="search" placeholder="Search Afrobeats, Amapiano, Trap..." aria-label="Search beats">
+        <button class="search-btn" id="marketSearchButton" type="button">Search</button>
       </div>
       <a href="index.html">Home</a>
       <a href="explore.html">Explore</a>
@@ -109,7 +110,7 @@
         <div class="market-category-icon">🎛️</div>
         <h3>Stems</h3>
         <p>Individual track layers (drums, bass, melody, vocals) sold separately for artists who want full mixing control.</p>
-        <a href="auth.html" class="ghost-btn">Coming Soon</a>
+        <span class="ghost-btn market-coming-soon" aria-disabled="true">Coming Soon</span>
       </div>
 
       <div class="market-category-card">
@@ -117,7 +118,7 @@
         <div class="market-category-icon">🥁</div>
         <h3>Drum Kits</h3>
         <p>Producer-made kicks, snares, hi-hats, and log drum one-shots to build your own beats from scratch.</p>
-        <a href="auth.html" class="ghost-btn">Coming Soon</a>
+        <span class="ghost-btn market-coming-soon" aria-disabled="true">Coming Soon</span>
       </div>
 
       <div class="market-category-card">
@@ -125,7 +126,7 @@
         <div class="market-category-icon">🎚️</div>
         <h3>Sound Kits</h3>
         <p>Full sample packs — loops, one-shots, and MIDI — built around Afrobeat, Amapiano, and Trap production.</p>
-        <a href="auth.html" class="ghost-btn">Coming Soon</a>
+        <span class="ghost-btn market-coming-soon" aria-disabled="true">Coming Soon</span>
       </div>
 
       <div class="market-category-card">
@@ -133,7 +134,7 @@
         <div class="market-category-icon">🎹</div>
         <h3>Presets</h3>
         <p>Synth and plugin presets tuned to the log drums, keys, and leads that define these genres.</p>
-        <a href="auth.html" class="ghost-btn">Coming Soon</a>
+        <span class="ghost-btn market-coming-soon" aria-disabled="true">Coming Soon</span>
       </div>
 
       <div class="market-category-card">
@@ -141,7 +142,7 @@
         <div class="market-category-icon">🎙️</div>
         <h3>Full Song Placements</h3>
         <p>Finished, ready-to-release tracks available for placement or feature — beyond just an instrumental.</p>
-        <a href="auth.html" class="ghost-btn">Coming Soon</a>
+        <span class="ghost-btn market-coming-soon" aria-disabled="true">Coming Soon</span>
       </div>
 
       <div class="market-category-card">
@@ -149,7 +150,7 @@
         <div class="market-category-icon">🎚️</div>
         <h3>Mixing &amp; Mastering</h3>
         <p>Book a producer directly for mixing, mastering, or a fully custom beat built to your reference.</p>
-        <a href="auth.html" class="ghost-btn">Coming Soon</a>
+        <span class="ghost-btn market-coming-soon" aria-disabled="true">Coming Soon</span>
       </div>
 
       <div class="market-category-card">
@@ -157,7 +158,7 @@
         <div class="market-category-icon">📦</div>
         <h3>Bundles &amp; Collections</h3>
         <p>Curated packs — genre bundles, producer collections, beat-plus-stems packages at a combined price.</p>
-        <a href="auth.html" class="ghost-btn">Coming Soon</a>
+        <span class="ghost-btn market-coming-soon" aria-disabled="true">Coming Soon</span>
       </div>
     </div>
   </section>
@@ -168,27 +169,27 @@
   <!-- ============================================================ -->
   <section class="market-seller-benefits">
     <span class="section-eyebrow" style="display:table;margin:0 auto 18px;">FOR PRODUCERS</span>
-    <h2>Why Sell More Than Beats</h2>
+    <h2>More Ways to Create on LyTune</h2>
     <div class="market-benefits-grid">
       <div class="market-benefit-card">
         <div class="genre-spotlight-icon">💰</div>
-        <h3>More Revenue Streams</h3>
-        <p>Stems, kits, and services sell to artists and other producers, not just beat buyers.</p>
+        <h3>A Broader Creative Marketplace</h3>
+        <p>LyTune plans to support more creator products and services alongside its live beat catalog.</p>
       </div>
       <div class="market-benefit-card">
         <div class="genre-spotlight-icon">🔁</div>
-        <h3>Repeat Customers</h3>
-        <p>A drum kit or preset pack can sell over and over, long after a single beat's exclusive sells once.</p>
+        <h3>Products Beyond Beats</h3>
+        <p>Sound kits, presets, and stems are planned categories. They are not accepting listings yet.</p>
       </div>
       <div class="market-benefit-card">
         <div class="genre-spotlight-icon">🏆</div>
-        <h3>Showcase Your Range</h3>
-        <p>Mixing, mastering, and custom work show artists what you can do beyond a finished beat.</p>
+        <h3>Showcase Your Skills</h3>
+        <p>Producer services are planned so creators can eventually offer more than instrumentals.</p>
       </div>
       <div class="market-benefit-card">
         <div class="genre-spotlight-icon">🚀</div>
-        <h3>First-Mover Advantage</h3>
-        <p>These categories are opening soon with zero existing sellers — early producers set the bar.</p>
+        <h3>Built with Producers</h3>
+        <p>We are shaping the next marketplace features around real producer needs. Availability will be announced when ready.</p>
       </div>
     </div>
   </section>
@@ -214,7 +215,7 @@
   <section class="market-cta">
     <div class="accent-bar" style="margin:0 auto 18px;"></div>
     <h2>Want to Sell on LyTune?</h2>
-    <p>Create an account to explore LyTune and check back as new seller categories become available.</p>
+    <p>Create an account to explore the live beat catalog. Additional seller categories will be announced when they are ready.</p>
     <a href="auth.html" class="main-btn">Create an Account</a>
   </section>
 
