@@ -172,7 +172,12 @@ loginTab.addEventListener("click", () => setMode("login"));
 signupTab.addEventListener("click", () => setMode("signup"));
 
 // Allow links such as signup.html and auth.html?mode=signup to open registration directly.
-if (new URLSearchParams(window.location.search).get("mode") === "signup") {
+const authParams = new URLSearchParams(window.location.search);
+if (authParams.get("role") === "producer") {
+  const producerRole = document.querySelector('input[name="role"][value="producer"]');
+  if (producerRole) producerRole.checked = true;
+}
+if (authParams.get("mode") === "signup") {
   setMode("signup");
 }
 
