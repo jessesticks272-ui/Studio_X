@@ -221,6 +221,51 @@
         color:#17223d;
         border-color:rgba(10,20,60,.18);
       }
+      /* Mobile app palette uses its own token names; map them into the same light palette. */
+      :root[data-theme="light"] .app-shell {
+        --bg:#f4f7ff; --panel:#fff; --panel2:#edf1fb;
+        --line:rgba(10,20,60,.13); --text:#0b1030; --muted:#59627a;
+        --cyan:#075b91;
+      }
+      :root[data-theme="light"] .app-shell .topbar,
+      :root[data-theme="light"] .app-shell .bottom-nav {
+        background:rgba(244,247,255,.96);
+        border-color:rgba(10,20,60,.13);
+      }
+      :root[data-theme="light"] .app-shell .searchbar,
+      :root[data-theme="light"] .app-shell .genre-chip,
+      :root[data-theme="light"] .app-shell .studio-card,
+      :root[data-theme="light"] .app-shell .link-list,
+      :root[data-theme="light"] .app-shell .upload-panel,
+      :root[data-theme="light"] .app-shell .sound-card,
+      :root[data-theme="light"] .app-shell .feature-tile {
+        background:#fff;
+        color:#0b1030;
+        border-color:rgba(10,20,60,.13);
+      }
+      :root[data-theme="light"] .app-shell .ai-panel {
+        background:linear-gradient(140deg,#f0edff,#f7f9ff);
+        border-color:rgba(65,65,130,.18);
+      }
+      :root[data-theme="light"] .app-shell .ai-form textarea {
+        background:#fff; color:#0b1030; border-color:#cbd3e5;
+      }
+      :root[data-theme="light"] .app-shell .button-quiet {
+        background:#fff; color:#17223d; border-color:#cbd3e5;
+      }
+      :root[data-theme="light"] .app-shell .text-link,
+      :root[data-theme="light"] .app-shell .inline-link,
+      :root[data-theme="light"] .app-shell .genre-chip,
+      :root[data-theme="light"] .app-shell .nav-item,
+      :root[data-theme="light"] .app-shell .footer a {
+        color:#0756a6;
+      }
+      :root[data-theme="light"] .app-shell .nav-item.active { color:#0756a6; }
+      :root[data-theme="light"] .app-shell .link-list small,
+      :root[data-theme="light"] .app-shell .footer p,
+      :root[data-theme="light"] .app-shell .footer > div {
+        color:#59627a;
+      }
       :root[data-theme="light"] table th {
         background:#eaf0fb;
         color:#15213c;
