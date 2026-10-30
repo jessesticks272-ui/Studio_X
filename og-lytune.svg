@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">LyTune Studio X</title>
+  <desc id="desc">Discover your next sound. A marketplace for Afrobeat, Amapiano and Trap producers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#080d1c"/><stop offset="1" stop-color="#17113a"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#19d7ff"/><stop offset=".55" stop-color="#007bff"/><stop offset="1" stop-color="#9b2eff"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#007bff" stop-opacity=".34"/><stop offset="1" stop-color="#007bff" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="940" cy="260" r="390" fill="url(#glow)"/>
+  <path d="M0 500 C180 420 270 600 460 510 S760 390 930 485 S1110 550 1200 465" fill="none" stroke="url(#accent)" stroke-opacity=".22" stroke-width="3"/>
+  <g transform="translate(820 125)" fill="none" stroke="url(#accent)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 330 115 90 Q124 67 145 62 Q166 57 184 77 L300 212 Q320 236 312 264 Q304 291 278 293 Q259 294 245 278 L174 201 119 333 Q109 350 88 350 Q58 350 45 330Z" stroke-width="25"/>
+    <path d="M370 145v140 M405 105v220 M440 165v100 M475 80v270" stroke-width="8" opacity=".65"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#fff">
+    <text x="92" y="230" font-size="30" font-weight="700" letter-spacing="7" fill="#19d7ff">THE CREATOR MARKETPLACE</text>
+    <text x="88" y="330" font-size="78" font-weight="800" letter-spacing="-3">LyTune Studio X</text>
+    <text x="94" y="395" font-size="34" font-weight="500" fill="#d7e2ff">Discover your next sound.</text>
+    <text x="94" y="465" font-size="24" fill="#aebbd8">Afrobeat  •  Amapiano  •  Trap</text>
+  </g>
+  <rect x="90" y="520" width="1020" height="2" fill="url(#accent)" opacity=".7"/>
+</svg>
