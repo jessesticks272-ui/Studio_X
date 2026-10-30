@@ -53,7 +53,7 @@ window.DATA_API = (function () {
       '<div class="producer-card">' +
       avatarHtml +
       '<div class="producer-badge"><span class="producer-badge-dot"></span><span>' + p.name + '</span></div>' +
-      '<div class="producer-info"><span>' + p.role + '</span></div>' +
+      '<div class="producer-info"><span>' + p.role + '</span><span class="producer-sample-label" style="display:inline-block;margin-top:7px;padding:4px 9px;border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:rgba(25,215,255,.14);color:var(--text-primary);">Sample profile</span></div>' +
       '</div>';
     return card;
   }
