@@ -191,7 +191,7 @@
 
     if (catalogLoading) {
       grid.innerHTML = '<div class="explore-empty explore-empty--loading" role="status" aria-live="polite"><div class="founder-icon">♫</div><h2>Loading published beats…</h2><p>Connecting to the LyTune catalogue.</p></div>';
-      if (resultsCount) resultsCount.textContent = "Loading beats…";
+      if (resultsCount) resultsCount.textContent = "";
       return;
     }
 
@@ -468,7 +468,7 @@
     if (searchInput && initialQuery) searchInput.value = initialQuery.trim();
 
     wireControls();
-    if (resultsCount) resultsCount.textContent = 'Loading beats…';
+    if (resultsCount) resultsCount.textContent = '';
 
     if (window.LytuneAuth) {
       window.LytuneAuth.whenReady().then(loadBeats);
