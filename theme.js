@@ -190,6 +190,51 @@
       :root[data-theme="light"] .noise { opacity:.008; }
       :root[data-theme="light"] ::selection { background:rgba(0,123,255,.22); }
       :root[data-theme="light"] :focus-visible { outline-color:#006fe8; }
+      /* Improve contrast for legacy pages that use fixed light-blue link colors. */
+      :root[data-theme="light"] a:not(.main-btn):not(.ghost-btn):not(.search-btn):not(.submit-btn):not(.ps-btn):not(.future-btn):not(.filter-chip) {
+        color:#0756a6;
+      }
+      :root[data-theme="light"] a:not(.main-btn):not(.ghost-btn):not(.search-btn):not(.submit-btn):not(.ps-btn):not(.future-btn):not(.filter-chip):hover {
+        color:#003f83;
+      }
+      :root[data-theme="light"] .section-eyebrow,
+      :root[data-theme="light"] .eyebrow,
+      :root[data-theme="light"] .ps-eyebrow {
+        color:#075b91;
+        background-color:rgba(0,105,180,.09);
+      }
+      :root[data-theme="light"] .navbar-links a,
+      :root[data-theme="light"] .footer a,
+      :root[data-theme="light"] .site-footer a {
+        color:#34415e;
+      }
+      :root[data-theme="light"] .navbar-links a:hover,
+      :root[data-theme="light"] .footer a:hover,
+      :root[data-theme="light"] .site-footer a:hover {
+        color:#0756a6;
+      }
+      :root[data-theme="light"] .theme-toggle,
+      :root[data-theme="light"] .icon-button,
+      :root[data-theme="light"] .hamburger-btn {
+        color:#17223d;
+        border-color:rgba(10,20,60,.18);
+      }
+      :root[data-theme="light"] table th {
+        background:#eaf0fb;
+        color:#15213c;
+      }
+      :root[data-theme="light"] table td {
+        color:#303b55;
+        border-color:rgba(10,20,60,.12);
+      }
+      :root[data-theme="light"] .empty-state,
+      :root[data-theme="light"] .empty,
+      :root[data-theme="light"] .notice,
+      :root[data-theme="light"] .upload-safety-note {
+        color:#35415c;
+        background-color:rgba(255,255,255,.82);
+        border-color:rgba(10,20,60,.13);
+      }
       .lytune-theme-fallback-toggle {
         position:fixed; right:18px; bottom:18px; z-index:9999; width:46px; height:46px;
         border:1px solid rgba(25,215,255,.45); border-radius:50%;
