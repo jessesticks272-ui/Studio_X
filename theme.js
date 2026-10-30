@@ -35,6 +35,8 @@
     if (next === "light") root.setAttribute("data-theme", "light");
     else root.removeAttribute("data-theme");
     root.style.colorScheme = next;
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute("content", next === "light" ? "#f4f7ff" : "#090b12");
     updateToggleIcon(next);
     window.dispatchEvent(new CustomEvent("lytune:themechange", { detail: { theme: next } }));
   }
