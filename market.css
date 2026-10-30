@@ -827,3 +827,8 @@ input:focus-visible,
 .accent-bar{width:58px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--accent-3))}
 @media(max-width:800px){.market-benefits-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.market-seller-benefits,.market-cta{width:calc(100% - 28px)}.market-benefits-grid{grid-template-columns:1fr}.market-benefit-card{padding:20px}.market-status-badge{top:12px;right:12px}}
+
+/* Marketplace availability controls */
+.market-coming-soon{display:inline-flex;align-items:center;justify-content:center;cursor:not-allowed;opacity:.8;min-height:42px}
+.market-status-badge.live{color:#82e8cf}
+[data-theme="light"] .market-status-badge.live{color:#12634f}
