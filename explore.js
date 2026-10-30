@@ -44,6 +44,7 @@
 
   let allBeats = [];   // published releases loaded from Firestore
   let catalogError = false;
+  let catalogLoading = true;
   let stopPublishedBeatUpdates = null;
   let cartCount = 0;
 
@@ -188,6 +189,12 @@
   function applyFilters() {
     if (!grid) return;
 
+    if (catalogLoading) {
+      grid.innerHTML = '<div class="explore-empty explore-empty--loading" role="status" aria-live="polite"><div class="founder-icon">♫</div><h2>Loading published beats…</h2><p>Connecting to the LyTune catalogue.</p></div>';
+      if (resultsCount) resultsCount.textContent = "Loading beats…";
+      return;
+    }
+
     if (allBeats.length === 0) {
       if (catalogError) {
         grid.innerHTML =
@@ -277,6 +284,7 @@
       if (stopPublishedBeatUpdates) stopPublishedBeatUpdates();
       stopPublishedBeatUpdates = subscribeToPublishedBeats((beats, error) => {
         if (error) {
+          catalogLoading = false;
           console.error("Could not subscribe to published beats:", error);
           catalogError = allBeats.length === 0;
           if (modeIndicator) modeIndicator.textContent = '● Marketplace unavailable';
@@ -284,12 +292,14 @@
           return;
         }
 
+        catalogLoading = false;
         catalogError = false;
         allBeats = Array.isArray(beats) ? beats : [];
         if (modeIndicator) modeIndicator.textContent = '● Live from Firebase';
         applyFilters();
       });
     } catch (error) {
+      catalogLoading = false;
       console.error("Could not connect to published beats:", error);
       catalogError = true;
       allBeats = [];
