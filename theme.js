@@ -191,10 +191,10 @@
       :root[data-theme="light"] ::selection { background:rgba(0,123,255,.22); }
       :root[data-theme="light"] :focus-visible { outline-color:#006fe8; }
       /* Improve contrast for legacy pages that use fixed light-blue link colors. */
-      :root[data-theme="light"] a:not(.main-btn):not(.ghost-btn):not(.search-btn):not(.submit-btn):not(.ps-btn):not(.future-btn):not(.filter-chip) {
+      :root[data-theme="light"] a:not(.main-btn):not(.ghost-btn):not(.search-btn):not(.submit-btn):not(.ps-btn):not(.future-btn):not(.filter-chip):not([class*="button"]) {
         color:#0756a6;
       }
-      :root[data-theme="light"] a:not(.main-btn):not(.ghost-btn):not(.search-btn):not(.submit-btn):not(.ps-btn):not(.future-btn):not(.filter-chip):hover {
+      :root[data-theme="light"] a:not(.main-btn):not(.ghost-btn):not(.search-btn):not(.submit-btn):not(.ps-btn):not(.future-btn):not(.filter-chip):not([class*="button"]):hover {
         color:#003f83;
       }
       :root[data-theme="light"] .section-eyebrow,
