@@ -38,7 +38,8 @@
     <form id="authForm" novalidate>
       <div class="field signup-only is-hidden"><label for="name">Full name</label><div class="input-wrap"><span class="input-icon">✦</span><input id="name" name="name" type="text" autocomplete="name" placeholder="What should we call you?"></div></div>
       <div class="field"><label for="email">Email address</label><div class="input-wrap"><span class="input-icon">@</span><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div></div>
-      <div class="field"><div class="label-row"><label for="password">Password</label><a href="#" id="forgotLink">Forgot password?</a></div><div class="input-wrap"><span class="input-icon">⌁</span><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button type="button" id="passwordToggle">SHOW</button></div></div>
+      <div class="field"><div class="label-row"><label for="password">Password</label><a href="#email" id="forgotLink">Forgot password?</a></div><div class="input-wrap"><span class="input-icon">⌁</span><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button type="button" id="passwordToggle">SHOW</button></div></div>
+      <p class="password-hint signup-only is-hidden" id="passwordHint">Use at least 6 characters. Choose a password you do not use on other websites.</p>
       <div class="signup-only account-type is-hidden"><span class="field-label">CHOOSE YOUR LANE</span><div class="role-grid">
         <label class="role-option"><input type="radio" name="role" value="artist" checked><span class="role-icon">♬</span><span><strong>Artist</strong><small>Create & collaborate</small></span><b class="check">✓</b></label>
         <label class="role-option"><input type="radio" name="role" value="producer"><span class="role-icon">◈</span><span><strong>Producer</strong><small>Build & sell beats</small></span><b class="check">✓</b></label>
@@ -46,7 +47,7 @@
       <button class="submit-btn" id="submitBtn" type="submit"><span class="btn-text">ENTER THE STUDIO</span><span class="btn-loader" aria-hidden="true"><i></i><i></i><i></i></span><span class="btn-arrow">→</span></button>
       <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
     </form>
-    <p class="terms">By continuing, you agree to LyTune Studio X’s Terms and Privacy Policy.</p>
+    <p class="terms">By continuing, you agree to LyTune Studio X’s <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</p>
   </div>
 </section>
 </main>
