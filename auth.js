@@ -60,7 +60,7 @@
   // Pings a lightweight existing route (GET /api/beats, per the README's
   // route list) rather than requiring a dedicated /health endpoint.
   function checkOnline() {
-    return fetchWithTimeout(API_BASE + '/beats', { method: 'GET' }, PING_TIMEOUT_MS)
+    return fetchWithTimeout(API_BASE + '/health', { method: 'GET' }, PING_TIMEOUT_MS)
       .then((res) => {
         state.online = !!res && res.ok;
         return state.online;
@@ -408,7 +408,13 @@
           photoURL: profile?.photoURL || firebaseUser.photoURL || ''
         };
 
-        safeSet(TOKEN_KEY, 'firebase-authenticated');
+        try {
+          const idToken = await firebaseUser.getIdToken();
+          safeSet(TOKEN_KEY, idToken);
+        } catch (tokenError) {
+          safeRemove(TOKEN_KEY);
+          console.warn('Could not refresh Firebase ID token:', tokenError);
+        }
         safeSet(USER_KEY, JSON.stringify(state.user));
         renderNav();
         window.LytuneAuthRefreshMobileMenu?.();

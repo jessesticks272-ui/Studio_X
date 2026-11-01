@@ -66,6 +66,7 @@
     </div>
     <span class="ai-kicker">DEMUCS AI</span>
   </div>
+  <p class="muted" role="note">Privacy notice: stem separation uploads your selected audio to public file storage so the processing service can read it. Only upload music you own and are comfortable sharing through a public file link. Do not upload unreleased or confidential masters.</p>
   <div class="stem-grid">
     <div class="stem-option"><b>🎤 Vocals</b><p>Isolate the vocal performance for practice, remixing or analysis.</p></div>
     <div class="stem-option"><b>🥁 Drums</b><p>Extract the drum/percussion layer from the full mix.</p></div>
@@ -91,6 +92,12 @@ const beats=[
 ];
 let fileReady=false,vibe="any",duration=0;
 const $=id=>document.getElementById(id),ctx=$("canvas").getContext("2d");
+async function apiAuthHeaders(){
+ const {auth}=await import("./firebase.js");
+ const user=auth.currentUser;
+ if(!user)throw new Error("Sign in to use LyTune AI tools.");
+ return {"Content-Type":"application/json","Authorization":"Bearer "+await user.getIdToken()};
+}
 function drawFallback(){ctx.clearRect(0,0,900,130);ctx.beginPath();for(let x=0;x<900;x+=8){let h=10+Math.abs(Math.sin(x*.035))*42;ctx.moveTo(x,65-h);ctx.lineTo(x,65+h)}ctx.strokeStyle="#19D7FF";ctx.lineWidth=2;ctx.stroke()}
 async function loadFile(f){
 if(!f)return;fileReady=true;$("name").textContent=f.name;$("meta").textContent=(f.size/1048576).toFixed(1)+" MB";$("pill").classList.add("show");$("wave").style.display="block";$("search").disabled=false;$("status").textContent="Reading your sound profile…";
@@ -111,7 +118,7 @@ async function runAISearch(){
  $("status").textContent="LyTune AI is understanding your direction…";
  const catalog=beats.map(b=>({title:b[0],producer:b[1],genre:b[2],tempo:b[3],vibe:b[4],bpm:b[5],price:b[6]}));
  try{
-   const response=await fetch("/api/ai-search",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:$("keywords").value,genre:$("genre").value,tempo:$("tempo").value,vibe,duration,catalog})});
+   const response=await fetch("/api/ai-search",{method:"POST",headers:await apiAuthHeaders(),body:JSON.stringify({query:$("keywords").value,genre:$("genre").value,tempo:$("tempo").value,vibe,duration,catalog})});
    const data=await response.json();
    if(!response.ok) throw new Error(data.error||"AI search failed");
    const profile=data.soundProfile||{};
@@ -154,11 +161,16 @@ async function separateStems(){
   results.innerHTML="";
 
   try{
-    const pathname="lytune-stems/"+Date.now()+"-"+stemFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    if(!stemFile.type.startsWith("audio/") || stemFile.size > 100 * 1024 * 1024)throw new Error("Choose an audio file no larger than 100 MB before separating stems.");
+    const {auth}=await import("./firebase.js");
+    const user=auth.currentUser;
+    if(!user)throw new Error("Sign in to use stem separation.");
+    const token=await user.getIdToken();
+    const pathname="stem-inputs/"+user.uid+"/"+Date.now()+"-"+stemFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
     const sign=await fetch("/api/blob-upload",{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({pathname,contentType:stemFile.type||"application/octet-stream"})
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({pathname,contentType:stemFile.type})
     });
     const signed=await sign.json();
     if(!sign.ok)throw new Error(signed.error||"Could not prepare secure Blob upload.");
@@ -177,7 +189,7 @@ async function separateStems(){
 
     const start=await fetch("/api/stems",{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
       body:JSON.stringify({audioUrl:blob.url})
     });
     const job=await start.json();
@@ -195,7 +207,7 @@ async function separateStems(){
     while(attempts<90){
       await new Promise(r=>setTimeout(r,2500));
       attempts++;
-      const check=await fetch("/api/stems?id="+encodeURIComponent(job.predictionId));
+      const check=await fetch("/api/stems?id="+encodeURIComponent(job.predictionId),{headers:{"Authorization":"Bearer "+token}});
       const data=await check.json();
       if(!check.ok)throw new Error(data.error||"Could not check separation status.");
 
