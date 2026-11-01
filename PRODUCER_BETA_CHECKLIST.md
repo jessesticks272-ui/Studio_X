@@ -1,47 +1,70 @@
 # LyTune Studio X — Producer Beta Checklist
 
-Use this before inviting more producers or asking anyone to upload valuable music.
+Use this before inviting producers or asking anyone to upload valuable music.
 
-## Current beta scope
-- Producers can create an account and choose a producer role.
-- Producer dashboard links to the Studio workspace.
-- The Studio upload code writes beat metadata to Firestore and can upload audio to Firebase Storage.
-- Explore is wired to subscribe to published beats in Firestore.
-- A feedback form now stores signed-in user feedback in Firestore.
-- Checkout is not connected to a payment provider. Do not promise completed purchases, payouts, or automatic license delivery.
+## Current product limits
+- Producers can create an account, use Studio, and publish beat metadata to Firestore.
+- Explore reads published beats from Firestore.
+- Checkout is a placeholder. Do not promise purchases, payouts, or automatic license delivery.
+- Preview audio is not a paid master download.
+- Only upload music you own or have permission to distribute/process.
 
-## Required manual setup in Firebase Console
-1. Open the Firebase project `lytune-studio-x`.
-2. In Firestore Database → Rules, review and publish the rules in `firestore.rules` from the repository.
-3. Confirm Firebase Authentication has Email/Password enabled. If using Google sign-in, enable Google and add the production domain under Authorized domains.
-4. In Storage, verify the bucket is active and review its security rules before allowing producer uploads.
-5. Do not assume a GitHub commit publishes Firebase rules. Firestore and Storage rules must be deployed in Firebase Console or through a configured Firebase CLI workflow.
+## Required Firebase and Vercel setup
+1. In Firebase Authentication, confirm Email/Password is enabled. If Google sign-in is used, enable it and authorize the production domain.
+2. Review and publish firestore.rules to the correct Firebase project.
+3. Review and publish storage.rules to the correct Firebase Storage bucket.
+4. Confirm Vercel has the Google Workload Identity Federation environment configuration already used by /api/members: GCP_PROJECT_ID, GCP_PROJECT_NUMBER, GCP_SERVICE_ACCOUNT_EMAIL, GCP_WORKLOAD_IDENTITY_POOL_ID, and GCP_WORKLOAD_IDENTITY_POOL_PROVIDER_ID.
+5. Confirm BLOB_READ_WRITE_TOKEN is configured if stem-separation uploads are enabled.
+6. Confirm OPENAI_API_KEY and REPLICATE_API_TOKEN are configured only if those external AI features are enabled.
+7. GitHub commits do not publish Firebase rules. Deploy rules through Firebase Console or a configured Firebase CLI workflow.
 
-## Smoke test
-- [ ] Open the production site in a private/incognito browser window.
-- [ ] Create a new test account as a producer.
-- [ ] Confirm the account lands on the producer dashboard.
-- [ ] Open Studio and upload a test audio file that is safe to share publicly.
-- [ ] Confirm the success message appears and the beat is in the producer catalog.
-- [ ] Open Explore in another tab and confirm the published beat appears without manually reloading.
-- [ ] Open the beat page and test the audio preview.
-- [ ] Submit the feedback form and confirm a success message.
-- [ ] Sign in as a different account and confirm the feedback record is not readable by that account.
-- [ ] Test the same essential steps on a phone-sized screen.
-- [ ] Test messaging between two test accounts.
-- [ ] Test checkout and confirm it clearly states that payment is not live and makes no charge.
+## Security changes on the development branch
+The branch build/phase-1-security-foundation contains proposed changes that are not live until reviewed, merged and deployed:
+- Ordinary users cannot promote themselves to admin or change their role after account creation.
+- Only producer accounts can create or manage beat catalogue records.
+- The legacy unauthenticated PostgreSQL beat-create endpoint is disabled; Studio's current write path is Firestore.
+- API health checks no longer depend on the legacy PostgreSQL database.
+- AI search, Blob upload signing and stem-separation endpoints verify Firebase ID tokens.
+- API requests use persistent per-user Firestore rate-limit counters.
+- Public preview uploads and private master uploads use separate Firebase Storage paths.
+- New private master files do not receive a public download URL from Studio.
+- Stem job records are private and tied to the account that started them.
 
-## Release blockers / cautions
-- **Audio protection:** the current upload path uses the same downloaded audio URL for preview and full audio. Treat uploaded audio as publicly accessible. Do not upload unreleased masters until preview delivery and protected master delivery are separated.
-- **Payments:** checkout is a non-payment placeholder. A secure payment integration, server-side verification, license acceptance, and post-payment delivery are still needed.
-- **Rules deployment:** the repository rules need to be published to Firebase. Verify them with two test accounts after publishing.
-- **Storage security:** review file-size/type limits and per-user ownership rules before opening uploads broadly.
-- **Live verification:** code in GitHub does not prove the Vercel deployment is updated or that the deployed site can reach Firebase. Confirm the production URL and browser console during the smoke test.
+## Important audio privacy limits
+- New preview files are intentionally public so artists can listen.
+- New full masters use masters/{uid}/... and Storage rules restrict reads to the owning producer. Paid customer delivery is not implemented yet.
+- Older files under beats/{uid}/... remain publicly readable for backwards compatibility. Treat those files as public until migrated.
+- The AI stem-separation page uploads input audio to public Vercel Blob storage so the processing provider can fetch it. The page displays a privacy warning. Do not upload unreleased or confidential audio through that feature.
+- Never put a private master URL in a public Firestore beat document.
+
+## Smoke tests required before beta
+- [ ] Sign up as a producer and confirm the account receives the producer role.
+- [ ] Sign up as an artist and confirm the account receives the artist role.
+- [ ] Attempt to change a normal account's role to admin through Firestore; the rules must reject it.
+- [ ] Confirm an artist cannot create or modify producer beat records.
+- [ ] Upload a preview and confirm it plays in Explore while signed out.
+- [ ] Upload a private master and confirm the owner can access it but another account and a signed-out visitor cannot.
+- [ ] Confirm the beat document contains a preview URL but no public master download URL.
+- [ ] Confirm another user cannot read the first user's stem job record or poll its job ID.
+- [ ] Confirm AI search and stem separation reject requests without a valid Firebase ID token.
+- [ ] Confirm API rate limits return HTTP 429 after the configured threshold.
+- [ ] Test account creation, upload, preview playback and messaging with two separate accounts.
+- [ ] Test the same essential workflows on a phone-sized screen.
+- [ ] Confirm checkout clearly states that payment is not live and makes no charge.
+- [ ] Check the production browser console and Vercel function logs after deployment.
+
+## Remaining launch blockers
+- Payment provider integration, server-side payment verification, license acceptance, order records, refunds and producer payouts.
+- Secure, time-limited customer master delivery after a verified purchase.
+- Migration of legacy public audio files into preview and private-master storage paths.
+- Moderation, reporting, dispute handling and support workflows.
+- Real analytics and trending signals, with no fabricated plays, sales or earnings.
+- End-to-end tests and live two-account verification.
 
 ## Feedback prompts for invited producers
 1. Could you create your account without help?
-2. Was it obvious where to upload a beat?
-3. Did the beat appear in Explore after publishing?
+2. Was it obvious where to upload a beat and its preview?
+3. Could you store a full master privately?
 4. Did the preview play correctly on your phone?
-5. What was confusing, broken, or missing?
+5. What was confusing, broken or missing?
 6. What one feature would make you return next week?
