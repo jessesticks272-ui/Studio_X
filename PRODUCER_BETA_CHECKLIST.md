@@ -34,7 +34,7 @@ The branch build/phase-1-security-foundation contains proposed changes that are 
 - New preview files are intentionally public so artists can listen.
 - New full masters use masters/{uid}/... and Storage rules restrict reads to the owning producer. Paid customer delivery is not implemented yet.
 - Older files under beats/{uid}/... remain publicly readable for backwards compatibility. Treat those files as public until migrated.
-- The AI stem-separation page uploads input audio to public Vercel Blob storage so the processing provider can fetch it. The page displays a privacy warning. Do not upload unreleased or confidential audio through that feature.
+- The AI stem-separation page uploads input audio to public Vercel Blob storage so the processing provider can fetch it. The page displays a privacy warning and the API attempts deletion after processing completes and the status is polled. If the page is closed early, the public input may remain. Do not upload unreleased or confidential audio through that feature.
 - Never put a private master URL in a public Firestore beat document.
 
 ## Smoke tests required before beta
