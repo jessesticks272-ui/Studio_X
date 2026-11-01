@@ -1,3 +1,4 @@
+import { del } from "@vercel/blob";
 import { authenticateRequest, authErrorResponse, hasAllowedContentLength, consumeRateLimit } from "../lib/firebase-admin-auth.js";
 
 const DEMUCS_VERSION =
@@ -79,7 +80,9 @@ export async function POST(request) {
     await db.collection("stemJobs").doc(data.id).set({
       ownerId: user.uid,
       status: data.status || "starting",
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      inputBlobUrl: audioUrl,
+      inputDeleted: false
     });
 
     return json({
@@ -123,8 +126,20 @@ export async function GET(request) {
       return json({ error: "Could not read the stem separation status.", code: "REPLICATE_STATUS_FAILED" }, 502);
     }
 
+    const job = jobSnapshot.data() || {};
+    let inputDeleted = Boolean(job.inputDeleted);
+    if (["succeeded", "failed", "canceled"].includes(data.status) && job.inputBlobUrl && !inputDeleted) {
+      try {
+        await del(job.inputBlobUrl);
+        inputDeleted = true;
+      } catch (deleteError) {
+        console.warn("Could not remove completed stem input blob:", deleteError?.message);
+      }
+    }
+
     await jobSnapshot.ref.set({
       status: data.status || "unknown",
+      inputDeleted,
       updatedAt: new Date().toISOString()
     }, { merge: true });
 
