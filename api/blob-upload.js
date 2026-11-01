@@ -7,8 +7,8 @@ export async function POST(request) {
       return Response.json({ error: "Upload authorization request is too large." }, { status: 413 });
     }
 
-    const { user, db } = await authenticateRequest(request, ["producer"]);
-    if (!await consumeRateLimit(db, user.uid, "blob-preview-upload", 12, 60 * 60 * 1000)) {
+    const { user, db } = await authenticateRequest(request, ["artist", "producer", "both", "listener"]);
+    if (!await consumeRateLimit(db, user.uid, "stem-input-upload", 5, 60 * 60 * 1000)) {
       return Response.json({ error: "Upload limit reached. Try again later." }, { status: 429 });
     }
     const body = await request.json();
@@ -28,13 +28,13 @@ export async function POST(request) {
     const segments = pathname.split("/");
     const safePath = pathname.length <= 300
       && segments.length >= 3
-      && segments[0] === "previews"
+      && segments[0] === "stem-inputs"
       && segments[1] === user.uid
       && segments.every(segment => segment && segment !== "." && segment !== "..")
       && /^[a-zA-Z0-9._/-]+$/.test(pathname);
 
     if (!safePath) {
-      return Response.json({ error: "Uploads must use your own public preview folder." }, { status: 400 });
+      return Response.json({ error: "Uploads must use your own stem-input folder." }, { status: 400 });
     }
 
     if (!allowed.includes(contentType)) {
