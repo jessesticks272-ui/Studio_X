@@ -29,6 +29,7 @@ onAuthStateChanged(auth, async user => {
 });
 
 let selectedFile = null;
+let selectedMasterFile = null;
 renderCatalog();
 function setSelectedFile(file){
   selectedFile = file || null;
@@ -36,6 +37,10 @@ function setSelectedFile(file){
   if(selectedFile && !$("beatName").value) $("beatName").value = selectedFile.name.replace(/\.[^.]+$/,"").replace(/[_-]+/g," ");
 }
 $("beatFile").addEventListener("change", e => setSelectedFile(e.target.files[0]));
+$("beatMasterFile").addEventListener("change", e => {
+  selectedMasterFile = e.target.files[0] || null;
+  $("masterFileInfo").textContent = selectedMasterFile ? "🔒 " + selectedMasterFile.name + " (private master)" : "";
+});
 
 const drop=$("dropZone");
 ["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.style.borderColor="rgba(25,215,255,.9)"}));
@@ -45,7 +50,9 @@ drop.addEventListener("drop",e=>{e.preventDefault();setSelectedFile(e.dataTransf
 document.querySelectorAll(".tag").forEach(tag=>tag.addEventListener("click",()=>tag.classList.toggle("active")));
 
 $("saveBeat").addEventListener("click", async () => {
-  if(!selectedFile && !$("beatAudioUrl").value.trim()){ $("uploadStatus").textContent="Choose an audio file or enter a hosted audio/preview URL."; return; }
+  if(!selectedFile && !$("beatAudioUrl").value.trim()){ $("uploadStatus").textContent="Choose a preview audio file or enter a hosted preview URL."; return; }
+  if(selectedFile && (!selectedFile.type.startsWith("audio/") || selectedFile.size > 25 * 1024 * 1024)){ $("uploadStatus").textContent="Preview audio must be an audio file no larger than 25 MB."; return; }
+  if(selectedMasterFile && (!selectedMasterFile.type.startsWith("audio/") || selectedMasterFile.size > 250 * 1024 * 1024)){ $("uploadStatus").textContent="The full master must be an audio file no larger than 250 MB."; return; }
   if(!currentUser){ $("uploadStatus").textContent="Please sign in before uploading."; return; }
 
   const name=$("beatName").value.trim()||(selectedFile ? selectedFile.name.replace(/\.[^.]+$/,"") : "Untitled Beat");
@@ -65,41 +72,54 @@ $("saveBeat").addEventListener("click", async () => {
 
   try{
     button.disabled=true;
-    let downloadURL=audioUrl;
-    let storagePath="";
+    let previewURL=audioUrl;
+    let previewStoragePath="";
+    let masterStoragePath="";
     let fileName=selectedFile?.name || "";
     let contentType=selectedFile?.type || "audio/mpeg";
 
     if(selectedFile){
-      status.textContent="Uploading to Firebase Storage…";
+      status.textContent="Uploading public preview…";
       const safeName=selectedFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-      const storageRef=ref("beats/"+currentUser.uid+"/"+Date.now()+"_"+safeName);
-      await uploadBytes(storageRef, selectedFile, {contentType});
-      downloadURL=await getDownloadURL(storageRef);
-      storagePath=storageRef.fullPath;
-    } else {
-      status.textContent="Saving your catalog release…";
+      const previewRef=ref("previews/"+currentUser.uid+"/"+Date.now()+"_"+safeName);
+      await uploadBytes(previewRef, selectedFile, {contentType});
+      previewURL=await getDownloadURL(previewRef);
+      previewStoragePath=previewRef.fullPath;
     }
 
-    if(!downloadURL){
-      throw new Error("A hosted audio/preview URL is required when no file is selected.");
+    if(selectedMasterFile){
+      status.textContent="Uploading private full master…";
+      const safeMasterName=selectedMasterFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+      const masterRef=ref("masters/"+currentUser.uid+"/"+Date.now()+"_"+safeMasterName);
+      await uploadBytes(masterRef, selectedMasterFile, {
+        contentType:selectedMasterFile.type || "audio/mpeg"
+      });
+      masterStoragePath=masterRef.fullPath;
     }
 
-    const beatId=await addBeat(currentUser.uid,{
+    if(!previewURL){
+      throw new Error("A hosted preview URL is required.");
+    }
+
+    await addBeat(currentUser.uid,{
       title:name,
       producerName:currentUser.displayName || currentUser.email?.split("@")[0] || "LyTune Producer",
       genre, bpm, key, mood, tags,
       price, currency:"USD", licenseType,
       description, coverUrl,
       status:"published",
-      previewUrl:downloadURL,
-      audioUrl:downloadURL,
+      previewUrl:previewURL,
+      audioUrl:previewURL,
       fileName,
-      storagePath,
+      previewStoragePath,
+      masterStoragePath,
+      masterAvailable:Boolean(masterStoragePath),
       contentType
     });
 
-    status.textContent="✓ Beat uploaded, published and saved to your Studio X catalog.";
+    status.textContent=masterStoragePath
+      ? "✓ Preview published and full master stored privately."
+      : "✓ Preview published. Add a private full master before enabling paid downloads.";
     await renderCatalog();
   }catch(error){
     console.error("Beat upload failed:",error);
