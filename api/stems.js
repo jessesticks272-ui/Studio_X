@@ -77,12 +77,22 @@ export async function POST(request) {
       return json({ error: "The stem AI service could not start the separation.", code: "REPLICATE_CREATE_FAILED" }, 502);
     }
 
+    let inputDeleted = false;
+    if (["succeeded", "failed", "canceled"].includes(data.status)) {
+      try {
+        await del(audioUrl);
+        inputDeleted = true;
+      } catch (deleteError) {
+        console.warn("Could not remove completed stem input blob:", deleteError?.message);
+      }
+    }
+
     await db.collection("stemJobs").doc(data.id).set({
       ownerId: user.uid,
       status: data.status || "starting",
       createdAt: new Date().toISOString(),
       inputBlobUrl: audioUrl,
-      inputDeleted: false
+      inputDeleted
     });
 
     return json({
@@ -101,7 +111,10 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    const { user, db } = await authenticateRequest(request, ["producer"]);
+    const { user, db } = await authenticateRequest(request, ["artist", "producer", "both", "listener"]);
+    if (!await consumeRateLimit(db, user.uid, "stem-status", 60, 60 * 1000)) {
+      return json({ error: "Too many status checks. Wait a moment and try again." }, 429);
+    }
     const token = process.env.REPLICATE_API_TOKEN;
     if (!token) {
       return json({ error: "Stem separation is not configured yet.", code: "MISSING_REPLICATE_API_TOKEN" }, 503);
