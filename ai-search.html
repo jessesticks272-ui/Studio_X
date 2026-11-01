@@ -161,7 +161,7 @@ async function separateStems(){
   results.innerHTML="";
 
   try{
-    if(!stemFile.type.startsWith("audio/"))throw new Error("Choose a valid audio file before separating stems.");
+    if(!stemFile.type.startsWith("audio/") || stemFile.size > 100 * 1024 * 1024)throw new Error("Choose an audio file no larger than 100 MB before separating stems.");
     const {auth}=await import("./firebase.js");
     const user=auth.currentUser;
     if(!user)throw new Error("Sign in to use stem separation.");
