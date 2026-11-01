@@ -38,7 +38,7 @@ export async function POST(request) {
       return json({ error: "Stem separation request is too large." }, 413);
     }
 
-    const { user, db } = await authenticateRequest(request, ["producer"]);
+    const { user, db } = await authenticateRequest(request, ["artist", "producer", "both", "listener"]);
     if (!await consumeRateLimit(db, user.uid, "stem-separation", 3, 60 * 60 * 1000)) {
       return json({ error: "Stem separation limit reached. Try again later." }, 429);
     }
