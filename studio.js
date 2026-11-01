@@ -32,9 +32,10 @@ let selectedFile = null;
 let selectedMasterFile = null;
 renderCatalog();
 function isAudioFile(file){
+  const extension=String(file?.name||"").split(".").pop().toLowerCase();
   return Boolean(file && (
     file.type.startsWith("audio/") ||
-    /\\.(mp3|wav|m4a|aac|ogg|flac|webm)$/i.test(file.name)
+    ["mp3","wav","m4a","aac","ogg","flac","webm"].includes(extension)
   ));
 }
 function audioContentType(file){
@@ -78,7 +79,7 @@ $("saveBeat").addEventListener("click", async () => {
   const licenseType=$("beatLicense").value || "lease";
   const coverUrl=$("beatCoverUrl").value.trim();
   const audioUrl=$("beatAudioUrl").value.trim();
-  if(audioUrl && !/^https?:\/\//i.test(audioUrl)){ $("uploadStatus").textContent="Audio URL must start with http:// or https://."; return; }
+  if(audioUrl && !audioUrl.startsWith("https://")){ $("uploadStatus").textContent="Audio URL must use HTTPS."; return; }
   const description=$("beatDescription").value.trim();
   const tags=Array.from(document.querySelectorAll(".tag.active")).map(tag=>tag.textContent.trim());
   const status=$("uploadStatus");
