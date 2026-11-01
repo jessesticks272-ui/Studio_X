@@ -1,4 +1,4 @@
-import { authenticateRequest, authErrorResponse, hasAllowedContentLength } from "../lib/firebase-admin-auth.js";
+import { authenticateRequest, authErrorResponse, hasAllowedContentLength, consumeRateLimit } from "../lib/firebase-admin-auth.js";
 
 const MODEL = "gpt-5.6-luna";
 
@@ -22,7 +22,10 @@ export async function POST(request) {
       return json({ error: "Search request is too large." }, 413);
     }
 
-    await authenticateRequest(request, ["artist", "producer", "both", "listener"]);
+    const { user, db } = await authenticateRequest(request, ["artist", "producer", "both", "listener"]);
+    if (!await consumeRateLimit(db, user.uid, "ai-search", 15, 60 * 1000)) {
+      return json({ error: "AI search limit reached. Please try again shortly." }, 429);
+    }
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return json({ error: "AI is not configured yet.", code: "MISSING_OPENAI_API_KEY" }, 503);
