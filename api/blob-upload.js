@@ -21,6 +21,9 @@ export async function POST(request) {
       "audio/x-wav",
       "audio/mp4",
       "audio/x-m4a",
+      "audio/aac",
+      "audio/flac",
+      "audio/x-flac",
       "audio/ogg",
       "audio/webm"
     ];
