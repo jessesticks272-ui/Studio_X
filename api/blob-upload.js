@@ -1,5 +1,5 @@
 import { issueSignedToken, presignUrl } from "@vercel/blob";
-import { authenticateRequest, authErrorResponse, hasAllowedContentLength } from "../lib/firebase-admin-auth.js";
+import { authenticateRequest, authErrorResponse, hasAllowedContentLength, consumeRateLimit } from "../lib/firebase-admin-auth.js";
 
 export async function POST(request) {
   try {
@@ -7,7 +7,10 @@ export async function POST(request) {
       return Response.json({ error: "Upload authorization request is too large." }, { status: 413 });
     }
 
-    const { user } = await authenticateRequest(request, ["producer"]);
+    const { user, db } = await authenticateRequest(request, ["producer"]);
+    if (!await consumeRateLimit(db, user.uid, "blob-preview-upload", 12, 60 * 60 * 1000)) {
+      return Response.json({ error: "Upload limit reached. Try again later." }, { status: 429 });
+    }
     const body = await request.json();
     const pathname = String(body?.pathname || "").trim();
     const contentType = String(body?.contentType || "").trim().toLowerCase();
