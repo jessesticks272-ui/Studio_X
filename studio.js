@@ -31,6 +31,20 @@ onAuthStateChanged(auth, async user => {
 let selectedFile = null;
 let selectedMasterFile = null;
 renderCatalog();
+function isAudioFile(file){
+  return Boolean(file && (
+    file.type.startsWith("audio/") ||
+    /\\.(mp3|wav|m4a|aac|ogg|flac|webm)$/i.test(file.name)
+  ));
+}
+function audioContentType(file){
+  if(file?.type?.startsWith("audio/")) return file.type;
+  const extension=String(file?.name||"").split(".").pop().toLowerCase();
+  return ({
+    mp3:"audio/mpeg", wav:"audio/wav", m4a:"audio/mp4",
+    aac:"audio/aac", ogg:"audio/ogg", flac:"audio/flac", webm:"audio/webm"
+  })[extension] || "audio/mpeg";
+}
 function setSelectedFile(file){
   selectedFile = file || null;
   $("fileInfo").textContent = selectedFile ? "✓ " + selectedFile.name : "";
@@ -51,8 +65,8 @@ document.querySelectorAll(".tag").forEach(tag=>tag.addEventListener("click",()=>
 
 $("saveBeat").addEventListener("click", async () => {
   if(!selectedFile && !$("beatAudioUrl").value.trim()){ $("uploadStatus").textContent="Choose a preview audio file or enter a hosted preview URL."; return; }
-  if(selectedFile && (!selectedFile.type.startsWith("audio/") || selectedFile.size > 25 * 1024 * 1024)){ $("uploadStatus").textContent="Preview audio must be an audio file no larger than 25 MB."; return; }
-  if(selectedMasterFile && (!selectedMasterFile.type.startsWith("audio/") || selectedMasterFile.size > 250 * 1024 * 1024)){ $("uploadStatus").textContent="The full master must be an audio file no larger than 250 MB."; return; }
+  if(selectedFile && (!isAudioFile(selectedFile) || selectedFile.size > 25 * 1024 * 1024)){ $("uploadStatus").textContent="Preview audio must be an audio file no larger than 25 MB."; return; }
+  if(selectedMasterFile && (!isAudioFile(selectedMasterFile) || selectedMasterFile.size > 250 * 1024 * 1024)){ $("uploadStatus").textContent="The full master must be an audio file no larger than 250 MB."; return; }
   if(!currentUser){ $("uploadStatus").textContent="Please sign in before uploading."; return; }
 
   const name=$("beatName").value.trim()||(selectedFile ? selectedFile.name.replace(/\.[^.]+$/,"") : "Untitled Beat");
@@ -76,7 +90,7 @@ $("saveBeat").addEventListener("click", async () => {
     let previewStoragePath="";
     let masterStoragePath="";
     let fileName=selectedFile?.name || "";
-    let contentType=selectedFile?.type || "audio/mpeg";
+    let contentType=selectedFile ? audioContentType(selectedFile) : "audio/mpeg";
 
     if(selectedFile){
       status.textContent="Uploading public preview…";
@@ -92,7 +106,7 @@ $("saveBeat").addEventListener("click", async () => {
       const safeMasterName=selectedMasterFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
       const masterRef=ref("masters/"+currentUser.uid+"/"+Date.now()+"_"+safeMasterName);
       await uploadBytes(masterRef, selectedMasterFile, {
-        contentType:selectedMasterFile.type || "audio/mpeg"
+        contentType:audioContentType(selectedMasterFile)
       });
       masterStoragePath=masterRef.fullPath;
     }
