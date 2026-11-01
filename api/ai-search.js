@@ -1,6 +1,6 @@
 import { authenticateRequest, authErrorResponse, hasAllowedContentLength, consumeRateLimit } from "../lib/firebase-admin-auth.js";
 
-const MODEL = "gpt-5.6-luna";
+const MODEL = process.env.OPENAI_MODEL || "gpt-6-luna";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
