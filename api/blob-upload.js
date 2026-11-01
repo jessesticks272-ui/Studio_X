@@ -25,13 +25,13 @@ export async function POST(request) {
     const segments = pathname.split("/");
     const safePath = pathname.length <= 300
       && segments.length >= 3
-      && segments[0] === "beats"
+      && segments[0] === "previews"
       && segments[1] === user.uid
       && segments.every(segment => segment && segment !== "." && segment !== "..")
       && /^[a-zA-Z0-9._/-]+$/.test(pathname);
 
     if (!safePath) {
-      return Response.json({ error: "Uploads must use your own beats folder." }, { status: 400 });
+      return Response.json({ error: "Uploads must use your own public preview folder." }, { status: 400 });
     }
 
     if (!allowed.includes(contentType)) {
