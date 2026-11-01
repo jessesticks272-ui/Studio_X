@@ -47,7 +47,7 @@ export async function POST(request) {
       operations: ["put"],
       validUntil,
       allowedContentTypes: allowed,
-      maximumSizeInBytes: 250 * 1024 * 1024
+      maximumSizeInBytes: 100 * 1024 * 1024
     });
 
     const { presignedUrl } = await presignUrl(signedToken, {
