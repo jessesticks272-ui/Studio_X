@@ -16,6 +16,8 @@ This work is on the development branch build/phase-1-security-foundation. It is 
 - Disabled unauthenticated writes to the legacy PostgreSQL /api/beats endpoint.
 - Added /api/health and updated the navigation's online check so it no longer depends on PostgreSQL being configured.
 - Updated the AI Search page to send Firebase ID tokens and show a warning before uploading audio to public Blob storage for stem processing.
+- Use the supported GPT-6 Luna API model by default, with OPENAI_MODEL available as an override.
+- Rate-limit stem-status polling and delete public stem-input blobs when processing reaches a terminal state and the client polls the result.
 
 ## Manual configuration needed
 - Deploy firestore.rules and storage.rules to the correct Firebase project.
@@ -24,7 +26,7 @@ This work is on the development branch build/phase-1-security-foundation. It is 
 
 ## Known limitations
 - Older audio files under beats/{uid}/... are still publicly readable to preserve compatibility. They must be migrated before a broad launch.
-- AI stem-separation input files are stored in public Vercel Blob storage so Replicate can read them. The UI warns users not to upload unreleased or confidential audio. A private temporary-file pipeline is still preferable.
+- AI stem-separation input files are stored in public Vercel Blob storage so Replicate can read them. The UI warns users not to upload unreleased or confidential audio. The API attempts to delete each input blob when the job reaches a terminal state and the client polls it; if the user closes the page before polling completes, the public input may remain. A private temporary-file pipeline is still preferable.
 - Private masters are not yet delivered to purchasers. That must wait for payment verification and server-issued, time-limited download access.
 - Checkout remains non-functional and must not be represented as a live payment system.
 - The rate limiter uses Firestore transactions, but it has not yet been load-tested.
