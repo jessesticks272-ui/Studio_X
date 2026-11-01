@@ -1,10 +1,16 @@
 import { issueSignedToken, presignUrl } from "@vercel/blob";
+import { authenticateRequest, authErrorResponse, hasAllowedContentLength } from "../lib/firebase-admin-auth.js";
 
 export async function POST(request) {
   try {
+    if (!hasAllowedContentLength(request, 1024 * 1024)) {
+      return Response.json({ error: "Upload authorization request is too large." }, { status: 413 });
+    }
+
+    const { user } = await authenticateRequest(request, ["producer"]);
     const body = await request.json();
     const pathname = String(body?.pathname || "").trim();
-    const contentType = String(body?.contentType || "").trim();
+    const contentType = String(body?.contentType || "").trim().toLowerCase();
 
     const allowed = [
       "audio/mpeg",
@@ -13,21 +19,26 @@ export async function POST(request) {
       "audio/mp4",
       "audio/x-m4a",
       "audio/ogg",
-      "audio/webm",
-      "video/mp4",
-      "video/webm"
+      "audio/webm"
     ];
 
-    if (!pathname || pathname.length > 300 || pathname.includes("..")) {
-      return Response.json({ error: "Invalid upload pathname." }, { status: 400 });
+    const segments = pathname.split("/");
+    const safePath = pathname.length <= 300
+      && segments.length >= 3
+      && segments[0] === "beats"
+      && segments[1] === user.uid
+      && segments.every(segment => segment && segment !== "." && segment !== "..")
+      && /^[a-zA-Z0-9._/-]+$/.test(pathname);
+
+    if (!safePath) {
+      return Response.json({ error: "Uploads must use your own beats folder." }, { status: 400 });
     }
 
     if (!allowed.includes(contentType)) {
-      return Response.json({ error: "Unsupported audio/video type." }, { status: 400 });
+      return Response.json({ error: "Unsupported audio type." }, { status: 400 });
     }
 
-    const validUntil = Date.now() + 15 * 60 * 1000;
-
+    const validUntil = Date.now() + 10 * 60 * 1000;
     const signedToken = await issueSignedToken({
       pathname,
       operations: ["put"],
@@ -43,12 +54,15 @@ export async function POST(request) {
       validUntil: signedToken.validUntil
     });
 
-    return Response.json({ presignedUrl });
-  } catch (error) {
-    console.error("Blob signed upload error:", error);
     return Response.json(
-      { error: error?.message || "Could not create a Blob upload URL." },
-      { status: 500 }
+      { presignedUrl },
+      { headers: { "cache-control": "no-store" } }
     );
+  } catch (error) {
+    if (error?.status === 401 || error?.status === 403 || error?.code === "FIREBASE_ADMIN_NOT_CONFIGURED") {
+      return authErrorResponse(error);
+    }
+    console.error("Blob signed upload error:", error);
+    return Response.json({ error: "Could not create an audio upload URL." }, { status: 500 });
   }
 }
