@@ -130,56 +130,9 @@ export async function GET(request) {
   }
 }
 
-export async function POST(request) {
-  try {
-    const body = await request.json();
-    const title = String(body?.title || "").trim();
-    const genre = String(body?.genre || "").trim().toLowerCase();
-
-    if (!title || title.length > 120) {
-      return json({ error: "A beat title is required and must be 120 characters or fewer." }, 400);
-    }
-    if (!genre || genre.length > 40) {
-      return json({ error: "A valid beat genre is required." }, 400);
-    }
-
-    const bpm = body?.bpm == null || body.bpm === "" ? null : Number(body.bpm);
-    const price = body?.price == null || body.price === "" ? 0 : Number(body.price);
-
-    if (bpm !== null && (!Number.isInteger(bpm) || bpm < 40 || bpm > 240)) {
-      return json({ error: "BPM must be a whole number from 40 to 240." }, 400);
-    }
-    if (!Number.isFinite(price) || price < 0) {
-      return json({ error: "Price must be a valid non-negative number." }, 400);
-    }
-
-    const sql = getDb();
-    const [beat] = await sql`
-      INSERT INTO beats
-        (producer_id, title, slug, genre, mood, bpm, musical_key, price, currency,
-         license_type, preview_url, audio_url, cover_url, description, is_published)
-      VALUES
-        (${body?.producerId || null},
-         ${title},
-         ${body?.slug || null},
-         ${genre},
-         ${body?.mood || null},
-         ${bpm},
-         ${body?.key || null},
-         ${price},
-         ${body?.currency || "USD"},
-         ${body?.licenseType || "lease"},
-         ${body?.previewUrl || null},
-         ${body?.audioUrl || null},
-         ${body?.coverUrl || null},
-         ${body?.description || null},
-         ${body?.isPublished !== false})
-      RETURNING *
-    `;
-
-    return json({ beat: mapBeat(beat) }, 201);
-  } catch (error) {
-    console.error("POST /api/beats:", error);
-    return json({ error: "Could not create beat." }, 500);
-  }
+export async function POST() {
+  return json({
+    error: "Beat creation is handled by the authenticated Studio workflow.",
+    code: "LEGACY_BEAT_WRITE_DISABLED"
+  }, 405);
 }
