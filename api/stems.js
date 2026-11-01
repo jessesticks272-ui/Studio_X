@@ -1,4 +1,4 @@
-import { authenticateRequest, authErrorResponse, hasAllowedContentLength } from "../lib/firebase-admin-auth.js";
+import { authenticateRequest, authErrorResponse, hasAllowedContentLength, consumeRateLimit } from "../lib/firebase-admin-auth.js";
 
 const DEMUCS_VERSION =
   "cjwbw/demucs:25a173108cff36ef9f80f854c162d01df9e6528be175794b81158fa03836d953";
@@ -39,6 +39,9 @@ export async function POST(request) {
     }
 
     const { user, db } = await authenticateRequest(request, ["producer"]);
+    if (!await consumeRateLimit(db, user.uid, "stem-separation", 3, 60 * 60 * 1000)) {
+      return json({ error: "Stem separation limit reached. Try again later." }, 429);
+    }
     const token = process.env.REPLICATE_API_TOKEN;
     if (!token) {
       return json({ error: "Stem separation is not configured yet.", code: "MISSING_REPLICATE_API_TOKEN" }, 503);
