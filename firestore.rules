@@ -157,5 +157,10 @@ service cloud.firestore {
     match /stemJobs/{jobId} {
       allow read, write: if false;
     }
+
+    // Per-account API rate-limit counters are managed only by server code.
+    match /apiRateLimits/{rateLimitId} {
+      allow read, write: if false;
+    }
   }
 }
