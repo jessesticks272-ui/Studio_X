@@ -1,3 +1,5 @@
+> **Current architecture note (November 2026):** This repository has evolved beyond the original static landing-page notes below. The current Studio and Explore marketplace use Firebase Authentication, Firestore and Firebase Storage. The legacy PostgreSQL /api/beats GET endpoint is still present for older consumers, but Studio writes beat metadata to Firestore. The navigation health check uses /api/health. Firebase rules must be deployed separately from GitHub. See PRODUCER_BETA_CHECKLIST.md and PHASE_1_SECURITY_NOTES.md for current launch requirements.
+
 # LyTune Studio X — Landing Page
 
 The homepage for LyTune Studio X, organized to work **offline** (no
