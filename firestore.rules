@@ -55,7 +55,7 @@ service cloud.firestore {
           "name", "email", "photoURL", "updatedAt", "lastLoginAt"
         ]);
 
-      allow delete: if signedIn() && request.auth.uid == userId;
+      allow delete: if isOwner();
     }
 
     // Producer profiles are public to read, but only the account owner with
