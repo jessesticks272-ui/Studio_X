@@ -33,7 +33,7 @@ onAuthStateChanged(auth, async user => {
 
   try{
     const accountProfile = await getUserProfile(user.uid);
-    if(accountProfile?.role !== "producer"){
+    if(!["producer","both"].includes(accountProfile?.role)){
       $("profileForm").hidden = true;
       setStatus("Creator profile editing is available to producer accounts only. Sign in with a producer account to continue.", "error");
       return;
@@ -66,7 +66,7 @@ onAuthStateChanged(auth, async user => {
         };
 
         await saveCreatorProfile(user.uid, data);
-        await saveUserProfile(user, "producer", {
+        await saveUserProfile(user, accountProfile.role, {
           name:data.name,
           photoURL:data.avatarUrl || user.photoURL || ""
         });
