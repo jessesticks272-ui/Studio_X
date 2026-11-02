@@ -56,7 +56,14 @@ The development branch also adds producer workflow improvements:
 - [ ] Sign up as an artist and confirm the account receives the artist role.
 - [ ] Attempt to change a normal account's role to admin through Firestore; the rules must reject it.
 - [ ] Confirm an artist cannot create or modify producer beat records.
-- [ ] Save a metadata-only draft and confirm it is not visible in Explore.\n- [ ] Edit the draft and confirm the changes persist.\n- [ ] Confirm a draft cannot be published until a preview is attached.\n- [ ] Publish a draft and confirm it appears in Explore.\n- [ ] Unpublish a release and confirm it disappears from Explore but remains in the producer catalogue.\n- [ ] Search the catalogue and filter Published/Drafts.\n- [ ] Delete a test catalogue record and confirm the UI explains stored audio is not automatically removed.\n- [ ] Upload a preview and confirm it plays in Explore while signed out.
+- [ ] Save a metadata-only draft and confirm it is not visible in Explore.
+- [ ] Edit the draft and confirm the changes persist.
+- [ ] Confirm a draft cannot be published until a preview is attached.
+- [ ] Publish a draft and confirm it appears in Explore.
+- [ ] Unpublish a release and confirm it disappears from Explore but remains in the producer catalogue.
+- [ ] Search the catalogue and filter Published/Drafts.
+- [ ] Delete a test catalogue record and confirm the UI explains stored audio is not automatically removed.
+- [ ] Upload a preview and confirm it plays in Explore while signed out.
 - [ ] Upload a private master and confirm the owner can access it but another account and a signed-out visitor cannot.
 - [ ] Confirm the beat document contains a preview URL but no public master download URL.
 - [ ] Confirm another user cannot read the first user's stem job record or poll its job ID.
