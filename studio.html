@@ -75,11 +75,15 @@
       <label>License<select id="beatLicense"><option value="lease">Lease</option><option value="premium">Premium Lease</option><option value="exclusive">Exclusive Rights</option></select></label>
       <label>Cover image URL<input id="beatCoverUrl" type="url" placeholder="https://..."></label>
       <label>Audio/Preview URL<input id="beatAudioUrl" type="url" placeholder="https://...mp3"></label>
+      <label>Release status<select id="beatStatus"><option value="draft">Save as draft</option><option value="published">Publish preview</option></select></label>
     </div>
     <label class="release-description">Description<textarea id="beatDescription" rows="4" placeholder="Describe the sound, instruments and intended use."></textarea></label>
     <div class="tag-row"><button class="tag active" type="button">Instrumental</button><button class="tag" type="button">Drums</button><button class="tag" type="button">Melodic</button><button class="tag" type="button">Dark</button><button class="tag" type="button">Chill</button><button class="tag" type="button">Street</button></div>
-    <button id="saveBeat" class="wide-btn" type="button">Add to Studio X Catalog</button>
-    <p id="uploadStatus" class="status"></p>
+    <div class="form-actions">
+      <button id="saveBeat" class="wide-btn" type="button">Save Beat</button>
+      <button id="cancelEdit" class="secondary-btn hidden" type="button">Cancel Editing</button>
+    </div>
+    <p id="uploadStatus" class="status" role="status" aria-live="polite"></p>
   </section>
 
   <section id="aiPanel" class="panel hidden">
@@ -95,6 +99,10 @@
 
   <section id="catalogPanel" class="panel hidden">
     <div class="panel-head"><div><span class="eyebrow">03 / CATALOG</span><h2>My Catalog</h2></div><span id="catalogCount" class="pill">0 BEATS</span></div>
+    <div class="catalog-toolbar">
+      <label class="catalog-search"><span>Search your beats</span><input id="catalogSearch" type="search" placeholder="Search by title or genre"></label>
+      <label class="catalog-filter"><span>Status</span><select id="catalogFilter"><option value="all">All releases</option><option value="published">Published</option><option value="draft">Drafts</option></select></label>
+    </div>
     <div id="catalog" class="catalog-empty"><div>♫</div><h3>Your catalog starts here</h3><p>Your catalog is stored in Firebase. Audio files can be uploaded when Firebase Storage is enabled, or published using a valid hosted audio/preview URL.</p></div>
   </section>
 
