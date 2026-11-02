@@ -37,11 +37,32 @@ The branch build/phase-1-security-foundation contains proposed changes that are 
 - The AI stem-separation page uploads input audio to public Vercel Blob storage so the processing provider can fetch it. The page displays a privacy warning and the API attempts deletion after processing completes and the status is polled. If the page is closed early, the public input may remain. Do not upload unreleased or confidential audio through that feature.
 - Never put a private master URL in a public Firestore beat document.
 
+## Phase 2 producer workspace
+
+The development branch also adds producer workflow improvements:
+
+- Save a beat as a private draft without publishing it.
+- Publish a draft only after a preview is attached.
+- Edit beat metadata and retain existing preview/master storage references.
+- Unpublish a release back into drafts.
+- Search the producer's catalogue and filter by publication status.
+- Delete a catalogue record with a confirmation. This does not automatically delete its stored audio files.
+- Dashboard counts show total beats, published beats, drafts and real follower records. Plays and earnings remain intentionally unreported until real event and payment systems exist.
+- Producer profiles can include a personal journey, sound influences and specialities.
+- Accounts with the combined artist + producer role can manage a producer catalogue.
+
 ## Smoke tests required before beta
 - [ ] Sign up as a producer and confirm the account receives the producer role.
 - [ ] Sign up as an artist and confirm the account receives the artist role.
 - [ ] Attempt to change a normal account's role to admin through Firestore; the rules must reject it.
 - [ ] Confirm an artist cannot create or modify producer beat records.
+- [ ] Save a metadata-only draft and confirm it is not visible in Explore.
+- [ ] Edit the draft and confirm the changes persist.
+- [ ] Confirm a draft cannot be published until a preview is attached.
+- [ ] Publish a draft and confirm it appears in Explore.
+- [ ] Unpublish a release and confirm it disappears from Explore but remains in the producer catalogue.
+- [ ] Search the catalogue and filter Published/Drafts.
+- [ ] Delete a test catalogue record and confirm the UI explains stored audio is not automatically removed.
 - [ ] Upload a preview and confirm it plays in Explore while signed out.
 - [ ] Upload a private master and confirm the owner can access it but another account and a signed-out visitor cannot.
 - [ ] Confirm the beat document contains a preview URL but no public master download URL.

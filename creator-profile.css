@@ -7,3 +7,9 @@
 .links a[hidden] { display: none !important; }
 
 .verified-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+
+.story-section{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.story-section h3{margin:0 0 8px;font-size:.95rem}
+.story-section p{color:var(--muted);font-size:.78rem;line-height:1.7;white-space:pre-line}
+.profile-detail{margin-top:9px;color:var(--muted);font-size:.72rem;line-height:1.6}
+.story-section [hidden]{display:none!important}
