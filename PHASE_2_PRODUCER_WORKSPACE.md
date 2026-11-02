@@ -36,7 +36,7 @@ Phase 2 extends the producer-facing workflow on branch `build/phase-2-producer-w
 
 - JavaScript syntax parsing passed for `studio.js`, `firestore.js`, `creator-edit.js`, `creator-profile.js` and the producer dashboard inline module.
 - Checked the updated HTML files for duplicate element IDs; none were found.
-- Compared the branch against Phase 1: 16 commits ahead and 0 behind at review time.
+- Compared the branch against Phase 1: 18 commits ahead and 0 behind at review time.
 
 ## Manual verification still required
 
