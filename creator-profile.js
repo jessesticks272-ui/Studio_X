@@ -60,6 +60,16 @@ async function loadProfile(){
   $("creatorRole").textContent=profile.role==="producer" ? "Producer" : profile.role==="artist" ? "Artist" : "Creator";
   $("avatar").textContent=initials(name); if(profile.avatarUrl){$("avatar").classList.add("has-image");$("avatar").style.backgroundImage="url(\""+profile.avatarUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";} else {$("avatar").classList.remove("has-image");$("avatar").style.backgroundImage="";} if(profile.coverUrl){$("profile-hero")?.classList.add("has-cover");$("cover")?.classList.add("has-image");$("cover").style.backgroundImage="url(\""+profile.coverUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";}
   $("bio").textContent=profile.bio || "Creator on LyTune Studio X.";
+  const story=String(profile.story||"").trim();
+  const influences=Array.isArray(profile.influences)?profile.influences.filter(Boolean):[];
+  const specialties=Array.isArray(profile.specialties)?profile.specialties.filter(Boolean):[];
+  $("storySection").hidden=!story&&!influences.length&&!specialties.length;
+  $("producerStory").textContent=story;
+  $("producerStory").hidden=!story;
+  $("producerInfluences").textContent=influences.length?"Influences: "+influences.join(", "):"";
+  $("producerInfluences").hidden=!influences.length;
+  $("producerSpecialties").textContent=specialties.length?"Specialities: "+specialties.join(", "):"";
+  $("producerSpecialties").hidden=!specialties.length;
   if(profile.location) $("location").textContent="📍 "+profile.location;
   for (const [id, url] of [["instagram", profile.instagram], ["tiktok", profile.tiktok], ["youtube", profile.youtube]]) {
     const link = $(id);
