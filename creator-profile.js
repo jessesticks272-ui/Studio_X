@@ -57,7 +57,7 @@ async function loadProfile(){
 
   const name=profile.name || profile.displayName || "LyTune Creator";
   $("creatorName").textContent=name;
-  $("creatorRole").textContent=profile.role==="producer" ? "Producer" : profile.role==="artist" ? "Artist" : "Creator";
+  $("creatorRole").textContent=profile.role==="producer" ? "Producer" : profile.role==="artist" ? "Artist" : profile.role==="both" ? "Artist + Producer" : "Creator";
   $("avatar").textContent=initials(name); if(profile.avatarUrl){$("avatar").classList.add("has-image");$("avatar").style.backgroundImage="url(\""+profile.avatarUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";} else {$("avatar").classList.remove("has-image");$("avatar").style.backgroundImage="";} if(profile.coverUrl){$("profile-hero")?.classList.add("has-cover");$("cover")?.classList.add("has-image");$("cover").style.backgroundImage="url(\""+profile.coverUrl.replaceAll("\\","\\\\").replaceAll("\"","\\\"")+"\")";}
   $("bio").textContent=profile.bio || "Creator on LyTune Studio X.";
   const story=String(profile.story||"").trim();
