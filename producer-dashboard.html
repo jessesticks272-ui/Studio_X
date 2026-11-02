@@ -41,20 +41,60 @@
 </main>
 <script type="module">
 import { auth } from "./firebase.js";
-import { getUserProfile, getUserBeats } from "./firestore.js";
+import { getUserProfile, getUserBeats, getCreatorFollowerCount, getCreatorProfile } from "./firestore.js";
 const $=id=>document.getElementById(id);
-const initials=n=>(n||"P").trim().charAt(0).toUpperCase();
+const esc=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[char]));
+const initials=name=>(name||"P").trim().charAt(0).toUpperCase();
 auth.onAuthStateChanged(async user=>{
- if(!user){location.href="auth.html";return;}
- const profile=await getUserProfile(user.uid).catch(()=>null);
- if(profile?.role==="artist"){location.href="artist-dashboard.html";return;}
- const name=profile?.name||user.displayName||user.email?.split("@")[0]||"Producer";
- $("producerName").textContent=name;$("profileName").textContent=name;$("profileAvatar").textContent=initials(name);$("userBadge").textContent=initials(name);$("menuName").textContent=name;$("menuEmail").textContent=user.email||"";
- const beats=await getUserBeats(user.uid).catch(()=>[]);
- $("beatCount").textContent=beats.length;
- $("beatList").innerHTML=beats.length?beats.map(b=>`<div class="release-row"><div class="release-art">${b.coverUrl?'<img src="'+b.coverUrl+'" alt="">':'♫'}</div><div><b>${b.title||"Untitled Beat"}</b><small>${b.genre||"Beat"} · ${b.bpm?b.bpm+" BPM":"No BPM set"} · ${b.status||"draft"}</small><small><a href="beat.html?id=${encodeURIComponent(b.id)}">View beat</a> · <a href="creator-profile.html?uid=${encodeURIComponent(b.ownerId||user.uid)}">View storefront</a></small></div><span>${b.price?((b.currency||"USD")==="USD"?"$":"₦")+Number(b.price).toLocaleString((b.currency||"USD")==="USD"?"en-US":"en-NG"):"Free"}</span></div>`).join(""):'<div class="empty">No beats yet. Upload your first beat from the Studio.</div>';
+  if(!user){location.href="auth.html";return;}
+  const profile=await getUserProfile(user.uid).catch(()=>null);
+  if(profile?.role==="artist"){location.href="artist-dashboard.html";return;}
+  if(!["producer","both"].includes(profile?.role)){
+    location.href="auth.html";
+    return;
+  }
+  const creator=await getCreatorProfile(user.uid).catch(()=>profile);
+  const name=creator?.name||profile?.name||user.displayName||user.email?.split("@")[0]||"Producer";
+  $("producerName").textContent=name;
+  $("profileName").textContent=name;
+  $("profileAvatar").textContent=initials(name);
+  const avatar=creator?.avatarUrl||profile?.photoURL||user.photoURL||"";
+  if(/^https:\/\//i.test(avatar)){
+    $("profileAvatar").style.backgroundImage='url("'+avatar.replace(/["\\]/g,"")+'")';
+    $("profileAvatar").classList.add("has-image");
+  }
+  $("userBadge").textContent=initials(name);
+  $("menuName").textContent=name;
+  $("menuEmail").textContent=user.email||"";
+  try{
+    const [beats,followers]=await Promise.all([
+      getUserBeats(user.uid),
+      getCreatorFollowerCount(user.uid).catch(()=>0)
+    ]);
+    const published=beats.filter(beat=>beat.status==="published").length;
+    const drafts=beats.filter(beat=>beat.status!=="published").length;
+    $("beatCount").textContent=beats.length;
+    $("publishedCount").textContent=published;
+    $("draftCount").textContent=drafts;
+    $("followerCount").textContent=followers;
+    const rows=beats.slice(0,5);
+    $("beatList").innerHTML=rows.length?rows.map(beat=>{
+      const art=beat.coverUrl?'<img src="'+esc(beat.coverUrl)+'" alt="" loading="lazy">':"♫";
+      const status=beat.status==="published"?"published":"draft";
+      return '<div class="release-row"><div class="release-art">'+art+'</div><div><b>'+esc(beat.title||"Untitled Beat")+'</b><small>'+esc(beat.genre||"Beat")+' · '+esc(beat.bpm||"—")+' BPM · '+status+'</small><small><a href="studio.html?edit='+encodeURIComponent(beat.id)+'">Edit in Studio</a> · <a href="creator-profile.html?uid='+encodeURIComponent(user.uid)+'">View storefront</a></small></div><span>'+status+'</span></div>';
+    }).join(""):'<div class="empty">No beats yet. Save your first draft or publish a preview from Studio.</div>';
+  }catch(error){
+    console.error("Producer dashboard could not load catalogue:",error);
+    $("beatList").innerHTML='<div class="empty">Your catalogue could not be loaded. Refresh and try again.</div>';
+  }
 });
 $("userBadge").addEventListener("click",()=>$("accountMenu").classList.toggle("hidden"));
-$("logoutButton").addEventListener("click",async()=>{await auth.signOut();localStorage.clear();location.href="index.html";});
+document.addEventListener("click",event=>{if(!event.target.closest(".account-wrap"))$("accountMenu").classList.add("hidden")});
+$("logoutButton").addEventListener("click",async()=>{
+  await auth.signOut();
+  localStorage.removeItem("lytune-user");
+  localStorage.removeItem("lytune-token");
+  location.href="index.html";
+});
 </script>
 </body></html>
