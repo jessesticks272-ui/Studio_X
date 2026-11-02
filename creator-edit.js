@@ -21,6 +21,9 @@ function fill(profile, user){
   $("avatarUrl").value=profile?.avatarUrl || profile?.photoURL || user.photoURL || "";
   $("coverUrl").value=profile?.coverUrl || "";
   $("bio").value=profile?.bio || "";
+  $("story").value=profile?.story || "";
+  $("influences").value=Array.isArray(profile?.influences) ? profile.influences.join(", ") : "";
+  $("specialties").value=Array.isArray(profile?.specialties) ? profile.specialties.join(", ") : "";
   $("genres").value=Array.isArray(profile?.genres) ? profile.genres.join(", ") : "";
   $("tags").value=Array.isArray(profile?.tags) ? profile.tags.join(", ") : "";
   $("instagram").value=profile?.instagram || "";
@@ -58,6 +61,9 @@ onAuthStateChanged(auth, async user => {
           avatarUrl:$("avatarUrl").value.trim(),
           coverUrl:$("coverUrl").value.trim(),
           bio:$("bio").value.trim(),
+          story:$("story").value.trim(),
+          influences:list($("influences").value),
+          specialties:list($("specialties").value),
           genres:list($("genres").value),
           tags:list($("tags").value),
           instagram:$("instagram").value.trim(),
