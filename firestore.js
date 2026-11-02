@@ -2,6 +2,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  updateDoc,
   deleteDoc,
   addDoc,
   collection,
@@ -50,12 +51,28 @@ export async function saveCreatorProfile(uid, data = {}) {
 export async function addBeat(uid, beat) {
   if (!uid) throw new Error("A signed-in user is required.");
   const ref = await addDoc(collection(db, "beats"), {
-    ownerId: uid,
     ...beat,
+    ownerId: uid,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   });
   return ref.id;
+}
+
+export async function updateBeat(uid, beatId, changes = {}) {
+  if (!uid || !beatId) throw new Error("A signed-in producer and beat ID are required.");
+  const safeChanges = { ...changes };
+  delete safeChanges.ownerId;
+  delete safeChanges.createdAt;
+  await updateDoc(doc(db, "beats", beatId), {
+    ...safeChanges,
+    updatedAt: serverTimestamp()
+  });
+}
+
+export async function deleteBeat(uid, beatId) {
+  if (!uid || !beatId) throw new Error("A signed-in producer and beat ID are required.");
+  await deleteDoc(doc(db, "beats", beatId));
 }
 
 export async function getUserBeats(uid) {
