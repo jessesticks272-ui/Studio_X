@@ -14,7 +14,7 @@ service cloud.firestore {
 
     function isProducer(uid) {
       return signedIn()
-        && get(/databases/$(database)/documents/users/$(uid)).data.role == "producer";
+        && get(/databases/$(database)/documents/users/$(uid)).data.role in ["producer", "both"];
     }
 
     // Account roles are selected during onboarding, but ordinary users can
