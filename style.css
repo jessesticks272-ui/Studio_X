@@ -2052,3 +2052,11 @@ input:focus-visible,
 .mobile-nav-links { display:flex; flex-direction:column; gap:8px; }
 .mobile-nav-links .mobile-auth-link { width:100%; box-sizing:border-box; text-align:left; border:1px solid var(--border-color); border-radius:12px; padding:12px 14px; color:var(--text-primary); background:transparent; font:inherit; cursor:pointer; text-decoration:none; }
 .mobile-nav-links .mobile-auth-link:hover { background:rgba(255,255,255,.06); }
+
+
+/* Image-free marketing placeholders. Real member photos and beat artwork remain dynamic. */
+.ai-search-image.media-placeholder{height:300px;border-radius:28px;background:radial-gradient(circle at 50% 45%,rgba(25,215,255,.35),transparent 22%),radial-gradient(circle at 50% 50%,rgba(0,123,255,.28),transparent 48%),linear-gradient(145deg,#101a3b,#080d20);position:relative;overflow:hidden}
+.ai-search-image.media-placeholder:after{content:"♫";position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.82);font-size:6rem;text-shadow:0 0 38px rgba(25,215,255,.65)}
+.phone-result-thumb.media-placeholder{display:block;background:linear-gradient(135deg,rgba(25,215,255,.45),rgba(0,123,255,.35),rgba(155,46,255,.45))}
+.showcase-video.media-placeholder{background:radial-gradient(ellipse at 50% 40%,rgba(0,123,255,.4),transparent 48%),linear-gradient(135deg,#0b1736,#080b1c 60%,#171039)}
+.cook-video.media-placeholder{background:radial-gradient(circle at 65% 35%,rgba(25,215,255,.24),transparent 35%),linear-gradient(145deg,#111b39,#0a1026 65%,#21143d)}
